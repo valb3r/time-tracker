@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import ua.timetracker.shared.restapi.dto.EntityNotFoundException;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
@@ -28,6 +29,7 @@ public class TimeLogController {
 
     @PutMapping("/{user_id}")
     public Mono<TimeLogDto> uploadTimelog(@PathVariable("user_id") long userId, @Valid @RequestBody TimeLogUpload log) {
-        return uploader.upload(userId, log);
+        return uploader.upload(userId, log)
+                .switchIfEmpty(EntityNotFoundException.mono());
     }
 }

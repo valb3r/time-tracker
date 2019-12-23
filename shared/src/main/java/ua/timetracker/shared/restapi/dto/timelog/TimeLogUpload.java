@@ -32,4 +32,7 @@ public class TimeLogUpload {
 
     @NotBlank
     private String description;
+
+    @NotNull
+    private LocationUpload location;
 }
