@@ -13,10 +13,10 @@ import ua.timetracker.shared.restapi.dto.role.RoleDto;
 
 import javax.validation.Valid;
 
-import static ua.timetracker.shared.restapi.Paths.V1_GROUPS;
+import static ua.timetracker.shared.restapi.Paths.V1_ROLES;
 
 @RestController
-@RequestMapping(value = V1_GROUPS,
+@RequestMapping(value = V1_ROLES,
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
 )

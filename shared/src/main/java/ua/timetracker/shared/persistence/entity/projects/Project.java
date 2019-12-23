@@ -27,6 +27,8 @@ public class Project {
     private Long id;
 
     private String name;
+    private String code;
+    private String description;
 
     @Mapper
     public interface FromDto {

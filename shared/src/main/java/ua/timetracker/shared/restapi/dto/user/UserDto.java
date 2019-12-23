@@ -1,17 +1,13 @@
 package ua.timetracker.shared.restapi.dto.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ua.timetracker.shared.persistence.entity.user.User;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class UserDto {
 
     public static final UserDto.FromEntity MAP = Mappers.getMapper(UserDto.FromEntity.class);

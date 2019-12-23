@@ -15,9 +15,6 @@ import org.springframework.data.annotation.CreatedDate;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -41,13 +38,8 @@ public class TimeLog {
     @GeneratedValue
     private Long id;
 
-    @NotEmpty
     private Collection<String> tags;
-
-    @NotNull
     private Duration duration;
-
-    @NotBlank
     private String description;
 
     @Relationship(type = OWNER, direction = OUTGOING)
