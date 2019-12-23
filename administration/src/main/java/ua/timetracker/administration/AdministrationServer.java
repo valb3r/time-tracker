@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(
         scanBasePackages = {
                 "ua.timetracker.shared.config",
+                "ua.timetracker.administration.config",
                 "ua.timetracker.administration.controller",
                 "ua.timetracker.administration.service"
         }
