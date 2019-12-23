@@ -1,4 +1,4 @@
-package ua.timetracker.shared.persistence.entity.groups;
+package ua.timetracker.shared.persistence.entity.projects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,12 +6,10 @@ import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 
-import java.util.Collection;
-
 @Getter
 @Setter
 @Node
-public class Group {
+public class Project {
 
     @Id
     @GeneratedValue

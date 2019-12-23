@@ -3,7 +3,7 @@ package ua.timetracker.shared.restapi.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ua.timetracker.shared.persistence.entity.User;
+import ua.timetracker.shared.persistence.entity.user.User;
 
 import java.time.LocalDateTime;
 

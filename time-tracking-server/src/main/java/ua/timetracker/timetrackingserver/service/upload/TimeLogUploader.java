@@ -6,7 +6,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import ua.timetracker.shared.persistence.entity.TimeLog;
+import ua.timetracker.shared.persistence.entity.projects.TimeLog;
 import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;

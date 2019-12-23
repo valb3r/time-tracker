@@ -4,15 +4,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.springframework.data.core.ReactiveNeo4jClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
-
 import java.util.List;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;

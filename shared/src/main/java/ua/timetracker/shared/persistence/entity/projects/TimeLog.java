@@ -1,4 +1,4 @@
-package ua.timetracker.shared.persistence.entity;
+package ua.timetracker.shared.persistence.entity.projects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,8 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.data.annotation.CreatedDate;
+import ua.timetracker.shared.persistence.entity.projects.Project;
+import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
 import javax.validation.constraints.NotBlank;

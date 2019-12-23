@@ -1,4 +1,4 @@
-package ua.timetracker.shared.persistence.entity;
+package ua.timetracker.shared.persistence.entity.user;
 
 import lombok.Getter;
 import lombok.Setter;
