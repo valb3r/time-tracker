@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.data.annotation.CreatedDate;
-import ua.timetracker.shared.persistence.entity.projects.Project;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
@@ -34,6 +35,8 @@ import static ua.timetracker.shared.persistence.entity.Relationships.OWNER;
 @AllArgsConstructor
 public class TimeLog {
 
+    public static final TimeLog.FromDto MAP = Mappers.getMapper(TimeLog.FromDto.class);
+
     @Id
     @GeneratedValue
     private Long id;
@@ -56,8 +59,8 @@ public class TimeLog {
     @CreatedDate
     private LocalDateTime loggedAt;
 
-    public TimeLog(TimeLogUpload upload) {
-        tags = upload.getTags();
-        duration = upload.getDuration();
+    @Mapper
+    public interface FromDto {
+        TimeLog map(TimeLogUpload log);
     }
 }

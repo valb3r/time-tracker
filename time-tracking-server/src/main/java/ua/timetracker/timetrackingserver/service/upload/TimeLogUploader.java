@@ -11,7 +11,7 @@ import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
-import ua.timetracker.shared.restapi.dto.timelog.TimeLogUploaded;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 import static reactor.core.publisher.Mono.just;
@@ -26,13 +26,13 @@ public class TimeLogUploader {
     private final TimeLogsRepository timeLogs;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<TimeLogUploaded> upload(long userId, TimeLogUpload uploaded) {
+    public Mono<TimeLogDto> upload(long userId, TimeLogUpload uploaded) {
 
         val user = users.findById(just(userId));
         val project = projects.findById(just(uploaded.getProjectId()));
 
-        return user.map(usr -> new TimeLog(uploaded).toBuilder().user(usr))
+        return user.map(usr -> TimeLog.MAP.map(uploaded).toBuilder().user(usr))
                 .zipWith(project, (timeLog, proj) -> timeLog.projects(ImmutableSet.of(proj)).build())
-                .flatMap(log -> timeLogs.save(log).map(TimeLogUploaded::new));
+                .flatMap(log -> timeLogs.save(log).map(TimeLogDto.MAP::map));
     }
 }

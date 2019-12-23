@@ -1,7 +1,12 @@
 package ua.timetracker.shared.persistence.entity.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -15,7 +20,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Node
+@NoArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class User {
+
+    public static final User.FromDto MAP = Mappers.getMapper(User.FromDto.class);
 
     @Id
     @GeneratedValue
@@ -34,5 +44,10 @@ public class User {
 
     public User(UserCreate toCreate) {
         this.name = toCreate.getUsername();
+    }
+
+    @Mapper
+    public interface FromDto {
+        User map(UserCreate user);
     }
 }

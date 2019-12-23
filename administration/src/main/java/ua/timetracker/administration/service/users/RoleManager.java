@@ -4,21 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
-import ua.timetracker.shared.restapi.dto.project.ProjectCreate;
-import ua.timetracker.shared.restapi.dto.project.ProjectDto;
+import ua.timetracker.shared.persistence.repository.reactive.RolesRepository;
+import ua.timetracker.shared.restapi.dto.role.RoleCreate;
+import ua.timetracker.shared.restapi.dto.role.RoleDto;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
 
 @Service
 @RequiredArgsConstructor
-public class ProjectManager {
+public class RoleManager {
 
-    private final ProjectsRepository projects;
+    private final RolesRepository roles;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<ProjectDto> createProject(ProjectCreate projectToCreate) {
+    public Mono<RoleDto> createRole(RoleCreate groupToCreate) {
         return null;
     }
 }

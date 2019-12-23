@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.users.UserManager;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
-import ua.timetracker.shared.restapi.dto.user.UserCreated;
+import ua.timetracker.administration.service.users.ProjectManager;
+import ua.timetracker.shared.restapi.dto.project.ProjectCreate;
+import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 
 import javax.validation.Valid;
 
 import static ua.timetracker.shared.restapi.Paths.V1_PROJECTS;
-import static ua.timetracker.shared.restapi.Paths.V1_USERS;
 
 @RestController
 @RequestMapping(value = V1_PROJECTS,
@@ -24,10 +23,10 @@ import static ua.timetracker.shared.restapi.Paths.V1_USERS;
 @RequiredArgsConstructor
 public class ProjectController {
 
-    private final UserManager manager;
+    private final ProjectManager manager;
 
     @PutMapping
-    public Mono<UserCreated> createUser(@Valid @RequestBody UserCreate userToCreate) {
-        return manager.createUser(userToCreate);
+    public Mono<ProjectDto> createProject(@Valid @RequestBody ProjectCreate projectToCreate) {
+        return manager.createProject(projectToCreate);
     }
 }

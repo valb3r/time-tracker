@@ -7,26 +7,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.users.UserManager;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
-import ua.timetracker.shared.restapi.dto.user.UserDto;
+import ua.timetracker.administration.service.users.RoleManager;
+import ua.timetracker.shared.restapi.dto.role.RoleCreate;
+import ua.timetracker.shared.restapi.dto.role.RoleDto;
 
 import javax.validation.Valid;
 
-import static ua.timetracker.shared.restapi.Paths.V1_USERS;
+import static ua.timetracker.shared.restapi.Paths.V1_GROUPS;
 
 @RestController
-@RequestMapping(value = V1_USERS,
+@RequestMapping(value = V1_GROUPS,
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class UserController {
+public class RoleController {
 
-    private final UserManager manager;
+    private final RoleManager manager;
 
     @PutMapping
-    public Mono<UserDto> createUser(@Valid @RequestBody UserCreate userToCreate) {
-        return manager.createUser(userToCreate);
+    public Mono<RoleDto> createRole(@Valid @RequestBody RoleCreate roleToCreate) {
+        return manager.createRole(roleToCreate);
     }
 }
