@@ -22,13 +22,21 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo.spring.io/libs-snapshot"
+    }
 }
 
 dependencies {
-    compile "org.projectlombok:lombok"
-    compile "org.hibernate:hibernate-java8"
+    compile "org.neo4j.springframework.data:spring-data-neo4j-rx:${versions.neo4jRx}"
+
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
     compile "com.google.guava:guava:${versions.guava}"
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "org.slf4j:slf4j-api:${versions.slf4j}"
+
+    compile "org.hibernate:hibernate-validator:${versions.validator}"
 
     testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
 }

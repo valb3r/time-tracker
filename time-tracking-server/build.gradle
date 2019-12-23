@@ -22,13 +22,23 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo.spring.io/libs-snapshot"
+    }
 }
 
 dependencies {
+    compile project(":shared")
+
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter:${versions.neo4jRx}"
+
     compile "org.projectlombok:lombok"
     compile "com.google.guava:guava:${versions.guava}"
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "org.slf4j:slf4j-api:${versions.slf4j}"
     compile "org.hibernate:hibernate-validator:${versions.validator}"
+
+    compile "org.springdoc:springdoc-openapi-webflux-ui:${versions.springdoc}"
 
     testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
 }

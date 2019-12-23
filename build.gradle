@@ -3,11 +3,16 @@ buildscript {
         versions = [
                 springBoot          : "2.2.2.RELEASE",
                 dependencyManagement: "1.0.8.RELEASE",
+                springdoc           : "1.2.18",
                 guava               : "28.1-jre",
                 junit               : "5.5.2",
                 mockito             : "3.2.4",
                 assertJ             : "3.14.0",
-                validator           : "6.1.0.Final"
+                validator           : "6.1.0.Final",
+                ogmCore             : "3.2.4",
+                neo4jRx             : "1.0.0-beta02",
+                slf4j               : "1.7.29",
+                lombok              : "1.18.10" // Used in desktop-client, shared
         ]
     }
     dependencies {

@@ -27,7 +27,7 @@ repositories {
 dependencies {
     compile "org.projectlombok:lombok"
     compile "com.google.guava:guava:${versions.guava}"
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "org.slf4j:slf4j-api:${versions.slf4j}"
     compile "org.hibernate:hibernate-validator:${versions.validator}"
 
     testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"

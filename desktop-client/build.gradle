@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.projectlombok:lombok"
+    compile "org.projectlombok:lombok:${versions.lombok}"
     testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
 }
 
