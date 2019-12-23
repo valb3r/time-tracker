@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import ua.timetracker.shared.persistence.entity.roles.Role;
 import ua.timetracker.shared.persistence.repository.reactive.RolesRepository;
 import ua.timetracker.shared.restapi.dto.role.RoleCreate;
 import ua.timetracker.shared.restapi.dto.role.RoleDto;
@@ -18,7 +19,7 @@ public class RoleManager {
     private final RolesRepository roles;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<RoleDto> createRole(RoleCreate groupToCreate) {
-        return null;
+    public Mono<RoleDto> createRole(RoleCreate roleToCreate) {
+        return roles.save(Role.MAP.map(roleToCreate)).map(RoleDto.MAP::map);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import ua.timetracker.shared.persistence.entity.groups.Group;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.restapi.dto.group.GroupCreate;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
@@ -19,6 +20,6 @@ public class GroupManager {
 
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<GroupDto> createGroup(GroupCreate groupToCreate) {
-        return null;
+        return groups.save(Group.MAP.map(groupToCreate)).map(GroupDto.MAP::map);
     }
 }
