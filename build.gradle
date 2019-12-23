@@ -3,6 +3,7 @@ buildscript {
         versions = [
                 springBoot          : "2.2.2.RELEASE",
                 dependencyManagement: "1.0.8.RELEASE",
+                reactor             : "3.3.1.RELEASE",
                 springdoc           : "1.2.18",
                 jackson             : "2.10.1",
                 swagger             : "2.1.0",

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.TimeLog;
-import ua.timetracker.timetrackingserver.repository.ProjectsRepository;
-import ua.timetracker.timetrackingserver.repository.TimeLogsRepository;
-import ua.timetracker.timetrackingserver.repository.UsersRepository;
+import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
+import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
+import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
 import ua.timetracker.shared.restapi.dto.TimeLogUpload;
 import ua.timetracker.shared.restapi.dto.TimeLogUploaded;
 
