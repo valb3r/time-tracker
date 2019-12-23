@@ -1,22 +1,31 @@
 package ua.timetracker.timetrackingserver.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.restapi.dto.TimeLogUpload;
 import ua.timetracker.shared.restapi.dto.TimeLogUploaded;
-
-import javax.validation.Valid;
+import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 
 @RestController
-@RequestMapping(V1_TIMELOGS)
+@RequestMapping(value = V1_TIMELOGS,
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+)
+@RequiredArgsConstructor
 public class TimeLogController {
 
-    @PutMapping
-    public Mono<TimeLogUploaded> uploadTimelog(@Valid TimeLogUpload log) {
-        return null;
+    private final TimeLogUploader uploader;
+
+    @PutMapping("/{userId}")
+    public Mono<TimeLogUploaded> uploadTimelog(@PathVariable long userId, @RequestBody TimeLogUpload log) {
+        return uploader.upload(userId, log);
     }
 }

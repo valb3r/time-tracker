@@ -1,4 +1,4 @@
-package ua.timetracker.shared.persistence.groups;
+package ua.timetracker.shared.persistence.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import org.neo4j.springframework.data.core.schema.Node;
 @Getter
 @Setter
 @Node
-public class Group {
+public class User {
 
     @Id
     @GeneratedValue

@@ -1,4 +1,4 @@
-package ua.timetracker.shared.persistence;
+package ua.timetracker.shared.persistence.entity;
 
 import lombok.experimental.UtilityClass;
 

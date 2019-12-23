@@ -35,6 +35,8 @@ dependencies {
 
     compile "com.google.guava:guava:${versions.guava}"
     compile "org.slf4j:slf4j-api:${versions.slf4j}"
+    compile "io.swagger.core.v3:swagger-annotations:${versions.swagger}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${versions.jackson}"
 
     compile "org.hibernate:hibernate-validator:${versions.validator}"
 
