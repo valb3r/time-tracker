@@ -1,0 +1,32 @@
+group 'ua.timetracker.desktopclient'
+version '0.1-SNAPSHOT'
+description = 'Desktop client for lazy ones'
+
+buildscript {
+    dependencies {
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.projectlombok:lombok"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+jar {
+    version = project.version
+    enabled = true
+}
+

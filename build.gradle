@@ -1,0 +1,44 @@
+buildscript {
+    ext {
+        versions = [
+                springBoot          : "2.2.2.RELEASE",
+                dependencyManagement: "1.0.8.RELEASE",
+                guava               : "28.1-jre",
+                junit               : "5.5.2",
+                mockito             : "3.2.4",
+                assertJ             : "3.14.0",
+                validator           : "6.1.0.Final"
+        ]
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}"
+        classpath "io.spring.gradle:dependency-management-plugin:${versions.dependencyManagement}"
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+idea {
+    project {
+        //if you want to set specific jdk and language level
+        jdkName = JavaVersion.VERSION_1_8
+        languageLevel = JavaVersion.VERSION_1_8
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+subprojects {
+    tasks.withType(Test) {
+        useJUnitPlatform()
+    }
+}

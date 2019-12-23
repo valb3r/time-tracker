@@ -1,0 +1,44 @@
+group 'ua.timetracker.timetrackingserver'
+version '0.1-SNAPSHOT'
+description = 'Time log receiver'
+
+buildscript {
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}"
+        classpath "io.spring.gradle:dependency-management-plugin:${versions.springDependencyManagement}"
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.projectlombok:lombok"
+    compile "com.google.guava:guava:${versions.guava}"
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "org.hibernate:hibernate-validator:${versions.validator}"
+
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    version = project.version
+    enabled = true
+}
+
