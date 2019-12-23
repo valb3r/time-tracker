@@ -7,13 +7,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableNeo4jAuditing
-//@EnableReactiveNeo4jRepositories(basePackages = "ua.timetracker.timetrackingserver.repository")
 @EnableTransactionManagement
 @EnableConfigurationProperties
 @SpringBootApplication(
         scanBasePackages = {
                 "ua.timetracker.timetrackingserver.config",
                 "ua.timetracker.timetrackingserver.controller",
+                "ua.timetracker.timetrackingserver.repository",
                 "ua.timetracker.timetrackingserver.service"
         }
 )

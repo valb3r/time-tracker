@@ -14,5 +14,3 @@ org:
       authentication:
         username: neo4j
         password: docker
-
-debug: true

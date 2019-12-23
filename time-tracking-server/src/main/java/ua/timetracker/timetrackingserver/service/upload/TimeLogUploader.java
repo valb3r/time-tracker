@@ -13,6 +13,7 @@ import ua.timetracker.shared.restapi.dto.TimeLogUpload;
 import ua.timetracker.shared.restapi.dto.TimeLogUploaded;
 
 import static reactor.core.publisher.Mono.just;
+import static ua.timetracker.timetrackingserver.config.Const.REACTIVE_TX_MANAGER;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class TimeLogUploader {
     private final ProjectsRepository projects;
     private final TimeLogsRepository logs;
 
-    @Transactional("reactiveTransactionManager")
+    @Transactional(REACTIVE_TX_MANAGER)
     public Mono<TimeLogUploaded> upload(long userId, TimeLogUpload uploaded) {
 
         return users.findById(just(userId))

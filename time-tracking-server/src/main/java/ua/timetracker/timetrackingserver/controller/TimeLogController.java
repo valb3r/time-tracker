@@ -24,8 +24,8 @@ public class TimeLogController {
 
     private final TimeLogUploader uploader;
 
-    @PutMapping("/{userId}")
-    public Mono<TimeLogUploaded> uploadTimelog(@PathVariable long userId, @RequestBody TimeLogUpload log) {
+    @PutMapping("/{user_id}")
+    public Mono<TimeLogUploaded> uploadTimelog(@PathVariable("user_id") long userId, @RequestBody TimeLogUpload log) {
         return uploader.upload(userId, log);
     }
 }
