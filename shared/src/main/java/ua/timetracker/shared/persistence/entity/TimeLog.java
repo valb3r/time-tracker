@@ -10,7 +10,7 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.data.annotation.CreatedDate;
-import ua.timetracker.shared.restapi.dto.TimeLogUpload;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -52,7 +52,7 @@ public class TimeLog {
     private Set<Project> projects;
 
     @CreatedDate
-    private LocalDateTime loggedAtUtc;
+    private LocalDateTime loggedAt;
 
     public TimeLog(TimeLogUpload upload) {
         tags = upload.getTags();

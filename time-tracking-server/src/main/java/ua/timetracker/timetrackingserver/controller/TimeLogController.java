@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.shared.restapi.dto.TimeLogUpload;
-import ua.timetracker.shared.restapi.dto.TimeLogUploaded;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogUploaded;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
+
+import javax.validation.Valid;
 
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 
@@ -25,7 +27,7 @@ public class TimeLogController {
     private final TimeLogUploader uploader;
 
     @PutMapping("/{user_id}")
-    public Mono<TimeLogUploaded> uploadTimelog(@PathVariable("user_id") long userId, @RequestBody TimeLogUpload log) {
+    public Mono<TimeLogUploaded> uploadTimelog(@PathVariable("user_id") long userId, @Valid @RequestBody TimeLogUpload log) {
         return uploader.upload(userId, log);
     }
 }

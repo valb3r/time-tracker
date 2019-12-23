@@ -1,0 +1,16 @@
+server:
+  port: 20081
+
+spring:
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    property-naming-strategy: SNAKE_CASE
+
+# docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j
+org:
+  neo4j:
+    driver:
+      uri: bolt://localhost:7687
+      authentication:
+        username: neo4j
+        password: docker

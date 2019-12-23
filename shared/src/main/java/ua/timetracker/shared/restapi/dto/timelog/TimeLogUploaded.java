@@ -1,4 +1,4 @@
-package ua.timetracker.shared.restapi.dto;
+package ua.timetracker.shared.restapi.dto.timelog;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TimeLogUploaded {
 
+    private Long id;
     private LocalDateTime uploadedAt;
 
     public TimeLogUploaded(TimeLog log) {
-        this.uploadedAt = log.getLoggedAtUtc();
+        this.uploadedAt = log.getLoggedAt();
     }
 }
