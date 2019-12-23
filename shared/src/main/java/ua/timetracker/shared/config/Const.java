@@ -1,4 +1,4 @@
-package ua.timetracker.timetrackingserver.config;
+package ua.timetracker.shared.config;
 
 import lombok.experimental.UtilityClass;
 

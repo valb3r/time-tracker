@@ -1,4 +1,4 @@
-package ua.timetracker.timetrackingserver.config;
+package ua.timetracker.shared.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.core.jackson.ModelResolver;

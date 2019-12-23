@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties
 @SpringBootApplication(
         scanBasePackages = {
-                "ua.timetracker.timetrackingserver.config",
+                "ua.timetracker.shared.config",
                 "ua.timetracker.timetrackingserver.controller",
                 "ua.timetracker.timetrackingserver.service"
         }

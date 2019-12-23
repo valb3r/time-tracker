@@ -12,8 +12,9 @@ import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
 import ua.timetracker.shared.restapi.dto.TimeLogUpload;
 import ua.timetracker.shared.restapi.dto.TimeLogUploaded;
 
+import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 import static reactor.core.publisher.Mono.just;
-import static ua.timetracker.timetrackingserver.config.Const.REACTIVE_TX_MANAGER;
+
 
 @Service
 @RequiredArgsConstructor
