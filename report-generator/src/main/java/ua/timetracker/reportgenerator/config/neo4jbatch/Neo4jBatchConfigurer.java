@@ -8,7 +8,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.SimpleJobRepository;
-import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import ua.timetracker.reportgenerator.config.neo4jbatch.dao.Neo4jExecutionContextDao;
@@ -24,7 +24,6 @@ public class Neo4jBatchConfigurer implements BatchConfigurer {
     private final Neo4jJobExecutionDao executionDao;
     private final Neo4jJobInstanceDao instanceDao;
     private final Neo4jStepExecutionDao stepExecutionDao;
-    private final Neo4jTransactionManager txManager;
 
     @Override
     public JobRepository getJobRepository() {
@@ -33,7 +32,8 @@ public class Neo4jBatchConfigurer implements BatchConfigurer {
 
     @Override
     public PlatformTransactionManager getTransactionManager() {
-        return txManager;
+        // TODO Check transaction management
+        return new ResourcelessTransactionManager();
     }
 
     @Override
