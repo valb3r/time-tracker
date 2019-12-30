@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.data.annotation.CreatedDate;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ParameterMapConverter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -33,6 +35,8 @@ public class Neo4jJobInstance {
 
     private String jobName;
     private String jobKey;
+
+    @Convert(ParameterMapConverter.class)
     private Map<String, JobParameter> parameters;
 
     @CreatedDate

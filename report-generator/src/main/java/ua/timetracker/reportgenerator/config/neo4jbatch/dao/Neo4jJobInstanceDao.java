@@ -42,25 +42,25 @@ public class Neo4jJobInstanceDao implements JobInstanceDao {
     @Override
     @Transactional
     public JobInstance getJobInstance(String jobName, JobParameters jobParameters) {
-        return Neo4jJobInstance.MAP.map(
-            jobInstances.findBy(jobName, keyGenerator.generateKey(jobParameters)).get()
-        );
+        return jobInstances.findBy(jobName, keyGenerator.generateKey(jobParameters))
+            .map(Neo4jJobInstance.MAP::map)
+            .orElse(null);
     }
 
     @Override
     @Transactional
     public JobInstance getJobInstance(Long instanceId) {
-        return Neo4jJobInstance.MAP.map(
-            jobInstances.findById(instanceId).get()
-        );
+        return jobInstances.findById(instanceId)
+            .map(Neo4jJobInstance.MAP::map)
+            .orElse(null);
     }
 
     @Override
     @Transactional
     public JobInstance getJobInstance(JobExecution jobExecution) {
-        return Neo4jJobInstance.MAP.map(
-            jobInstances.findForExecution(jobExecution.getJobId()).get()
-        );
+        return jobInstances.findForExecution(jobExecution.getJobId())
+            .map(Neo4jJobInstance.MAP::map)
+            .orElse(null);
     }
 
     @Override

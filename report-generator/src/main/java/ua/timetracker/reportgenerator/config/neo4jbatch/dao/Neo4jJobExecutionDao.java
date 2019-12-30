@@ -1,6 +1,7 @@
 package ua.timetracker.reportgenerator.config.neo4jbatch.dao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.repository.dao.JobExecutionDao;
@@ -22,13 +23,14 @@ public class Neo4jJobExecutionDao implements JobExecutionDao {
     @Override
     @Transactional
     public void saveJobExecution(JobExecution jobExecution) {
-        jobExecs.save(Neo4jJobExecution.MAP.map(jobExecution));
+        val result = jobExecs.save(Neo4jJobExecution.MAP.map(jobExecution, new CycleAvoidingMappingContext()));
+        jobExecution.setId(result.getId());
     }
 
     @Override
     @Transactional
     public void updateJobExecution(JobExecution jobExecution) {
-        jobExecs.save(Neo4jJobExecution.MAP.map(jobExecution));
+        jobExecs.save(Neo4jJobExecution.MAP.map(jobExecution, new CycleAvoidingMappingContext()));
     }
 
     @Override
@@ -36,16 +38,16 @@ public class Neo4jJobExecutionDao implements JobExecutionDao {
     public List<JobExecution> findJobExecutions(JobInstance jobInstance) {
         return jobExecs.findAllByJobInstanceId(jobInstance.getId())
             .stream()
-            .map(Neo4jJobExecution.MAP::map)
+            .map(it -> Neo4jJobExecution.MAP.map(it, new CycleAvoidingMappingContext()))
             .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public JobExecution getLastJobExecution(JobInstance jobInstance) {
-        return Neo4jJobExecution.MAP.map(
-            jobExecs.findLatestExecution(jobInstance.getId()).get()
-        );
+        return jobExecs.findLatestExecution(jobInstance.getId())
+            .map(it -> Neo4jJobExecution.MAP.map(it, new CycleAvoidingMappingContext()))
+            .orElse(null);
     }
 
     @Override
@@ -53,16 +55,16 @@ public class Neo4jJobExecutionDao implements JobExecutionDao {
     public Set<JobExecution> findRunningJobExecutions(String jobName) {
         return jobExecs.findRunningJobExecutions(jobName)
             .stream()
-            .map(Neo4jJobExecution.MAP::map)
+            .map(it -> Neo4jJobExecution.MAP.map(it, new CycleAvoidingMappingContext()))
             .collect(Collectors.toSet());
     }
 
     @Override
     @Transactional
     public JobExecution getJobExecution(Long executionId) {
-        return Neo4jJobExecution.MAP.map(
-            jobExecs.findById(executionId).get()
-        );
+        return jobExecs.findById(executionId)
+            .map(it -> Neo4jJobExecution.MAP.map(it, new CycleAvoidingMappingContext()))
+            .orElse(null);
     }
 
     @Override

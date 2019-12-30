@@ -1,7 +1,9 @@
 package ua.timetracker.reportgenerator.config.neo4jbatch.dao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import ua.timetracker.reportgenerator.persistence.entity.Neo4jStepExecution;
 import ua.timetracker.reportgenerator.persistence.repository.Neo4jStepExecutionRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,7 +24,8 @@ public class Neo4jStepExecutionDao implements StepExecutionDao {
     @Override
     @Transactional
     public void saveStepExecution(StepExecution stepExecution) {
-        stepExecs.save(Neo4jStepExecution.MAP.map(stepExecution));
+        val exec = stepExecs.save(Neo4jStepExecution.MAP.map(stepExecution));
+        stepExecution.setId(exec.getId());
     }
 
     @Override
@@ -41,9 +45,20 @@ public class Neo4jStepExecutionDao implements StepExecutionDao {
     @Override
     @Transactional
     public StepExecution getStepExecution(JobExecution jobExecution, Long stepExecutionId) {
-        return Neo4jStepExecution.MAP.map(
-            stepExecs.findBy(jobExecution.getId(), stepExecutionId).get()
-        );
+        return stepExecs.findBy(jobExecution.getId(), stepExecutionId)
+            .map(Neo4jStepExecution.MAP::map)
+            .orElse(null);
+    }
+
+    @Override
+    public StepExecution getLastStepExecution(JobInstance jobInstance, String stepName) {
+        List<Neo4jStepExecution> executions = stepExecs.findLastStepExecution(jobInstance.getInstanceId(), stepName);
+
+        if (executions.isEmpty()) {
+            return null;
+        } else {
+            return Neo4jStepExecution.MAP.map(executions.get(0));
+        }
     }
 
     @Override

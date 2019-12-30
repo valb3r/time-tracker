@@ -5,10 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -19,6 +22,10 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.item.ExecutionContext;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.CycleAvoidingMappingContext;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExecutionContextConverter;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExitStatusConverter;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ParametersConverter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -49,27 +56,33 @@ public class Neo4jJobExecution {
     @Relationship(type = PARENT, direction = INCOMING)
     private Collection<Neo4jStepExecution> persistentStepExecutions;
 
+    @Convert(ParametersConverter.class)
     private JobParameters jobParameters;
+
     private BatchStatus status = BatchStatus.STARTING;
     private Date startTime = null;
     private Date createTime = new Date(System.currentTimeMillis());
     private Date endTime = null;
     private Date lastUpdated = null;
+
+    @Convert(ExitStatusConverter.class)
     private ExitStatus exitStatus = ExitStatus.UNKNOWN;
+
     private String jobConfigurationName;
-    
+
+    @Convert(ExecutionContextConverter.class)
     private Map<String, Object> executionContext;
 
     @Mapper
     public interface FromBatch {
 
         @Mapping(source = "stepExecutions", target = "persistentStepExecutions")
-        Neo4jJobExecution map(JobExecution batch);
+        Neo4jJobExecution map(JobExecution batch, @Context CycleAvoidingMappingContext context);
 
         JobExecution map(Neo4jJobExecution source, @MappingTarget JobExecution target);
 
         @Mapping(source = "persistentStepExecutions", target = "stepExecutions")
-        default JobExecution map(Neo4jJobExecution source) {
+        default JobExecution map(Neo4jJobExecution source, @Context CycleAvoidingMappingContext context) {
             return map(source, new JobExecution(source.getId()));
         }
 
@@ -90,5 +103,11 @@ public class Neo4jJobExecution {
             return new JobInstance(batch.getId(), batch.getJobName());
         }
 
+        @AfterMapping
+        default void addBackReference(@MappingTarget Neo4jJobExecution execution) {
+            for (Neo4jStepExecution child : execution.getPersistentStepExecutions() ) {
+                child.setJobExecution(execution);
+            }
+        }
     }
 }

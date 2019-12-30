@@ -28,7 +28,7 @@ public class JobTest {
                 log.info("STEP ONE!");
                 return null;
             }).build())
-            .start(stepBuilderFactory.get("TWO").tasklet((a, b) -> {
+            .next(stepBuilderFactory.get("TWO").tasklet((a, b) -> {
                 log.info("STEP TWO!");
                 return null;
             }).build())

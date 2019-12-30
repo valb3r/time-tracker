@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -16,6 +17,9 @@ import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.item.ExecutionContext;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.CycleAvoidingMappingContext;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExecutionContextConverter;
+import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExitStatusConverter;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -50,25 +54,32 @@ public class Neo4jStepExecution {
     private Date startTime = new Date(System.currentTimeMillis());
     private Date endTime = null;
     private Date lastUpdated = null;
+
+    @Convert(ExitStatusConverter.class)
     private ExitStatus exitStatus = ExitStatus.EXECUTING;
+
     private boolean terminateOnly;
     private int filterCount;
 
     @Relationship(type = PARENT, direction = OUTGOING)
     private Neo4jJobExecution jobExecution;
 
+    @Convert(ExecutionContextConverter.class)
     private Map<String, Object> executionContext;
 
     @Mapper
     public interface FromBatch {
 
         Neo4jStepExecution map(StepExecution source);
+
         StepExecution map(Neo4jStepExecution source, @MappingTarget StepExecution target);
 
         default StepExecution map(Neo4jStepExecution source) {
             return map(
                 source,
-                new StepExecution(source.getStepName(), Neo4jJobExecution.MAP.map(source.getJobExecution()))
+                new StepExecution(
+                    source.getStepName(),
+                    Neo4jJobExecution.MAP.map(source.getJobExecution(), new CycleAvoidingMappingContext()))
             );
         }
 
