@@ -5,17 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
@@ -32,8 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.neo4j.springframework.data.core.schema.Relationship.Direction.INCOMING;
-import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 import static ua.timetracker.reportgenerator.persistence.BatchRelationshipConst.PARENT;
 
 @Getter
@@ -50,7 +48,7 @@ public class Neo4jJobExecution {
     @GeneratedValue
     private Long id;
 
-    @Relationship(type = PARENT, direction = OUTGOING)
+    @Relationship(type = PARENT)
     private Neo4jJobInstance jobInstance;
 
     @Relationship(type = PARENT, direction = INCOMING)
@@ -101,13 +99,6 @@ public class Neo4jJobExecution {
 
         default JobInstance map(Neo4jJobInstance batch) {
             return new JobInstance(batch.getId(), batch.getJobName());
-        }
-
-        @AfterMapping
-        default void addBackReference(@MappingTarget Neo4jJobExecution execution) {
-            for (Neo4jStepExecution child : execution.getPersistentStepExecutions() ) {
-                child.setJobExecution(execution);
-            }
         }
     }
 }

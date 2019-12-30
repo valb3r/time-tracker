@@ -8,11 +8,11 @@ import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
 import static ua.timetracker.reportgenerator.persistence.BatchRelationshipConst.PARENT;
 
 @Getter
@@ -61,7 +60,7 @@ public class Neo4jStepExecution {
     private boolean terminateOnly;
     private int filterCount;
 
-    @Relationship(type = PARENT, direction = OUTGOING)
+    @Relationship(type = PARENT)
     private Neo4jJobExecution jobExecution;
 
     @Convert(ExecutionContextConverter.class)
