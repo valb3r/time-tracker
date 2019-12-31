@@ -6,7 +6,7 @@ spring:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
     property-naming-strategy: SNAKE_CASE
 
-# docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j
+# docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j/neo4j-experimental:4.0.0-rc01
 org:
   neo4j:
     driver:

@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface Neo4jStepExecutionRepository extends CrudRepository<Neo4jStepExecution, Long> {
 
     @Query("MATCH (s:Neo4jStepExecution)-[:PARENT]->(e:Neo4jJobExecution) " +
-        "WHERE e.id = {jobExecId} AND s.id = {stepExecId} " +
+        "WHERE e.id = $jobExecId AND s.id = $stepExecId " +
         "RETURN s")
     Optional<Neo4jStepExecution> findBy(
         @Param("jobExecId") long jobExecId,
@@ -21,8 +21,10 @@ public interface Neo4jStepExecutionRepository extends CrudRepository<Neo4jStepEx
     );
 
     @Query("MATCH (s:Neo4jStepExecution)-[:PARENT]->(e:Neo4jJobExecution)-[:PARENT]->(j:Neo4jJobInstance) " +
-        "WHERE j.id = {jobExecInstanceId} AND s.stepName = {stepName} " +
+        "WHERE j.id = $jobExecInstanceId AND s.stepName = $stepName " +
         "RETURN s ORDER BY s.startTime DESC, s.id DESC")
-    List<Neo4jStepExecution> findLastStepExecution(@Param("jobExecInstanceId") long jobExecInstanceId,
-                                                   @Param("stepName") String stepName);
+    List<Neo4jStepExecution> findLastStepExecution(
+        @Param("jobExecInstanceId") long jobExecInstanceId,
+        @Param("stepName") String stepName
+    );
 }

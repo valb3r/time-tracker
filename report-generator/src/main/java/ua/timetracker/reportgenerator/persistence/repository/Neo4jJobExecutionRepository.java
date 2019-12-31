@@ -15,12 +15,12 @@ public interface Neo4jJobExecutionRepository extends CrudRepository<Neo4jJobExec
 
     List<Neo4jJobExecution> findAllByJobInstanceId(long instanceId);
 
-    @Query("MATCH (e:Neo4jJobExecution)-[:PARENT]->(i:Neo4jJobInstance) WHERE i.id = {instanceId} RETURN e " +
+    @Query("MATCH (e:Neo4jJobExecution)-[:PARENT]->(i:Neo4jJobInstance) WHERE i.id = $instanceId RETURN e " +
         "ORDER BY e.createTime LIMIT 1")
     Optional<Neo4jJobExecution> findLatestExecution(@Param("instanceId") long instanceId);
 
     @Query("MATCH (e:Neo4jJobExecution)-[:PARENT]->(i:Neo4jJobInstance) " +
-        "WHERE i.jobName = {name} AND e.startTime IS NOT NULL AND e.endTime IS NULL RETURN e " +
+        "WHERE i.jobName = $name AND e.startTime IS NOT NULL AND e.endTime IS NULL RETURN e " +
         "ORDER BY e.id DESC")
     Set<Neo4jJobExecution> findRunningJobExecutions(@Param("name") String jobName);
 }

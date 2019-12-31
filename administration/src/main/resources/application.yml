@@ -6,7 +6,7 @@ spring:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
     property-naming-strategy: SNAKE_CASE
 
-# docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j
+# docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j/neo4j-experimental:4.0.0-rc01
 org:
   neo4j:
     driver:
@@ -23,7 +23,13 @@ time-tracker:
       - CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE
       - CREATE CONSTRAINT ON (project:Project) ASSERT project.name IS UNIQUE
       - CREATE (admins:Group {name:"admins"})
-      - CREATE (administration:Role {name:"ADMINISTRATION"})
+      - CREATE (administration:Role {name:"ADMINISTRATOR"})
       - MATCH(g:Group {name:"admins"})
-        MATCH(r:Role {name:"ADMINISTRATION"})
+        MATCH(r:Role {name:"ADMINISTRATOR"})
         MERGE(g)-[:HAS_ROLE]->(r)
+
+oauth2:
+  keys:
+    # You should override these!
+    private: classpath:example.pem
+    public: classpath:example.pub
