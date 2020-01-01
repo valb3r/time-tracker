@@ -3,10 +3,16 @@ package ua.timetracker.administration.config.jwtsecurity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpCookie;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 import java.security.interfaces.RSAPublicKey;
 
@@ -17,29 +23,41 @@ public class JwtSecurityConfig {
     private RSAPublicKey publicKey;
 
     @Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveJwtDecoder decoder) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
+            .csrf().disable()
             .authorizeExchange()
+            .pathMatchers("/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .anyExchange().authenticated()
             .and()
             .oauth2ResourceServer()
-          //  .bearerTokenConverter(new CookieBasedJwt())
+            .bearerTokenConverter(new CookieBasedJwt())
             .jwt()
-            .jwtDecoder(decoder);
+            .jwtDecoder(jwtDecoder());
         return http.build();
     }
 
     @Bean
-    public ReactiveJwtDecoder jwtDecoder(Oauth2Config oauth2) {
+    public ReactiveJwtDecoder jwtDecoder() {
         return NimbusReactiveJwtDecoder.withPublicKey(publicKey).build();
     }
 
-    /**
     static class CookieBasedJwt implements ServerAuthenticationConverter {
+
+        private static final String AUTHORIZATION = "X-Authorization";
 
         @Override
         public Mono<Authentication> convert(ServerWebExchange exchange) {
-            return exchange.getRequest().getCookies().getFirst();
+            return Mono.justOrEmpty(readToken(exchange));
         }
-    }*/
+
+        private BearerTokenAuthenticationToken readToken(ServerWebExchange exchange) {
+            HttpCookie cookie = exchange.getRequest().getCookies().getFirst(AUTHORIZATION);
+            if (null == cookie) {
+                return null;
+            }
+
+            return new BearerTokenAuthenticationToken(cookie.getValue());
+        }
+    }
 }
