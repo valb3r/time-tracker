@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpCookie;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
@@ -16,8 +17,14 @@ import reactor.core.publisher.Mono;
 
 import java.security.interfaces.RSAPublicKey;
 
+import static ua.timetracker.shared.restapi.Paths.V1_LOGIN;
+
+
 @Configuration
-public class JwtSecurityConfig {
+@EnableWebFluxSecurity
+public class ResourceServerJwtSecurityConfig {
+
+    public static final String AUTHORIZATION = "X-Authorization";
 
     @Value("${oauth2.keys.pub}")
     private RSAPublicKey publicKey;
@@ -27,7 +34,7 @@ public class JwtSecurityConfig {
         http
             .csrf().disable()
             .authorizeExchange()
-            .pathMatchers("/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .pathMatchers(V1_LOGIN, "/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .anyExchange().authenticated()
             .and()
             .oauth2ResourceServer()
@@ -43,8 +50,6 @@ public class JwtSecurityConfig {
     }
 
     static class CookieBasedJwt implements ServerAuthenticationConverter {
-
-        private static final String AUTHORIZATION = "X-Authorization";
 
         @Override
         public Mono<Authentication> convert(ServerWebExchange exchange) {

@@ -28,8 +28,16 @@ time-tracker:
         MATCH(r:Role {name:"ADMINISTRATOR"})
         MERGE(g)-[:HAS_ROLE]->(r)
 
+bcrypt:
+  strength: 8
+
 oauth2:
+  token:
+    validity: 60M
   keys:
     # You should override these!
     priv: classpath:example.pem
     pub: classpath:example.pub
+
+
+debug: true
