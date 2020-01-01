@@ -7,25 +7,24 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 
 @Validated
 @Data
 @Configuration
-@ConfigurationProperties("ouath2")
+@ConfigurationProperties(prefix = "oauth2")
 public class Oauth2Config {
 
     @NotNull
     private Key keys;
 
     @Data
+    @Validated
     public static class Key {
 
         @NotNull
-        private RSAPublicKey pub;
+        private String pub;
 
         @NotBlank
-        private RSAPrivateKey priv;
+        private String priv;
     }
 }

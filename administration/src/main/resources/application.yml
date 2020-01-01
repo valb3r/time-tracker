@@ -31,5 +31,5 @@ time-tracker:
 oauth2:
   keys:
     # You should override these!
-    private: classpath:example.pem
-    public: classpath:example.pub
+    priv: classpath:example.pem
+    pub: classpath:example.pub

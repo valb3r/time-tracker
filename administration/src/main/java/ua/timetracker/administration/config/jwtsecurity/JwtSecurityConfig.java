@@ -1,5 +1,6 @@
 package ua.timetracker.administration.config.jwtsecurity;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -7,8 +8,13 @@ import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+import java.security.interfaces.RSAPublicKey;
+
 @Configuration
 public class JwtSecurityConfig {
+
+    @Value("${oauth2.keys.pub}")
+    private RSAPublicKey publicKey;
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveJwtDecoder decoder) {
@@ -25,7 +31,7 @@ public class JwtSecurityConfig {
 
     @Bean
     public ReactiveJwtDecoder jwtDecoder(Oauth2Config oauth2) {
-        return NimbusReactiveJwtDecoder.withPublicKey(oauth2.getKeys().getPub()).build();
+        return NimbusReactiveJwtDecoder.withPublicKey(publicKey).build();
     }
 
     /**

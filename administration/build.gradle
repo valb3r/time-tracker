@@ -31,6 +31,7 @@ dependencies {
     compile project(":shared")
 
     compile 'org.springframework.security:spring-security-oauth2-jose'
+    compile 'org.springframework.security:spring-security-oauth2-resource-server'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter:${versions.neo4jRx}"
