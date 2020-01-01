@@ -19,7 +19,6 @@ time-tracker:
   neo4j:
     schema:
       - CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE
-      - CREATE CONSTRAINT ON (role:Role) ASSERT role.name IS UNIQUE
       - CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE
       - CREATE CONSTRAINT ON (project:Project) ASSERT project.name IS UNIQUE
       - CREATE (admins:Group {name:"admins"})

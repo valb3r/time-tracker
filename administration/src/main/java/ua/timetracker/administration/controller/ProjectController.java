@@ -2,6 +2,7 @@ package ua.timetracker.administration.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class ProjectController {
     private final ProjectManager manager;
 
     @PutMapping
+    @PreAuthorize("#{auth.canCreateProjects()}")
     public Mono<ProjectDto> createProject(@Valid @RequestBody ProjectCreate projectToCreate) {
         return manager.createProject(projectToCreate);
     }
