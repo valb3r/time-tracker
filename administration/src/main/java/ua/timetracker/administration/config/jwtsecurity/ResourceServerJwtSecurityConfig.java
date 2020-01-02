@@ -12,12 +12,13 @@ import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.security.interfaces.RSAPublicKey;
 
-import static ua.timetracker.shared.restapi.Paths.V1_LOGIN;
+import static ua.timetracker.shared.restapi.Paths.V1_RESOURCES;
 
 
 @Configuration
@@ -29,13 +30,13 @@ public class ResourceServerJwtSecurityConfig {
     @Value("${oauth2.keys.pub}")
     private RSAPublicKey publicKey;
 
+    /**
+     * Protects /v1/resources with bearer-alike cookie 'X-Authorization'
+     */
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-            .authorizeExchange()
-                .pathMatchers(V1_LOGIN, "/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .anyExchange().authenticated()
-            .and().csrf().disable()
+            .securityMatcher(new PathPatternParserServerWebExchangeMatcher(V1_RESOURCES + "/**"))
             .oauth2ResourceServer()
                 .bearerTokenConverter(new CookieBasedJwt())
                 .jwt()
@@ -56,11 +57,6 @@ public class ResourceServerJwtSecurityConfig {
         }
 
         private BearerTokenAuthenticationToken readToken(ServerWebExchange exchange) {
-            // FIXME - oauth2ResourceServer adds anyExchange as its filter, haven't found web.ignore() analog for WebFlux
-            if (exchange.getRequest().getPath().toString().equalsIgnoreCase(V1_LOGIN)) {
-                return null;
-            }
-
             HttpCookie cookie = exchange.getRequest().getCookies().getFirst(AUTHORIZATION);
             if (null == cookie) {
                 return null;
