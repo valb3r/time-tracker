@@ -21,7 +21,7 @@ public class InitialUserCreation {
     public void initInitialUser() {
         users.findUser("admin")
             .switchIfEmpty(Mono.defer(
-                () -> users.createUser(new UserCreate()))
+                () -> users.createUser(new UserCreate("admin", "admin")))
             )
             .subscribe();
     }

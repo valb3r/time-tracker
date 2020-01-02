@@ -32,15 +32,14 @@ public class ResourceServerJwtSecurityConfig {
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-            .csrf().disable()
             .authorizeExchange()
-            .pathMatchers(V1_LOGIN, "/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .anyExchange().authenticated()
-            .and()
+                .pathMatchers(V1_LOGIN, "/swagger-ui.html", "/webjars/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .anyExchange().authenticated()
+            .and().csrf().disable()
             .oauth2ResourceServer()
-            .bearerTokenConverter(new CookieBasedJwt())
-            .jwt()
-            .jwtDecoder(jwtDecoder());
+                .bearerTokenConverter(new CookieBasedJwt())
+                .jwt()
+                .jwtDecoder(jwtDecoder());
         return http.build();
     }
 
@@ -57,6 +56,11 @@ public class ResourceServerJwtSecurityConfig {
         }
 
         private BearerTokenAuthenticationToken readToken(ServerWebExchange exchange) {
+            // FIXME - oauth2ResourceServer adds anyExchange as its filter, haven't found web.ignore() analog for WebFlux
+            if (exchange.getRequest().getPath().toString().equalsIgnoreCase(V1_LOGIN)) {
+                return null;
+            }
+
             HttpCookie cookie = exchange.getRequest().getCookies().getFirst(AUTHORIZATION);
             if (null == cookie) {
                 return null;

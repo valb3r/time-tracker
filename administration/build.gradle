@@ -30,7 +30,6 @@ targetCompatibility = 1.8
 dependencies {
     compile project(":shared")
 
-    compile 'com.nimbusds:nimbus-jose-jwt:8.0'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.security:spring-security-oauth2-jose'
