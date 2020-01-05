@@ -29,12 +29,12 @@ public class ProjectManager {
         return newProject
             .zipWith(group)
             .flatMap(projectAndGroup -> {
-                projectAndGroup.getT2().getProjectsAndInitialize().add(projectAndGroup.getT1());
+                projectAndGroup.getT2().getProjects().add(projectAndGroup.getT1());
                 return groups.save(projectAndGroup.getT2());
             })
             .switchIfEmpty(Mono.error(new IllegalArgumentException("No group: " + parentGroupId)))
-            .flatMap(updatedGroup -> newProject
-            .map(ProjectDto.MAP::map));
+            .flatMap(updatedGroup -> newProject)
+            .map(ProjectDto.MAP::map);
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

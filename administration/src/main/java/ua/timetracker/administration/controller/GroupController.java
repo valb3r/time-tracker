@@ -38,13 +38,13 @@ public class GroupController {
 
     @GetMapping
     @PreAuthorize("#{auth.canCreateGroups()}")
-    public Flux<GroupDto> createGroup() {
+    public Flux<GroupDto> listGroups() {
         return manager.groups();
     }
 
     @GetMapping(path = "/{id}")
     @PreAuthorize("#{auth.canCreateGroups()}")
-    public Mono<GroupDto> createGroup(@PathVariable("id") long groupId) {
+    public Mono<GroupDto> groupById(@PathVariable("id") long groupId) {
         return manager.groupById(groupId);
     }
 

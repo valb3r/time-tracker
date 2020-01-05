@@ -15,11 +15,13 @@ import ua.timetracker.shared.persistence.entity.projects.Project;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.restapi.dto.group.GroupCreate;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.INCOMING;
-import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN;
+import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
 
 @Getter
 @Setter
@@ -37,30 +39,21 @@ public class Group {
 
     private String name;
 
-    // Resource pool:
-    @Relationship(type = IN, direction = INCOMING)
-    private Set<Group> children;
+    // Resource pool
 
-    @Relationship(type = IN, direction = INCOMING)
-    private Set<User> users;
+    // Same entity mapping seem to be unstable:
+    // Issue-causing query:
+    // MATCH (startNode)-[rel:`CHILD`]->(:`Group`) WHERE id(startNode) = $fromId DELETE rel
+    // on parent-child relationship
+    // @Relationship(type = IN, direction = INCOMING)
+    // private Set<Group> children;
+    // So that ^^ above won't work.
 
-    @Relationship(type = IN, direction = INCOMING)
-    private Set<Project> projects;
+    @Relationship(type = IN_GROUP, direction = INCOMING)
+    private Set<User> users = new HashSet<>();
 
-    public Set<User> getUsersAndInitialize() {
-        this.users = null == this.users ? new LinkedHashSet<>() : this.users;
-        return this.users;
-    }
-
-    public Set<Project> getProjectsAndInitialize() {
-        this.projects = null == this.projects ? new LinkedHashSet<>() : this.projects;
-        return this.projects;
-    }
-
-    public Set<Group> getChildrenAndInitialize() {
-        this.children = null == this.children ? new LinkedHashSet<>() : this.children;
-        return this.children;
-    }
+    @Relationship(type = OWNS, direction = OUTGOING)
+    private Set<Project> projects = new HashSet<>();
 
     @Mapper
     public interface FromDto {

@@ -33,7 +33,7 @@ public class UserManager {
         return newUser
             .zipWith(group)
             .flatMap(userAndGroup -> {
-                userAndGroup.getT2().getUsersAndInitialize().add(userAndGroup.getT1());
+                userAndGroup.getT2().getUsers().add(userAndGroup.getT1());
                 return groups.save(userAndGroup.getT2());
             })
             .switchIfEmpty(Mono.error(new IllegalArgumentException("No group: " + parentGroupId)))

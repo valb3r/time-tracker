@@ -12,5 +12,6 @@ public class Paths {
     public static final String V1_ROLES = V1_RESOURCES + "/roles";
     public static final String V1_USERS = V1_RESOURCES + "/users";
     public static final String V1_GROUPS = V1_RESOURCES + "/groups";
+    public static final String V1_OWNED = V1_RESOURCES + "/owned-resources";
     public static final String V1_LOGIN = V1 + "/login";
 }
