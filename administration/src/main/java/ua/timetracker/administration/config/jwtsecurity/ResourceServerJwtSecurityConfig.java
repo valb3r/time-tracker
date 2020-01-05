@@ -36,6 +36,7 @@ public class ResourceServerJwtSecurityConfig {
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
+            .csrf().disable()
             .securityMatcher(new PathPatternParserServerWebExchangeMatcher(V1_RESOURCES + "/**"))
             .oauth2ResourceServer()
                 .bearerTokenConverter(new CookieBasedJwt())

@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
-import static ua.timetracker.shared.persistence.entity.Relationships.LOGGED_FOR;
-import static ua.timetracker.shared.persistence.entity.Relationships.OWNER;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.LOGGED_FOR;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNER;
 
 @Getter
 @Setter

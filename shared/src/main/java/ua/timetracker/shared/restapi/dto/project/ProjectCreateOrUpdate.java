@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class ProjectCreate {
+public class ProjectCreateOrUpdate {
 
     @NotBlank
     private String name;

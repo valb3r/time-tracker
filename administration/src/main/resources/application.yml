@@ -21,11 +21,8 @@ time-tracker:
       - CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE
       - CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE
       - CREATE CONSTRAINT ON (project:Project) ASSERT project.name IS UNIQUE
-      - CREATE (admins:Group {name:"admins"})
-      - CREATE (administration:Role {name:"ADMINISTRATOR"})
-      - MATCH(g:Group {name:"admins"})
-        MATCH(r:Role {name:"ADMINISTRATOR"})
-        MERGE(g)-[:HAS_ROLE]->(r)
+      - CREATE CONSTRAINT ON (project:Project) ASSERT project.code IS UNIQUE
+      - CREATE (root:Group {name:"Root group"})
 
 bcrypt:
   strength: 8
@@ -39,4 +36,3 @@ oauth2:
     pub: classpath:example.pub
 
 
-debug: true

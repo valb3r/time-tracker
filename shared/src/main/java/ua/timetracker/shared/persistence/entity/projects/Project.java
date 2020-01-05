@@ -2,21 +2,19 @@ package ua.timetracker.shared.persistence.entity.projects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
-import org.neo4j.springframework.data.core.schema.Relationship;
-import ua.timetracker.shared.restapi.dto.project.ProjectCreate;
+import ua.timetracker.shared.restapi.dto.project.ProjectCreateOrUpdate;
 
-import java.util.List;
-
-import static ua.timetracker.shared.persistence.entity.Relationships.DEVELOPER;
-import static ua.timetracker.shared.persistence.entity.Relationships.MANAGER;
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
 @Getter
 @Setter
@@ -27,6 +25,7 @@ import static ua.timetracker.shared.persistence.entity.Relationships.MANAGER;
 public class Project {
 
     public static final Project.FromDto MAP = Mappers.getMapper(Project.FromDto.class);
+    public static final Project.Merge UPDATE = Mappers.getMapper(Project.Merge.class);
 
     @Id
     @GeneratedValue
@@ -36,14 +35,16 @@ public class Project {
     private String code;
     private String description;
 
-    @Relationship(value = DEVELOPER, direction = Relationship.Direction.INCOMING)
-    private List<Object> developers;
-
-    @Relationship(value = MANAGER, direction = Relationship.Direction.INCOMING)
-    private List<Object> managers;
+    // SDN / RX Neo4J currently does not work properly with abstract relationship classes. Omitting them and using queries.
 
     @Mapper
     public interface FromDto {
-        Project map(ProjectCreate project);
+        Project map(ProjectCreateOrUpdate project);
     }
+
+    @Mapper(nullValuePropertyMappingStrategy = IGNORE)
+    public interface Merge {
+        void update(ProjectCreateOrUpdate updated, @MappingTarget Project result);
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import reactor.tools.agent.ReactorDebugAgent;
 
 @EnableNeo4jAuditing
 @EnableReactiveNeo4jRepositories("ua.timetracker.shared.persistence.repository.reactive")
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AdministrationServer {
 
     public static void main(String[] args) {
+        ReactorDebugAgent.init(); // Should be not costly as is bytecode generated, otherwise no stacktraces in logs
         SpringApplication.run(AdministrationServer.class, args);
     }
 }

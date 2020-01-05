@@ -19,9 +19,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Node
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@Node
 @AllArgsConstructor
 public class User {
 

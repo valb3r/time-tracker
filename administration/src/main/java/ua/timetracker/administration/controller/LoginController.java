@@ -3,7 +3,6 @@ package ua.timetracker.administration.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -18,20 +17,18 @@ import ua.timetracker.shared.restapi.dto.user.LoginDto;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ua.timetracker.administration.config.jwtsecurity.ResourceServerJwtSecurityConfig.AUTHORIZATION;
 import static ua.timetracker.shared.restapi.Paths.V1_LOGIN;
 
 @RestController
-@RequestMapping(value = V1_LOGIN,
-    consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE
-)
+@RequestMapping(value = V1_LOGIN)
 @RequiredArgsConstructor
 public class LoginController {
 
     private final LoginAuthorization authorization;
 
-    @PostMapping
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public Mono<? extends ResponseEntity> login(
         @RequestBody @Valid LoginDto loginDto, @Parameter(hidden = true) ServerHttpResponse response
     ) {

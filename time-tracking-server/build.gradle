@@ -30,6 +30,7 @@ targetCompatibility = 1.8
 dependencies {
     compile project(":shared")
 
+    compile "io.projectreactor:reactor-tools"
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter:${versions.neo4jRx}"
 
