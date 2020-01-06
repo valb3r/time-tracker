@@ -38,6 +38,7 @@ public class ResourceServerJwtSecurityConfig {
         http
             .csrf().disable()
             .securityMatcher(new PathPatternParserServerWebExchangeMatcher(V1_RESOURCES + "/**"))
+            .authorizeExchange().anyExchange().authenticated().and()
             .oauth2ResourceServer()
                 .bearerTokenConverter(new CookieBasedJwt())
                 .jwt()

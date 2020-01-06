@@ -11,6 +11,8 @@ import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.restapi.dto.group.GroupCreate;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 
+import java.util.Set;
+
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
 
@@ -41,5 +43,25 @@ public class GroupManager {
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<Void> deleteGroup(long groupId) {
         return groups.deleteById(groupId);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Long> addUserOrGroupToGroup(Set<Long> userOrGroupIds, Set<Long> targetGroupIds) {
+        return groups.addUserOrGroupToGroup(userOrGroupIds, targetGroupIds);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Long> removeUserOrGroupToGroup(Set<Long> userOrGroupIds, Set<Long> targetGroupIds) {
+        return groups.removeUserOrGroupFromGroup(userOrGroupIds, targetGroupIds);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Long> addProjectsToGroup(Set<Long> projectIds, Set<Long> targetGroupIds) {
+        return groups.addProjectsToGroup(projectIds, targetGroupIds);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Long> removeProjectsFromGroup(Set<Long> projectIds, Set<Long> targetGroupIds) {
+        return groups.removeProjectsFromGroup(projectIds, targetGroupIds);
     }
 }

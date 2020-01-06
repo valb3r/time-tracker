@@ -12,6 +12,8 @@ import java.util.Set;
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.DEVELOPER_ROLE;
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.MANAGER_ROLE;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.CHILD;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
 
 public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
 
@@ -34,4 +36,16 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
 
     @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (c)-[:" + CHILD + "]->(p) RETURN c")
     Mono<Group> mergeToParent(@Param("childId") long childId, @Param("parentId") long parentId);
+
+    @Query("MATCH (u),(g:Group) WHERE id(u) IN $resources AND id(g) IN $groups AND (u:User OR u:Group) CREATE (u)-[:" + IN_GROUP +"]->(g) RETURN COUNT(g)")
+    Mono<Long> addUserOrGroupToGroup(@Param("resources") Set<Long> groupOrUserIds, @Param("groups") Set<Long> groupIds);
+
+    @Query("MATCH (u)-[role:" + IN_GROUP + "]->(g:Group) WHERE id(u) IN $resources AND id(g) IN $groups AND (u:User OR u:Group) DELETE role RETURN COUNT(role)")
+    Mono<Long> removeUserOrGroupFromGroup(@Param("resources") Set<Long> groupOrUserIds, @Param("groups") Set<Long> groupIds);
+
+    @Query("MATCH (g:Group),(p:Project) WHERE id(p) IN $projects AND id(g) IN $groups CREATE (g)-[:" + OWNS +"]->(p) RETURN COUNT(g)")
+    Mono<Long> addProjectsToGroup(@Param("projects") Set<Long> projectIds, @Param("groups") Set<Long> groupIds);
+
+    @Query("MATCH (g:Group)-[role:" + OWNS + "]->(p:Project) WHERE id(p) IN $projects AND id(g) IN $groups DELETE role RETURN COUNT(role)")
+    Mono<Long> removeProjectsFromGroup(@Param("projects") Set<Long> projectIds, @Param("groups") Set<Long> groupIds);
 }

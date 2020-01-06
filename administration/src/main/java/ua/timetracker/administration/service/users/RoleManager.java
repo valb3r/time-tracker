@@ -18,16 +18,16 @@ import static ua.timetracker.shared.persistence.entity.realationships.ProjectRol
 @RequiredArgsConstructor
 public class RoleManager {
 
-    private final GroupsRepository projects;
+    private final GroupsRepository groups;
 
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<Long> addRoles(ProjectRole role, Set<Long> userOrGroupIds, Set<Long> projectOrGroupIds) {
         if (DEVELOPER == role) {
-            return projects.addDevs(projectOrGroupIds, userOrGroupIds);
+            return groups.addDevs(projectOrGroupIds, userOrGroupIds);
         }
 
         if (MANAGER == role) {
-            return projects.addManagers(projectOrGroupIds, userOrGroupIds);
+            return groups.addManagers(projectOrGroupIds, userOrGroupIds);
         }
 
         throw new IllegalStateException("Unknown role: " + role);
@@ -36,11 +36,11 @@ public class RoleManager {
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<Long> removeRoles(ProjectRole role, Set<Long> userOrGroupIds, Set<Long> projectOrGroupIds) {
         if (DEVELOPER == role) {
-            return projects.removeDevs(projectOrGroupIds, userOrGroupIds);
+            return groups.removeDevs(projectOrGroupIds, userOrGroupIds);
         }
 
         if (MANAGER == role) {
-            return projects.removeManagers(projectOrGroupIds, userOrGroupIds);
+            return groups.removeManagers(projectOrGroupIds, userOrGroupIds);
         }
 
         throw new IllegalStateException("Unknown role: " + role);
