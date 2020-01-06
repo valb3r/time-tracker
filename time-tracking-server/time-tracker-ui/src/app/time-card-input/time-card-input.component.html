@@ -1,0 +1,57 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Work log timesheet</mat-card-title>
+  </mat-card-header>
+  <div>
+    <button
+      mat-button
+      color="primary"
+      mwlCalendarPreviousView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()">
+      Previous
+    </button>
+    <button
+      mat-button
+      color="primary"
+      mwlCalendarToday
+      [(viewDate)]="viewDate">
+      Today
+    </button>
+    <button
+      mat-button
+      color="primary"
+      mwlCalendarNextView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="closeOpenMonthViewDay()">
+      Next
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <div>
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <br/>
+
+  <mwl-calendar-month-view
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    [activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+    (beforeViewRender)="beforeMonthViewRender($event)"
+  >
+  </mwl-calendar-month-view>
+
+  <h3>
+    Edit events
+    <button class="btn btn-primary pull-right" (click)="addEvent()">
+      Add new
+    </button>
+    <div class="clearfix"></div>
+  </h3>
+</mat-card>

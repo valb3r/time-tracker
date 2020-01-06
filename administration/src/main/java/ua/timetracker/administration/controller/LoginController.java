@@ -39,6 +39,6 @@ public class LoginController {
 
     private ResponseEntity buildResponse(TokenDto user, ServerHttpResponse response) {
         response.addCookie(ResponseCookie.from(AUTHORIZATION, user.getIssuedToken()).build());
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(user.getUser());
     }
 }

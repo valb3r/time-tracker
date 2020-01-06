@@ -6,6 +6,13 @@ import { AppComponent } from './app.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
+import { TimeCardInputComponent } from './time-card-input/time-card-input.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatIconModule} from "@angular/material/icon";
+import {MatDividerModule} from "@angular/material/divider";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -13,12 +20,19 @@ export function momentAdapterFactory() {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TimeCardInputComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: momentAdapterFactory}),
+    MatDividerModule,
+    MatIconModule,
+    MatCardModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
