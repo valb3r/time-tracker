@@ -14,6 +14,11 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { LoginComponent } from './login/login.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -22,19 +27,24 @@ export function momentAdapterFactory() {
 @NgModule({
   declarations: [
     AppComponent,
-    TimeCardInputComponent
+    TimeCardInputComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    FlexLayoutModule,
     CalendarModule.forRoot({provide: DateAdapter, useFactory: momentAdapterFactory}),
     MatDividerModule,
     MatIconModule,
     MatCardModule,
     MatButtonModule,
     MatMenuModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

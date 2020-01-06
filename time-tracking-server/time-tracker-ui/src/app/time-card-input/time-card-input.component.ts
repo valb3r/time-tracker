@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -8,16 +8,7 @@ import {
 } from "angular-calendar";
 import {Subject} from "rxjs";
 
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import {addDays, addHours, endOfDay, endOfMonth, isSameDay, isSameMonth, startOfDay, subDays} from 'date-fns';
 
 const colors: any = {
   red: {
@@ -38,7 +29,8 @@ const colors: any = {
   selector: 'time-card-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './time-card-input.component.html',
-  styleUrls: ['./time-card-input.component.css']
+  styleUrls: ['./time-card-input.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TimeCardInputComponent implements OnInit {
 

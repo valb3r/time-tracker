@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  loginUri: "http://localhost:20081/v1/login",
+  baseUri: "http://localhost:20080/v1/"
 };
 
 /*

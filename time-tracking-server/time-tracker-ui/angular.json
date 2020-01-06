@@ -24,9 +24,8 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/angular-calendar/css/angular-calendar.css",
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/index.scss"
             ],
             "scripts": []
           },
@@ -126,5 +125,10 @@
       }
     }
   },
-  "defaultProject": "time-tracker-ui"
+  "defaultProject": "time-tracker-ui",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
