@@ -44,6 +44,7 @@ export class TimeCardInputComponent implements OnInit {
 
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
+  excludeDays: number[] = [0, 6];
 
   modalData: {
     action: string;
