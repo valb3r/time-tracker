@@ -31,10 +31,14 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     @Query("MATCH (m)-[role:" + MANAGER_ROLE + "]->(r) WHERE id(p) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) DELETE role RETURN COUNT(role)")
     Mono<Long> removeManagers(@Param("resources") Set<Long> resourceIds, @Param("managers") Set<Long> managers);
 
-    @Query("MATCH (m)-[role:" + MANAGER_ROLE + "|" + CHILD + "*]->(r) WHERE id(m) = $ownerId AND (m:Group OR m:User) RETURN r")
-    Flux<Group> ownedResources(@Param("ownerId") long owningUserOrGroupId);
+    // Owns children of group user/group belongs to AND direct manager resources
+    @Query(
+        "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
+        "UNION MATCH (m:Group)-[:" + CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
+        "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) RETURN id(r)")
+    Flux<Long> ownedGroupIds(@Param("ownerId") long owningUserOrGroupId);
 
-    @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (c)-[:" + CHILD + "]->(p) RETURN c")
+    @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (p)-[:" + CHILD + "]->(c) RETURN c")
     Mono<Group> mergeToParent(@Param("childId") long childId, @Param("parentId") long parentId);
 
     @Query("MATCH (u),(g:Group) WHERE id(u) IN $resources AND id(g) IN $groups AND (u:User OR u:Group) CREATE (u)-[:" + IN_GROUP +"]->(g) RETURN COUNT(g)")

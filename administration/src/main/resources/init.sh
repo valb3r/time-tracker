@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export COOKIE="X-Authorization=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyMSIsImV4cCI6MTU3ODMwMzUwNCwiaWF0IjoxNTc4Mjk5OTA0fQ.j3FNjGC_0_EPH89lASE9yeKPt7wJ0qKViGSVbbDVq7tyCb5_-miTSTdyAO4HsIh4dvcoEpGpOjVLBTclbgcQdpHCjJ8QeIeeRwhAznnqBJmvWoYGiy6_h3h9J8kIB6p9tpqkgW3of1RSONJWT4utR_UT6SYKi2pI5OBxebh5MR-B_DtMgFyL84FWQqwq8nzqHcNRNnCuE7Ti4UizBtkr55Un4PHlCJ66DQPSZLkRRYcj0lbRT-BABMrdKU3e9ClAJcHBkHdJYgLG3L-wQBD_zXCKaWnk9Gk0qzdJ_B5Djc7YL7TscuIi7TnAgOARzHYGQG6kbMo6Y5PjKne_II8lNA"
 
 curl -X PUT --cookie "$COOKIE" "http://localhost:20081/v1/resources/groups/0/children" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Golden dimension\"}"

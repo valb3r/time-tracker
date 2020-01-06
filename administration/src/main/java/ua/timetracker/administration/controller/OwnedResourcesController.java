@@ -21,7 +21,7 @@ public class OwnedResourcesController {
 
     @GetMapping(path = "/{owning_group_or_user_id}")
     @PreAuthorize("#{auth.canAssignUsersToGroups()}")
-    public Flux<GroupDto> ownedResources(@PathVariable("owning_group_or_user_id") long owningGroupOrUserId) {
-        return resources.listOwnedResources(owningGroupOrUserId);
+    public Flux<GroupDto> ownedGroups(@PathVariable("owning_group_or_user_id") long owningGroupOrUserId) {
+        return resources.listOwnedGroups(owningGroupOrUserId);
     }
 }

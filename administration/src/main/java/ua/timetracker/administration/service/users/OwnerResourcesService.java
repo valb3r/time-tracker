@@ -16,7 +16,9 @@ public class OwnerResourcesService {
     private final GroupsRepository groups;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Flux<GroupDto> listOwnedResources(long owningGroupOrUserId) {
-        return groups.ownedResources(owningGroupOrUserId).map(GroupDto.MAP::map);
+    public Flux<GroupDto> listOwnedGroups(long owningGroupOrUserId) {
+        return groups
+            .findAllById(groups.ownedGroupIds(owningGroupOrUserId)) // Relationships are not loaded, initializing eagerly
+            .map(GroupDto.MAP::map);
     }
 }
