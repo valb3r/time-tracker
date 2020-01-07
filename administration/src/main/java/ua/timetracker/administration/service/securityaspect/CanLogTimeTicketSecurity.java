@@ -46,7 +46,7 @@ public class CanLogTimeTicketSecurity {
         "*(.., (org.springframework.security.core.Authentication+), .., @ManagedResourceId (*), ..)" +
         ") " +
         "&& (@annotation(ann) || @within(ann))")
-    public Mono<?> protectMono(ProceedingJoinPoint joinPoint, CanManageResource ann) {
+    public Mono<?> protectMono(ProceedingJoinPoint joinPoint, OnlyResourceManagers ann) {
         return hasAccess(joinPoint).filter(it -> it)
             .flatMap(it -> {
                 try {
@@ -65,7 +65,7 @@ public class CanLogTimeTicketSecurity {
         "*(.., (org.springframework.security.core.Authentication+), .., @ManagedResourceId (*), ..)" +
         ") " +
         "&& (@annotation(ann) || @within(ann))")
-    public Flux<?> protectFlux(ProceedingJoinPoint joinPoint, CanManageResource ann) {
+    public Flux<?> protectFlux(ProceedingJoinPoint joinPoint, OnlyResourceManagers ann) {
         return hasAccess(joinPoint).filter(it -> it)
             .flatMapMany(it -> {
                 try {

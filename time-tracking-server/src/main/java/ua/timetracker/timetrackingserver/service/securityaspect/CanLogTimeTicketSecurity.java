@@ -38,7 +38,7 @@ public class CanLogTimeTicketSecurity {
         "*(.., (org.springframework.security.core.Authentication+), .., (ua.timetracker.shared.restapi.dto.WithProjectId+), ..)" +
         ") " +
         "&& (@annotation(ann) || @within(ann))")
-    public Mono<?> protectMono(ProceedingJoinPoint joinPoint, CanLogTimeTicket ann) {
+    public Mono<?> protectMono(ProceedingJoinPoint joinPoint, OnlyProjectWorkers ann) {
         return canLogTicket(joinPoint).filter(it -> it)
             .flatMap(it -> {
                 try {
@@ -57,7 +57,7 @@ public class CanLogTimeTicketSecurity {
         "*(.., (org.springframework.security.core.Authentication+), .., (ua.timetracker.shared.restapi.dto.WithProjectId+), ..)" +
         ") " +
         "&& (@annotation(ann) || @within(ann))")
-    public Flux<?> protectFlux(ProceedingJoinPoint joinPoint, CanLogTimeTicket ann) {
+    public Flux<?> protectFlux(ProceedingJoinPoint joinPoint, OnlyProjectWorkers ann) {
         return canLogTicket(joinPoint).filter(it -> it)
             .flatMapMany(it -> {
                 try {

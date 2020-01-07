@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
@@ -36,4 +37,7 @@ public class TimeLogUpload implements WithProjectId {
 
     @NotNull
     private LocationUpload location;
+
+    @NotNull
+    private LocalDateTime loggedFor;
 }

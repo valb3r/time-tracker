@@ -24,6 +24,9 @@
     <mat-card-actions>
       <button color="primary" mat-button (click)="handleLoginClick()">Login</button>
     </mat-card-actions>
+    <mat-error *ngIf="responseError">
+      Server error: {{responseError}}
+    </mat-error>
   </mat-card>
 </div>
 

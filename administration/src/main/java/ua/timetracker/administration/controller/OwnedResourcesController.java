@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import ua.timetracker.administration.service.securityaspect.CanManageResource;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.OwnerResourcesService;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
@@ -22,7 +22,7 @@ public class OwnedResourcesController {
 
     private final OwnerResourcesService resources;
 
-    @CanManageResource
+    @OnlyResourceManagers
     @GetMapping(path = "/{owning_group_or_user_id}")
     public Flux<GroupDto> ownedGroups(
         @Parameter(hidden = true) Authentication user,

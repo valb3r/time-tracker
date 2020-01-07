@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.CanManageResource;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.UserManager;
 import ua.timetracker.shared.restapi.dto.user.UserCreate;
@@ -28,7 +28,7 @@ public class UserController {
 
     private final UserManager manager;
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PutMapping(path = "/of_group/{parent_group_id}", consumes = APPLICATION_JSON_VALUE)
     public Mono<UserDto> createUser(
         @Parameter(hidden = true) Authentication user,
@@ -38,7 +38,7 @@ public class UserController {
         return manager.createUser(parentGroupId, userToCreate);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{id}")
     public Mono<Void> deleteUser(
         @Parameter(hidden = true) Authentication user,

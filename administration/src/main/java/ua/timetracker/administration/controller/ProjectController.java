@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.CanManageResource;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.ProjectManager;
 import ua.timetracker.shared.restapi.dto.project.ProjectCreateOrUpdate;
@@ -29,7 +29,7 @@ public class ProjectController {
 
     private final ProjectManager manager;
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PutMapping(path = "/of_group/{parent_group_id}", consumes = APPLICATION_JSON_VALUE)
     public Mono<ProjectDto> createProject(
         @Parameter(hidden = true) Authentication user,
@@ -39,7 +39,7 @@ public class ProjectController {
         return manager.createProject(parentGroupId, projectToCreate);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PostMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
     public Mono<ProjectDto> updateProject(
         @Parameter(hidden = true) Authentication user,
@@ -49,7 +49,7 @@ public class ProjectController {
         return manager.updateProject(projectId, update);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{id}")
     public Mono<Void> deleteProject(
         @Parameter(hidden = true) Authentication user,

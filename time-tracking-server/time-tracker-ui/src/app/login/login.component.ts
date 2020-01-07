@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {FieldErrorStateMatcher} from "../app.component";
+import {AdminApiService} from "../service/admin-api/admin-api-service";
 
 @Component({
   selector: 'login',
@@ -10,6 +11,7 @@ import {FieldErrorStateMatcher} from "../app.component";
 })
 export class LoginComponent implements OnInit {
 
+  responseError: string;
   hide = true;
 
   userNameControl = new FormControl('', [
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   fieldMatcher = new FieldErrorStateMatcher();
 
-  constructor(private router: Router, private fb: FormBuilder) { }
+  constructor(private api: AdminApiService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
   }
@@ -37,6 +39,13 @@ export class LoginComponent implements OnInit {
       return
     }
 
-    this.router.navigate(['/time-card-input']);
+    this.api.login(this.userNameControl.value, this.passwordControl.value)
+      .subscribe(
+        success => {
+          this.router.navigate(['/time-card-input']);
+        },
+        error => {
+          this.responseError = error.status;
+        });
   }
 }

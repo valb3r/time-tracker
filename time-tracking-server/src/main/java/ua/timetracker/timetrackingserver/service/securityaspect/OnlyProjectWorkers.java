@@ -6,5 +6,5 @@ import java.lang.annotation.RetentionPolicy;
 
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CanLogTimeTicket {
+public @interface OnlyProjectWorkers {
 }

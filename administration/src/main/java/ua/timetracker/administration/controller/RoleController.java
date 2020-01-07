@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.CanManageResource;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.RoleManager;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
@@ -28,7 +28,7 @@ public class RoleController {
 
     private final RoleManager manager;
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PostMapping(path = "/{role}/actors/{user_or_group_ids}/in/{project_or_group_ids}")
     public Mono<Long> assignUserRoles(
         @Parameter(hidden = true) Authentication user,
@@ -39,7 +39,7 @@ public class RoleController {
         return manager.addRoles(role, userOrGroupIds, projectOrGroupIds);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{role}/actors/{user_or_group_ids}/in/{project_or_group_ids}")
     public Mono<Long> removeGroupRoles(
         @Parameter(hidden = true) Authentication user,

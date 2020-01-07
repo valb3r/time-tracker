@@ -12,6 +12,7 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
@@ -49,8 +50,13 @@ public class TimeLog {
     @Relationship(type = LOGGED_FOR, direction = OUTGOING)
     private Set<Project> projects;
 
+    private LocalDateTime loggedFor;
+
     @CreatedDate
-    private LocalDateTime loggedAt;
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @Mapper
     public interface FromDto {

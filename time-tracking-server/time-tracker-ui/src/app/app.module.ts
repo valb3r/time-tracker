@@ -19,6 +19,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {ErrorInterceptorService} from "./service/interceptor/error-interceptor-service";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -35,6 +37,7 @@ export function momentAdapterFactory() {
     BrowserAnimationsModule,
     AppRoutingModule,
     FlexLayoutModule,
+    HttpClientModule,
     CalendarModule.forRoot({provide: DateAdapter, useFactory: momentAdapterFactory}),
     MatDividerModule,
     MatIconModule,
@@ -46,7 +49,11 @@ export function momentAdapterFactory() {
     MatInputModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.CanManageResource;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.GroupManager;
 import ua.timetracker.shared.restapi.dto.group.GroupCreate;
@@ -32,7 +32,7 @@ public class GroupController {
 
     private final GroupManager manager;
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PutMapping(path = "/{parent_group_id}/children", consumes = APPLICATION_JSON_VALUE)
     public Mono<GroupDto> createGroup(
         @Parameter(hidden = true) Authentication user,
@@ -42,7 +42,7 @@ public class GroupController {
         return manager.createGroup(parentGroupId, groupToCreate);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @GetMapping(path = "/{id}")
     public Mono<GroupDto> groupById(
         @Parameter(hidden = true) Authentication user,
@@ -51,7 +51,7 @@ public class GroupController {
         return manager.groupById(groupId);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{id}")
     public Mono<Void> deleteGroup(
         @Parameter(hidden = true) Authentication user,
@@ -59,7 +59,7 @@ public class GroupController {
         return manager.deleteGroup(groupToDelete);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PostMapping(path = "/{owner_group_ids}/children/users-and-groups/{children_ids}")
     public Mono<Long> addUserOrGroup(
         @Parameter(hidden = true) Authentication user,
@@ -69,7 +69,7 @@ public class GroupController {
         return manager.addUserOrGroupToGroup(childrenIds, ownerIds);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{owner_group_ids}/children/users-and-groups/{children_ids}")
     public Mono<Long> removeUserOrGroup(
         @Parameter(hidden = true) Authentication user,
@@ -79,7 +79,7 @@ public class GroupController {
         return manager.removeUserOrGroupToGroup(childrenIds, ownerIds);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @PostMapping(path = "/{owner_group_ids}/children/projects/{children_ids}")
     public Mono<Long> addProject(
         @Parameter(hidden = true) Authentication user,
@@ -89,7 +89,7 @@ public class GroupController {
         return manager.addProjectsToGroup(projectIds, ownerIds);
     }
 
-    @CanManageResource
+    @OnlyResourceManagers
     @DeleteMapping(path = "/{owner_group_ids}/children/projects/{children_ids}")
     public Mono<Long> removeProject(
         @Parameter(hidden = true) Authentication user,
