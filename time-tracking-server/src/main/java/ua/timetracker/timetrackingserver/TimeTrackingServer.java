@@ -15,6 +15,7 @@ import reactor.tools.agent.ReactorDebugAgent;
 @SpringBootApplication(
         scanBasePackages = {
                 "ua.timetracker.shared.config",
+                "ua.timetracker.timetrackingserver.config",
                 "ua.timetracker.timetrackingserver.controller",
                 "ua.timetracker.timetrackingserver.service"
         }

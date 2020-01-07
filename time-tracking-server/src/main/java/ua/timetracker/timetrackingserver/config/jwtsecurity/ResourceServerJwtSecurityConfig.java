@@ -1,4 +1,4 @@
-package ua.timetracker.administration.config.jwtsecurity;
+package ua.timetracker.timetrackingserver.config.jwtsecurity;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +28,10 @@ import static ua.timetracker.shared.restapi.Paths.V1_RESOURCES;
 public class ResourceServerJwtSecurityConfig {
 
     @Value("${oauth2.keys.pub}")
-    private RSAPublicKey publicKey;
+    private RSAPublicKey publicKey; // Same as in administration module
 
     /**
-     * Protects /v1/resources with bearer-alike cookie 'X-Authorization'
+     * Protects all resources with bearer-alike cookie 'X-Authorization'. Cookie is granted by administration app.
      */
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {

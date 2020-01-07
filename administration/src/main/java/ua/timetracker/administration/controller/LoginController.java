@@ -18,7 +18,7 @@ import ua.timetracker.shared.restapi.dto.user.LoginDto;
 import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ua.timetracker.administration.config.jwtsecurity.ResourceServerJwtSecurityConfig.AUTHORIZATION;
+import static ua.timetracker.shared.config.Const.AUTHORIZATION_COOKIE;
 import static ua.timetracker.shared.restapi.Paths.V1_LOGIN;
 
 @RestController
@@ -38,7 +38,7 @@ public class LoginController {
     }
 
     private ResponseEntity buildResponse(TokenDto user, ServerHttpResponse response) {
-        response.addCookie(ResponseCookie.from(AUTHORIZATION, user.getIssuedToken()).build());
+        response.addCookie(ResponseCookie.from(AUTHORIZATION_COOKIE, user.getIssuedToken()).build());
         return ResponseEntity.ok().body(user.getUser());
     }
 }

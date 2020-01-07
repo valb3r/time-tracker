@@ -6,4 +6,5 @@ import lombok.experimental.UtilityClass;
 public class Const {
 
     public static final String REACTIVE_TX_MANAGER = "reactiveTransactionManager";
+    public static final String AUTHORIZATION_COOKIE = "X-Authorization";
 }

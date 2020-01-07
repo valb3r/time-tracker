@@ -31,6 +31,9 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     @Query("MATCH (m)-[role:" + MANAGER_ROLE + "]->(r) WHERE id(p) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) DELETE role RETURN COUNT(role)")
     Mono<Long> removeManagers(@Param("resources") Set<Long> resourceIds, @Param("managers") Set<Long> managers);
 
+    /**
+     * Derived and related to {@link ProjectsRepository#timeLoggableProjects(long)}
+     */
     // Owns children of group user/group belongs to AND direct manager resources
     @Query(
         "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +

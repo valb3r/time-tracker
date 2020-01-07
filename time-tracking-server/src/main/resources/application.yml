@@ -14,3 +14,8 @@ org:
       authentication:
         username: neo4j
         password: docker
+
+oauth2:
+  keys:
+    # You should override these! (same as in administration module)
+    pub: classpath:example.pub

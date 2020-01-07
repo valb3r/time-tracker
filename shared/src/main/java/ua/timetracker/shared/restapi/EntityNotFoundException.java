@@ -1,4 +1,4 @@
-package ua.timetracker.shared.restapi.dto;
+package ua.timetracker.shared.restapi;
 
 import reactor.core.publisher.Mono;
 
@@ -9,8 +9,6 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public static <T> Mono<T> mono() {
-        return Mono.fromRunnable(() -> {
-            throw new EntityNotFoundException();
-        });
+        return Mono.error(new EntityNotFoundException());
     }
 }

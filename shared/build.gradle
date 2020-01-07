@@ -29,6 +29,8 @@ repositories {
 
 dependencies {
     compile "io.projectreactor:reactor-core:${versions.reactor}"
+
+    compile 'org.springframework.security:spring-security-core'
     compile "org.neo4j.springframework.data:spring-data-neo4j-rx:${versions.neo4jRx}"
 
     compileOnly "org.projectlombok:lombok:${versions.lombok}"
