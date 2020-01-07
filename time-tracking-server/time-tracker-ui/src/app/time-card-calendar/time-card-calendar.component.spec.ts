@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TimeCardInputComponent } from './time-card-input.component';
+import { TimeCardCalendarComponent } from './time-card-calendar.component';
 
 describe('TimeCardInputComponent', () => {
-  let component: TimeCardInputComponent;
-  let fixture: ComponentFixture<TimeCardInputComponent>;
+  let component: TimeCardCalendarComponent;
+  let fixture: ComponentFixture<TimeCardCalendarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TimeCardInputComponent ]
+      declarations: [ TimeCardCalendarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TimeCardInputComponent);
+    fixture = TestBed.createComponent(TimeCardCalendarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

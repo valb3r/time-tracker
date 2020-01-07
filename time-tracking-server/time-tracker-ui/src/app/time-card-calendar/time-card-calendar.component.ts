@@ -9,6 +9,8 @@ import {
 import {Subject} from "rxjs";
 
 import {addDays, addHours, endOfDay, endOfMonth, isSameDay, isSameMonth, startOfDay, subDays} from 'date-fns';
+import {MatDialog} from "@angular/material/dialog";
+import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
 
 const colors: any = {
   red: {
@@ -26,13 +28,13 @@ const colors: any = {
 };
 
 @Component({
-  selector: 'time-card-input',
+  selector: 'time-card-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './time-card-input.component.html',
-  styleUrls: ['./time-card-input.component.scss'],
+  templateUrl: './time-card-calendar.component.html',
+  styleUrls: ['./time-card-calendar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TimeCardInputComponent implements OnInit {
+export class TimeCardCalendarComponent implements OnInit {
 
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
@@ -115,7 +117,7 @@ export class TimeCardInputComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -129,6 +131,15 @@ export class TimeCardInputComponent implements OnInit {
       }
       this.viewDate = date;
     }
+
+    const dialogRef = this.dialog.open(TimeCardEditComponent, {
+      data: {apiUrl: "122", username: "user", password: "pass"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+      }
+    });
   }
 
   eventTimesChanged({

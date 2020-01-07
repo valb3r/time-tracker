@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
-import { TimeCardInputComponent } from './time-card-input/time-card-input.component';
+import { TimeCardCalendarComponent } from './time-card-calendar/time-card-calendar.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -21,6 +21,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ErrorInterceptorService} from "./service/interceptor/error-interceptor-service";
+import { TimeCardEditComponent } from './time-card-edit/time-card-edit.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -29,8 +31,9 @@ export function momentAdapterFactory() {
 @NgModule({
   declarations: [
     AppComponent,
-    TimeCardInputComponent,
-    LoginComponent
+    TimeCardCalendarComponent,
+    LoginComponent,
+    TimeCardEditComponent
   ],
   imports: [
     BrowserModule,
@@ -47,8 +50,10 @@ export function momentAdapterFactory() {
     MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule
   ],
+  entryComponents: [TimeCardEditComponent],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptorService,

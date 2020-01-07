@@ -38,7 +38,12 @@ public class LoginController {
     }
 
     private ResponseEntity buildResponse(TokenDto user, ServerHttpResponse response) {
-        response.addCookie(ResponseCookie.from(AUTHORIZATION_COOKIE, user.getIssuedToken()).build());
+        response.addCookie(
+            ResponseCookie.from(AUTHORIZATION_COOKIE, user.getIssuedToken())
+                .path("/")
+                .httpOnly(true)
+                .build()
+        );
         return ResponseEntity.ok().body(user.getUser());
     }
 }

@@ -1,0 +1,18 @@
+{
+  "/admin-api/*": {
+    "target": "http://localhost:20081",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/admin-api": ""
+    }
+  },
+  "/tracker-api/*": {
+    "target": "http://localhost:20080",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/tracker-api": ""
+    }
+  }
+}

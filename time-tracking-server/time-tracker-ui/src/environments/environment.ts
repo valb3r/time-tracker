@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
 
-  adminBaseUri: "http://localhost:20081/v1/",
-  trackerBaseUri: "http://localhost:20080/v1/"
+  adminBaseUri: "/admin-api/v1/",
+  trackerBaseUri: "/tracker-api/v1/"
 };
 
 /*
