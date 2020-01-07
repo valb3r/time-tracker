@@ -41,6 +41,17 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
         "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) RETURN id(r)")
     Flux<Long> ownedGroupIds(@Param("ownerId") long owningUserOrGroupId);
 
+
+    /**
+     * Derived and related to {@link ProjectsRepository#timeLoggableProjects(long)}
+     */
+    // Owns children of group user/group belongs to AND direct manager resources
+    @Query(
+        "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + CHILD + "*]->(r:Group)-[:" + OWNS + "|" + IN_GROUP + "]-(p) WHERE id(m) = $ownerId AND id(p) IN $ownedIds AND (p:Group OR p:User OR p:Project) RETURN id(p)" +
+        "UNION MATCH (m:Group)-[:" + CHILD + "*]->(r:Group)-[:" + OWNS + "|" + IN_GROUP + "]-(p) WHERE id(m) = $ownerId AND id(p) IN $ownedIds AND (p:Group OR p:User OR p:Project) RETURN id(p)" +
+        "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group)-[:" + OWNS + "|" + IN_GROUP + "]-(p) WHERE id(m) = $ownerId AND (m:Group OR m:User) AND id(p) IN $ownedIds AND (p:Group OR p:User OR p:Project) RETURN id(p)")
+    Flux<Long> matchingOwnedResources(@Param("ownerId") long owningUserOrGroupId, @Param("ownedIds") Set<Long> resourcesToSearchFor);
+
     @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (p)-[:" + CHILD + "]->(c) RETURN c")
     Mono<Group> mergeToParent(@Param("childId") long childId, @Param("parentId") long parentId);
 
