@@ -1,27 +1,46 @@
 <mat-card-header>
-  <mat-card-title>Welcome to GD timelogger!</mat-card-title>
+  <mat-card-title>Add timecard</mat-card-title>
 </mat-card-header>
-<mat-card-content>
+<mat-card-content fxLayout="column">
   <mat-form-field>
-    <input name="username" matInput placeholder="Enter your username" type="text" [formControl]="userNameControl" [errorStateMatcher]="fieldMatcher">
-    <mat-error *ngIf="userNameControl.hasError('required')">
-      Username is <strong>required</strong>
-    </mat-error>
+    <input matInput [matDatepicker]="picker3" placeholder="Worked on" [value]="date.value">
+    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+    <mat-datepicker #picker3></mat-datepicker>
   </mat-form-field>
-  <br/>
   <mat-form-field>
-    <input name="password" matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [formControl]="passwordControl" [errorStateMatcher]="fieldMatcher">
-    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-    <mat-error *ngIf="passwordControl.hasError('required')">
-      Password is <strong>required</strong>
-    </mat-error>
+    <mat-label>Project worked on</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let project of projects" [value]="project.id">
+        [{{project.code}}] {{project.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Type of work</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let tag of tags" [value]="tag.id">
+        {{tag.id}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input type="text" placeholder="How long have you worked" aria-label="Number" matInput [formControl]="duration" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let duration of filteredDurations | async" [value]="duration">
+        {{duration}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Work description</mat-label>
+    <textarea matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="10"></textarea>
   </mat-form-field>
 </mat-card-content>
 <mat-card-actions>
-  <button color="primary" mat-button (click)="handleLoginClick()">Login</button>
+  <button color="primary" mat-button (click)="handleAddTimecardClick()">Add timecard</button>
+  <button mat-button (click)="handleCancelClick()">Cancel</button>
 </mat-card-actions>
-<mat-error *ngIf="responseError">
-  Server error: {{responseError}}
-</mat-error>

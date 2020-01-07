@@ -133,7 +133,7 @@ export class TimeCardCalendarComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(TimeCardEditComponent, {
-      data: {apiUrl: "122", username: "user", password: "pass"}
+      data: {date: this.viewDate, apiUrl: "122", username: "user", password: "pass"}
     });
 
     dialogRef.afterClosed().subscribe(result => {
