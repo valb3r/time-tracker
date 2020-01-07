@@ -1,7 +1,10 @@
 package ua.timetracker.administration.service.securityaspect;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -83,9 +86,12 @@ public class CanLogTimeTicketSecurity {
         Authentication auth = (Authentication) joinPoint.getArgs()[findPosByType(params, Authentication.class)];
         Set<Long> ids = extractIds(findAnnotated(params, args, ManagedResourceId.class));
 
-        return groups.matchingOwnedResources(id(auth), ids)
-            .collectList()
-            .map(it -> it.containsAll(ids));
+        val ownedGroups = groups.ownedGroupIds(id(auth)).collectList();
+        val ownedResources = ownedGroups.flatMapMany(groups::ownedResources).collectList();
+
+        return ownedGroups
+            .zipWith(ownedResources)
+            .map(owned -> ImmutableList.copyOf(Iterables.concat(owned.getT1(), owned.getT2())).containsAll(ids));
     }
 
     private int findPosByType(Parameter[] params, Class<?> clazz) {
