@@ -13,11 +13,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.restapi.EntityNotFoundException;
-import ua.timetracker.shared.restapi.ForbiddenException;
 import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
-import ua.timetracker.timetrackingserver.service.AuthorizationService;
+import ua.timetracker.timetrackingserver.service.securityaspect.CanLogTimeTicket;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 
 import javax.validation.Valid;
@@ -33,7 +32,6 @@ import static ua.timetracker.shared.util.UserIdUtil.id;
 @RequiredArgsConstructor
 public class TimeLogController {
 
-    private final AuthorizationService auth;
     private final ProjectsRepository projects;
     private final TimeLogUploader uploader;
 
@@ -46,15 +44,12 @@ public class TimeLogController {
             .switchIfEmpty(EntityNotFoundException.mono());
     }
 
+    @CanLogTimeTicket
     @PutMapping("/{user_id}")
     public Mono<TimeLogDto> uploadTimelog(
         @Parameter(hidden = true) Authentication user,
         @Valid @RequestBody TimeLogUpload log) {
-        return auth.canLogTimeHere(user, log)
-            .flatMap(
-                it -> uploader.upload(id(user), log)
-                    .switchIfEmpty(EntityNotFoundException.mono())
-            )
-            .switchIfEmpty(ForbiddenException.mono());
+        return uploader.upload(id(user), log)
+            .switchIfEmpty(EntityNotFoundException.mono());
     }
 }

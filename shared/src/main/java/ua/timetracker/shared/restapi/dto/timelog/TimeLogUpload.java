@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ua.timetracker.shared.restapi.dto.WithProjectId;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -17,7 +18,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TimeLogUpload {
+public class TimeLogUpload implements WithProjectId {
 
     @NotNull
     private Long projectId;

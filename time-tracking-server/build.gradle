@@ -35,6 +35,7 @@ dependencies {
     compile 'org.springframework.security:spring-security-oauth2-jose'
     compile 'org.springframework.security:spring-security-oauth2-resource-server'
     compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile 'org.springframework.boot:spring-boot-starter-aop'
     compile "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter:${versions.neo4jRx}"
 
     compileOnly "org.projectlombok:lombok:${versions.lombok}"
