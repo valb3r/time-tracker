@@ -22,7 +22,11 @@ time-tracker:
       - CREATE CONSTRAINT ON (group:Group) ASSERT group.name IS UNIQUE
       - CREATE CONSTRAINT ON (project:Project) ASSERT project.name IS UNIQUE
       - CREATE CONSTRAINT ON (project:Project) ASSERT project.code IS UNIQUE
+      - CREATE (rootAdmins:Group {name:"Root admins group"})
       - CREATE (root:Group {name:"Root group"})
+      - MATCH(p:Group {name:"Root admins group"})
+        MATCH(c:Group {name:"Root group"})
+        MERGE(p)-[:HAS_CHILD]->(c)
 
 bcrypt:
   strength: 8

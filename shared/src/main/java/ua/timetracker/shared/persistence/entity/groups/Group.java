@@ -43,7 +43,7 @@ public class Group {
 
     // Same entity mapping seem to be unstable:
     // Issue-causing query:
-    // MATCH (startNode)-[rel:`CHILD`]->(:`Group`) WHERE id(startNode) = $fromId DELETE rel
+    // MATCH (startNode)-[rel:`HAS_CHILD`]->(:`Group`) WHERE id(startNode) = $fromId DELETE rel
     // on parent-child relationship
     // @Relationship(type = IN, direction = INCOMING)
     // private Set<Group> children;

@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 public class Relationships {
 
     public static final String IN_GROUP = "IN_GROUP";
-    public static final String CHILD = "CHILD";
+    public static final String HAS_CHILD = "HAS_CHILD";
     public static final String OWNS = "OWNS";
 
     public static final String LOGGED_FOR = "LOGGED_FOR";

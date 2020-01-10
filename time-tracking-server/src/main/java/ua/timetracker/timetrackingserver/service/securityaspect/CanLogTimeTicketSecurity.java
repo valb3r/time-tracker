@@ -39,16 +39,16 @@ public class CanLogTimeTicketSecurity {
         ") " +
         "&& (@annotation(ann) || @within(ann))")
     public Mono<?> protectMono(ProceedingJoinPoint joinPoint, OnlyProjectWorkers ann) {
-        return canLogTicket(joinPoint).filter(it -> it)
+        return canLogTicket(joinPoint)
+                .filter(it -> it)
+                .switchIfEmpty(Mono.error(ForbiddenException::new))
             .flatMap(it -> {
                 try {
-
                     return ((Mono<?>) joinPoint.proceed());
                 } catch (Throwable throwable) {
                     return Mono.error(throwable);
                 }
-            })
-            .switchIfEmpty(Mono.error(new ForbiddenException()));
+            });
     }
 
     @Transactional(REACTIVE_TX_MANAGER)
@@ -58,16 +58,17 @@ public class CanLogTimeTicketSecurity {
         ") " +
         "&& (@annotation(ann) || @within(ann))")
     public Flux<?> protectFlux(ProceedingJoinPoint joinPoint, OnlyProjectWorkers ann) {
-        return canLogTicket(joinPoint).filter(it -> it)
-            .flatMapMany(it -> {
+        return canLogTicket(joinPoint)
+                .filter(it -> it)
+                .flatMapMany(Flux::just)
+                .switchIfEmpty(Flux.error(ForbiddenException::new))
+            .flatMap(it -> {
                 try {
-
                     return ((Flux<?>) joinPoint.proceed());
                 } catch (Throwable throwable) {
                     return Flux.error(throwable);
                 }
-            })
-            .switchIfEmpty(Flux.error(new ForbiddenException()));
+            });
     }
 
     private Mono<Boolean> canLogTicket(ProceedingJoinPoint joinPoint) {

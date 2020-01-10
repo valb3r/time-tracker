@@ -24,7 +24,7 @@ public class InitialUserCreation {
         users.findUser("admin")
             .switchIfEmpty(Mono.defer(
                 () -> groups
-                    .findByName("Root group")
+                    .findByName("Root admins group")
                     .flatMap(admins -> users.createUser(admins.getId(), new UserCreate("admin", "admin"))))
             ).subscribe();
     }

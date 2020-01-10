@@ -11,7 +11,7 @@ import java.util.Collection;
 
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.DEVELOPER_ROLE;
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.MANAGER_ROLE;
-import static ua.timetracker.shared.persistence.entity.realationships.Relationships.CHILD;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.HAS_CHILD;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
 
@@ -36,8 +36,8 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
      */
     // Owns children of group user/group belongs to AND direct manager resources
     @Query(
-        "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
-        "UNION MATCH (m:Group)-[:" + CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
+        "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
+        "UNION MATCH (m:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
         "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) RETURN id(r)"
     )
     Flux<Long> ownedGroupIds(@Param("ownerId") long owningUserOrGroupId);
@@ -52,7 +52,7 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     )
     Flux<Long> ownedResources(@Param("ofGroupIds") Collection<Long> ofGroupIds);
 
-    @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (p)-[:" + CHILD + "]->(c) RETURN c")
+    @Query("MATCH (c:Group),(p:Group) WHERE id(c) = $childId AND id(p) = $parentId MERGE (p)-[:" + HAS_CHILD + "]->(c) RETURN c")
     Mono<Group> mergeToParent(@Param("childId") long childId, @Param("parentId") long parentId);
 
     @Query("MATCH (u),(g:Group) WHERE id(u) IN $resources AND id(g) IN $groups AND (u:User OR u:Group) CREATE (u)-[:" + IN_GROUP +"]->(g) RETURN COUNT(g)")
