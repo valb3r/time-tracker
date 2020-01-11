@@ -17,3 +17,15 @@ export class FieldErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
+
+export class ErrorMessageUtil {
+
+  static extract(error): string {
+    let errMsg = "Failed " + error.message;
+    if (error && error.error && error.error.message) {
+      errMsg = error.error.message;
+    }
+
+    return errMsg.substring(0, 32) + (errMsg.length >= 32 ? "..." : "");
+  }
+}

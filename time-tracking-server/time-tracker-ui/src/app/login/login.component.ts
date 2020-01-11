@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {FieldErrorStateMatcher} from "../app.component";
+import {ErrorMessageUtil, FieldErrorStateMatcher} from "../app.component";
 import {AdminApiService} from "../service/admin-api/admin-api-service";
 
 @Component({
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/main-screen/my-timecards']);
         },
         error => {
-          this.responseError = error.status;
+          this.responseError = ErrorMessageUtil.extract(error);
         });
   }
 }

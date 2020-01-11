@@ -17,7 +17,7 @@ public class GroupDto {
     private Long id;
     private String name;
 
-    private Set<GroupDto> children;
+   // private Set<GroupDto> children;
     private Set<UserDto> users;
     private Set<ProjectDto> projects;
 

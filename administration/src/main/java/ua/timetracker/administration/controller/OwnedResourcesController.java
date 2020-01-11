@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.OwnerResourcesService;
+import ua.timetracker.shared.dto.PathEntry;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 
 import static ua.timetracker.shared.restapi.Paths.V1_OWNED;
+import static ua.timetracker.shared.util.UserIdUtil.id;
 
 @RestController
 @RequestMapping(value = V1_OWNED)
@@ -29,5 +31,11 @@ public class OwnedResourcesController {
         @ManagedResourceId @PathVariable("owning_group_or_user_id") long owningGroupOrUserId
     ) {
         return resources.listOwnedGroups(owningGroupOrUserId);
+    }
+
+    // Authentication object is enough
+    @GetMapping
+    public Flux<PathEntry<GroupDto>> selfOwnedResources(@ManagedResourceId @Parameter(hidden = true) Authentication user) {
+        return resources.allOwnedResources(id(user));
     }
 }

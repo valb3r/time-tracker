@@ -127,6 +127,10 @@ public class CanManageResourceSecurity {
             if (param instanceof Collection) {
                 result.addAll((Collection) param);
             }
+
+            if (param instanceof Authentication) {
+                result.add(id((Authentication) param));
+            }
         }
 
         return result;

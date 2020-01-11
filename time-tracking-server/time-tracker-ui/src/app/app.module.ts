@@ -39,6 +39,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { ManagementComponent } from './management/management.component';
 import {MatTreeModule} from "@angular/material/tree";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -82,6 +83,7 @@ export const AppDateFormats = {
     MatCardModule,
     MatTreeModule,
     MatCheckboxModule,
+    MatProgressBarModule,
     MatButtonModule,
     MatMenuModule,
     MatSlideToggleModule,

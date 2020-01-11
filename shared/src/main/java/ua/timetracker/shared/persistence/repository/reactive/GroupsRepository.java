@@ -1,5 +1,6 @@
 package ua.timetracker.shared.persistence.repository.reactive;
 
+import org.neo4j.driver.internal.value.ListValue;
 import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -42,11 +43,23 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     )
     Flux<Long> ownedGroupIds(@Param("ownerId") long owningUserOrGroupId);
 
+    /**
+     * Pattern must be same as {@link GroupsRepository#ownedGroupIds(long)}.
+     */
+    @Query(
+        "MATCH p = (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId " +
+        "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]] " +
+        "UNION MATCH p = (m:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId " +
+        "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]] " +
+        "UNION MATCH p = (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) " +
+        "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]]"
+    )
+    Flux<ListValue> ownedGroupWithPaths(@Param("ownerId") long owningUserOrGroupId);
 
     /**
      * Derived and related to {@link ProjectsRepository#timeLoggableProjects(long)}
      */
-    // Owns children of group user/group belongs to AND direct manager resources
+    // Excludes child groups. Owns children of group user/group belongs to AND direct manager resources
     @Query(
         "MATCH (r:Group)-[:" + OWNS + "|" + IN_GROUP + "]-(p) WHERE id(r) IN $ofGroupIds RETURN id(p)"
     )

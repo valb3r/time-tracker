@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
+import {ProjectWithId, TimeCardApiService} from "../service/timecard-api/time-card-api.service";
 import {classToClass, plainToClass} from "class-transformer";
 import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
@@ -38,7 +38,7 @@ export class TimeCardEditComponent implements OnInit {
   ngOnInit() {
     this.api.listAvailableProjects()
       .subscribe(resp => {
-        this.projects = plainToClass(ProjectWithId, resp.body as []);
+        this.projects = resp.body;
       });
 
     this.filteredDurations = this.duration.valueChanges
@@ -61,14 +61,6 @@ export class TimeCardEditComponent implements OnInit {
 
     return this.durations.filter(option => option.toLowerCase().includes(filterValue));
   }
-}
-
-class ProjectWithId {
-
-  id: number;
-  name: string;
-  code: string;
-  description: string;
 }
 
 class Tag {
