@@ -28,6 +28,10 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {MAT_DATE_FORMATS} from "@angular/material/core";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
+import { MainScreenComponent } from './main-screen/main-screen.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -50,7 +54,8 @@ export const AppDateFormats = {
     AppComponent,
     TimeCardCalendarComponent,
     LoginComponent,
-    TimeCardEditComponent
+    TimeCardEditComponent,
+    MainScreenComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +77,10 @@ export const AppDateFormats = {
     MatDialogModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule
   ],
   entryComponents: [TimeCardEditComponent],
   providers: [{
