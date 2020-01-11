@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Add timecard</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker3" placeholder="Worked on" [value]="date.value">
+      <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+      <mat-datepicker #picker3></mat-datepicker>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button color="primary" mat-button (click)="handleSaveChanges()">Save changes</button>
+  </mat-card-actions>
+</mat-card>

@@ -28,7 +28,7 @@ const colors: any = {
 };
 
 @Component({
-  selector: 'time-card-calendar',
+  selector: 'my-timecards',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './time-card-calendar.component.html',
   styleUrls: ['./time-card-calendar.component.scss'],

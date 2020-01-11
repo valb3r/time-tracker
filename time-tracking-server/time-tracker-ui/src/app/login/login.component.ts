@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     this.api.login(this.userNameControl.value, this.passwordControl.value)
       .subscribe(
         success => {
-          this.router.navigate(['/main-screen/time-card-input']);
+          this.router.navigate(['/main-screen/my-timecards']);
         },
         error => {
           this.responseError = error.status;

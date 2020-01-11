@@ -32,6 +32,13 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import { MainScreenComponent } from './main-screen/main-screen.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ReportsComponent } from './reports/reports.component';
+import { LogoutComponent } from './logout/logout.component';
+import { ManagementComponent } from './management/management.component';
+import {MatTreeModule} from "@angular/material/tree";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -55,7 +62,12 @@ export const AppDateFormats = {
     TimeCardCalendarComponent,
     LoginComponent,
     TimeCardEditComponent,
-    MainScreenComponent
+    MainScreenComponent,
+    MyProfileComponent,
+    ChangePasswordComponent,
+    ReportsComponent,
+    LogoutComponent,
+    ManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +80,8 @@ export const AppDateFormats = {
     MatDividerModule,
     MatIconModule,
     MatCardModule,
+    MatTreeModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatMenuModule,
     MatSlideToggleModule,

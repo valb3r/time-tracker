@@ -10,7 +10,14 @@ export class MainScreenComponent implements OnInit {
 
   mobileQuery: MediaQueryList;
 
-  fillerNav = ["/login", "/other"];
+  fillerNav: Nav[] = [
+    new Nav("My profile", "my-profile"),
+    new Nav("My timecards", "my-timecards"),
+    new Nav("Management", "management"),
+    new Nav("Reporting", "reporting"),
+    new Nav("Change password", "change-password"),
+    new Nav("Logout", "logout")
+  ];
 
   private _mobileQueryListener: () => void;
 
@@ -25,5 +32,13 @@ export class MainScreenComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener("change", this._mobileQueryListener);
+  }
+}
+
+class Nav {
+
+  public destination: string;
+  constructor(public label: string, destination: string) {
+    this.destination = "./" + destination;
   }
 }
