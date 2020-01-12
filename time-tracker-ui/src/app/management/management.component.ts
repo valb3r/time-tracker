@@ -112,7 +112,9 @@ export class ManagementComponent implements OnInit {
   }
 
   removeUserFromProject(target: GroupNode) {
-
+    this.api.removeUserFromProject(target.id, target.parent.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
   }
 
   addProject(parent: GroupNode) {
@@ -124,7 +126,9 @@ export class ManagementComponent implements OnInit {
   }
 
   removeProject(target: GroupNode) {
-
+    this.api.removeProject(target.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
   }
 
   private fetchDataFromServer() {

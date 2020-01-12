@@ -26,10 +26,10 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     @Query("MATCH (r),(m) WHERE id(r) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) CREATE (r)<-[:" + MANAGER_ROLE + "]-(m) RETURN COUNT(r)")
     Mono<Long> addManagers(@Param("resources") Collection<Long> resourceIds, @Param("managers") Collection<Long> managers);
 
-    @Query("MATCH (m)-[role:" + DEVELOPER_ROLE + "]->(d) WHERE id(p) IN $resources AND id(d) IN $developers AND (r:Project OR r:Group) AND (d:User OR d:Group) DELETE role RETURN COUNT(role)")
+    @Query("MATCH (d)-[role:" + DEVELOPER_ROLE + "]->(p) WHERE id(p) IN $resources AND id(d) IN $developers AND (p:Project OR p:Group) AND (d:User OR d:Group) DELETE role RETURN COUNT(role)")
     Mono<Long> removeDevs(@Param("resources") Collection<Long> resourceIds, @Param("developers") Collection<Long> developers);
 
-    @Query("MATCH (m)-[role:" + MANAGER_ROLE + "]->(r) WHERE id(p) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) DELETE role RETURN COUNT(role)")
+    @Query("MATCH (m)-[role:" + MANAGER_ROLE + "]->(p) WHERE id(p) IN $resources AND id(m) IN $managers AND (p:Project OR p:Group) AND (m:User OR m:Group) DELETE role RETURN COUNT(role)")
     Mono<Long> removeManagers(@Param("resources") Collection<Long> resourceIds, @Param("managers") Collection<Long> managers);
 
     /**

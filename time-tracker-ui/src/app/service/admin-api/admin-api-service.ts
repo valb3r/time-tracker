@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {forkJoin, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AdminApiService {
   private projectActorsUri = this.base + "resources/roles/in/project/";
   private removeGroupUri = this.base + "resources/groups/";
   private removeUserUri = this.base + "resources/users/";
-
+  private removeProjectUri = this.base + "resources/projects/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -39,6 +40,17 @@ export class AdminApiService {
 
   removeUserCompletely(userId: number) {
     return this.httpClient.delete(this.removeUserUri + userId);
+  }
+
+  removeProject(projectId: number) {
+    return this.httpClient.delete(this.removeProjectUri + projectId);
+  }
+
+  removeUserFromProject(userId: number, projectId: number) {
+    let devUri = this.base + `resources/roles/DEVELOPER/actors/${userId}/in/${projectId}`;
+    let managerUri = this.base + `resources/roles/MANAGER/actors/${userId}/in/${projectId}`;
+
+    return forkJoin(this.httpClient.delete(devUri), this.httpClient.delete(managerUri), (x, y) => ({x, y}))
   }
 }
 
