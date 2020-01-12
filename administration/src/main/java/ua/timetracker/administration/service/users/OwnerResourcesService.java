@@ -6,9 +6,11 @@ import org.neo4j.driver.internal.value.ListValue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
-import ua.timetracker.shared.restapi.dto.PathEntry;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
+import ua.timetracker.shared.restapi.dto.PathEntry;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
+
+import java.util.Objects;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
@@ -29,10 +31,17 @@ public class OwnerResourcesService {
     public Flux<PathEntry<GroupDto>> allOwnedResources(long owningUserId) {
         val mapWithPath = groups.ownedGroupWithPaths(owningUserId)
             .map(this::computePathMap);
+
         val entities = groups.findAllById(mapWithPath.map(PathEntry::getEntry));
 
         return mapWithPath
-            .zipWith(entities, (path, entity) -> new PathEntry<>(path.getPath(), GroupDto.MAP.map(entity)));
+            .groupJoin(
+                entities,
+                e1 -> Flux.never(),
+                e2 -> Flux.never(),
+                (e1, group) -> group.filter(e2 -> Objects.equals(e1.getEntry(), e2.getId()))
+                    .map(it -> new PathEntry<>(e1.getPath(), GroupDto.MAP.map(it)))
+            ).flatMap(it -> it);
     }
 
     private PathEntry<Long> computePathMap(ListValue listOfPairs) {
