@@ -1,5 +1,54 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
 
+  <ng-template #actionButtons let-node="node" let-kind="kind" let-hasChildren="hasChildren">
+    <span *ngIf="hasChildren && (node.kind === kind.GROUP)">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="addGroup(node)">
+          <mat-icon>group_add</mat-icon>
+          <span>Add sub-group</span>
+        </button>
+        <button mat-menu-item (click)="addUser(node)">
+          <mat-icon>person_add</mat-icon>
+          <span>Add user</span>
+        </button>
+        <button mat-menu-item (click)="addProject(node)">
+          <mat-icon>note_add</mat-icon>
+          <span>Add project</span>
+        </button>
+
+        <button mat-menu-item (click)="removeGroup(node)">
+          <mat-icon>delete</mat-icon>
+          <span>Remove group</span>
+        </button>
+      </mat-menu>
+    </span>
+
+    <span *ngIf="!hasChildren">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUser(node)">
+          <mat-icon>person_add</mat-icon>
+          <span>Add user to project</span>
+        </button>
+        <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="removeProject(node)">
+         <mat-icon>delete</mat-icon>
+         <span>Remove project</span>
+        </button>
+        <button mat-menu-item *ngIf="node.kind === kind.USER" (click)="removeUser(node)">
+         <mat-icon>delete</mat-icon>
+          <span>Remove user completely</span>
+        </button>
+      </mat-menu>
+    </span>
+  </ng-template>
+
   <!-- This is the tree node template for leaf groups -->
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
     <li class="mat-tree-node">
@@ -9,6 +58,8 @@
         <mat-icon *ngSwitchCase="kind.USER">perm_identity</mat-icon>
       </button>
       {{node.name}}
+      <ng-container
+        *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: false}"></ng-container>
     </li>
   </mat-tree-node>
 
@@ -27,6 +78,8 @@
           <mat-icon *ngSwitchCase="kind.USER">group</mat-icon>
         </button>
         {{node.name}}
+        <ng-container
+          *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: true}"></ng-container>
       </div>
       <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
         <ng-container matTreeNodeOutlet></ng-container>

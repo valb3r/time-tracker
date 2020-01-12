@@ -8,6 +8,7 @@ export enum Kind {
 }
 
 interface GroupNode {
+  id: number;
   name: string;
   children?: GroupNode[];
   kind: Kind;
@@ -54,6 +55,7 @@ export class ManagementComponent implements OnInit {
         // is a root
         roots.push(grp.path);
         rootNodes.push({
+          id: grp.entry.id,
           name: grp.entry.name,
           children: ManagementComponent.buildChildren(grp.entry),
           kind: Kind.GROUP
@@ -67,29 +69,53 @@ export class ManagementComponent implements OnInit {
 
   hasChild = (_: number, node: GroupDto) => !!node.children && node.children.length > 0;
 
+  addGroup(parent: GroupNode) {
+
+  }
+
+  removeGroup(target: GroupNode) {
+
+  }
+
+  addUser(parent: GroupNode) {
+
+  }
+
+  removeUser(target: GroupNode) {
+
+  }
+
+  addProject(parent: GroupNode) {
+
+  }
+
+  removeProject(target: GroupNode) {
+
+  }
+
   private static buildChildren(node: GroupDto): GroupNode[] {
-    let res = [];
+    let res: GroupNode[] = [];
 
     if (!!node.users && node.users.length > 0) {
-      res.push({name: "Users", children: ManagementComponent.buildUsers(node.users), kind: Kind.USER});
+      res.push({id: node.id, name: "Users", children: ManagementComponent.buildUsers(node.users), kind: Kind.USER});
     }
 
     if (!!node.projects && node.projects.length > 0) {
-      res.push({name: "Projects", children: ManagementComponent.buildProjects(node.projects), kind: Kind.PROJECT});
+      res.push({id: node.id, name: "Projects", children: ManagementComponent.buildProjects(node.projects), kind: Kind.PROJECT});
     }
 
     return res;
   }
 
   private static buildUsers(nodes: UserDto[]): GroupNode[] {
-    let res = [];
-    nodes.forEach(it => res.push({name: it.name, children: [], kind: Kind.USER}));
+    let res: GroupNode[] = [];
+    nodes.forEach(it => res.push({id: it.id, name: it.name, children: [], kind: Kind.USER}));
     return res;
   }
 
   private static buildProjects(nodes: ProjectDto[]): GroupNode[] {
-    let res = [];
-    nodes.forEach(it => res.push({name: it.name, children: [], kind: Kind.PROJECT}));
+    let res: GroupNode[] = [];
+    nodes.forEach(it => res.push({id: it.id, name: it.name, children: [], kind: Kind.PROJECT}));
     return res;
   }
 
