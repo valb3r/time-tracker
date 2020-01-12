@@ -3,6 +3,7 @@ import {Component, Injectable, OnInit} from '@angular/core';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {AdminApiService, GroupDto, GroupDtoWithPath, ProjectDto, UserDto} from "../service/admin-api/admin-api-service";
 import {BehaviorSubject, Observable} from "rxjs";
+import {SelectionChange} from "@angular/cdk/collections";
 
 export enum Kind {
   GROUP, PROJECT, USER
@@ -13,7 +14,7 @@ class GroupNode {
 
   public isSurrogate: boolean = false;
 
-  constructor(public id: number, public name: string, public kind: Kind,
+  constructor(public id: number, public path: string, public name: string, public kind: Kind,
               public expandable: boolean, isSurrogate?: boolean, public parent?: GroupNode) {
     if (isSurrogate) {
       this.isSurrogate = isSurrogate;
@@ -23,8 +24,37 @@ class GroupNode {
 
 @Injectable()
 export class GroupDatabase {
+  private expandedMemoize = new Set<string>();
+
   dataChange = new BehaviorSubject<GroupNode[]>([]);
-  constructor() {}
+  constructor(private treeControl: TreeControl, private dataSource: MatTreeNestedDataSource<GroupNode>) {
+
+    this.treeControl.expansionModel.changed.subscribe(change => {
+      if ((change as SelectionChange<GroupNode>).added ||
+        (change as SelectionChange<GroupNode>).removed) {
+        this.handleTreeControl(change as SelectionChange<GroupNode>);
+      }
+    });
+  }
+
+  keepExpandedNodesState(roots: GroupNode[]) {
+    roots.forEach(it => {
+      if (this.expandedMemoize.has(it.path)) {
+        this.treeControl.expansionModel.select(it)
+      }
+      this.keepExpandedNodesState(it.childrenChange.value);
+    })
+  }
+
+  /** Handle expand/collapse behaviors */
+  handleTreeControl(change: SelectionChange<GroupNode>) {
+    if (change.added) {
+      change.added.forEach(node => this.expandedMemoize.add(node.path));
+    }
+    if (change.removed) {
+      change.removed.forEach(node => this.expandedMemoize.delete(node.path));
+    }
+  }
 }
 
 @Component({
@@ -38,7 +68,7 @@ export class ManagementComponent implements OnInit {
 
   treeControl = new NestedTreeControl<GroupNode>(this.getChildren);
   dataSource = new MatTreeNestedDataSource<GroupNode>();
-  database: GroupDatabase = new GroupDatabase();
+  database: GroupDatabase = new GroupDatabase(this.treeControl, this.dataSource);
 
   public kind = Kind;
 
@@ -72,9 +102,9 @@ export class ManagementComponent implements OnInit {
       } else {
         // is a root
         roots.push(grp.path);
-        let rootNode = new GroupNode(grp.entry.id, grp.entry.name, Kind.GROUP, true);
+        let rootNode = new GroupNode(grp.entry.id, grp.path, grp.entry.name, Kind.GROUP, true);
         rootNodes.push(rootNode);
-        rootNode.childrenChange.next(this.buildChildren(grp.entry));
+        rootNode.childrenChange.next(this.buildChildren(grp.path, grp.entry));
       }
     });
 
@@ -135,44 +165,47 @@ export class ManagementComponent implements OnInit {
     this.api.ownOwnedGroups().subscribe(res => {
       const data = this.buildFileTree(res);
       this.database.dataChange.next(data);
+      this.database.keepExpandedNodesState(data);
     });
   }
 
-  private buildChildren(node: GroupDto): GroupNode[] {
+  private buildChildren(path: string, node: GroupDto): GroupNode[] {
     let res: GroupNode[] = [];
 
     if (!!node.users && node.users.length > 0) {
-      let users = new GroupNode(node.id, "Users", Kind.USER, true);
+      let users = new GroupNode(node.id, path + "/" + node.id, "Users", Kind.USER, true);
       res.push(users);
-      users.childrenChange.next(ManagementComponent.buildUsers(node.users));
+      users.childrenChange.next(ManagementComponent.buildUsers(users.path, node.users));
     }
 
     if (!!node.projects && node.projects.length > 0) {
-      let projects = new GroupNode(node.id, "Projects", Kind.PROJECT, true);
+      let projects = new GroupNode(node.id, path + "/" + node.id, "Projects", Kind.PROJECT, true);
       res.push(projects);
-      projects.childrenChange.next(this.buildProjects(node.projects));
+      projects.childrenChange.next(this.buildProjects(projects.path, node.projects));
     }
 
     return res;
   }
 
-  private static buildUsers(nodes: UserDto[]): GroupNode[] {
+  private static buildUsers(path: string, nodes: UserDto[]): GroupNode[] {
     let res: GroupNode[] = [];
     nodes.forEach(it => {
-      let user = new GroupNode(it.id, it.name, Kind.USER, false);
+      let user = new GroupNode(it.id, path + "/" + it.id, it.name, Kind.USER, false);
       res.push(user)
     });
     return res;
   }
 
-  private buildProjects(nodes: ProjectDto[]): GroupNode[] {
+  private buildProjects(path: string, nodes: ProjectDto[]): GroupNode[] {
     let res: GroupNode[] = [];
     nodes.forEach(it => {
-      let project = new GroupNode(it.id, it.name, Kind.PROJECT, true, true);
+      let project = new GroupNode(it.id, path + "/" + it.id, it.name, Kind.PROJECT, true, true);
       res.push(project);
 
       this.api.projectActors(project.id).subscribe(actors => {
-        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false, true, project));
+        let mappedActors = actors.map(
+          actor => new GroupNode(actor.id, path + "/" + actor.id, actor.name, Kind.USER, false, true, project)
+        );
         project.expandable = true;
         project.childrenChange.next(mappedActors);
         this.database.dataChange.next(this.database.dataChange.value);
