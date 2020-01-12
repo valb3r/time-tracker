@@ -13,8 +13,8 @@ class GroupNode {
 
   public isSurrogate: boolean = false;
 
-  constructor(public id: number, public name: string, public kind: Kind, public expandable: boolean,
-              isSurrogate?: boolean) {
+  constructor(public id: number, public name: string, public kind: Kind,
+              public expandable: boolean, isSurrogate?: boolean, public parent?: GroupNode) {
     if (isSurrogate) {
       this.isSurrogate = isSurrogate;
     }
@@ -80,7 +80,9 @@ export class ManagementComponent implements OnInit {
 
     children.forEach((values, parent) => {
       parent.expandable = true;
-      parent.childrenChange.next(this.buildFileTree(values))
+      let children = this.buildFileTree(values);
+      children.forEach(child => child.parent = parent);
+      parent.childrenChange.next(children);
     });
     return rootNodes;
   };
@@ -90,7 +92,9 @@ export class ManagementComponent implements OnInit {
   }
 
   removeGroup(target: GroupNode) {
-
+    this.api.removeGroup(target.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
   }
 
   addUser(parent: GroupNode) {
@@ -162,7 +166,7 @@ export class ManagementComponent implements OnInit {
       res.push(project);
 
       this.api.projectActors(project.id).subscribe(actors => {
-        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false, true));
+        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false, true, project));
         project.expandable = true;
         project.childrenChange.next(mappedActors);
         this.database.dataChange.next(this.database.dataChange.value);

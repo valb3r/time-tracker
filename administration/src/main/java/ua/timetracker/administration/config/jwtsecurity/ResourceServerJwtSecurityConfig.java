@@ -15,9 +15,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -39,10 +36,9 @@ public class ResourceServerJwtSecurityConfig {
      * Protects /v1/resources with bearer-alike cookie 'X-Authorization'
      */
     @Bean
-    SecurityWebFilterChain springSecurityFilterChain(CorsConfigurationSource corsConfig, ServerHttpSecurity http) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
             .csrf().disable()
-            .cors(corsSpec -> corsSpec.configurationSource(corsConfig))
             // OPTIONS preflight is caught by 'oauth2ResourceServer'
             .securityMatcher(
                 new OrServerWebExchangeMatcher(
@@ -58,19 +54,6 @@ public class ResourceServerJwtSecurityConfig {
                 .jwt()
                 .jwtDecoder(jwtDecoder());
         return http.build();
-    }
-
-    @Bean
-    CorsConfigurationSource cors() {
-        UrlBasedCorsConfigurationSource cors = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedMethod(HttpMethod.GET);
-        configuration.addAllowedMethod(HttpMethod.POST);
-        configuration.addAllowedMethod(HttpMethod.PUT);
-        configuration.addAllowedMethod(HttpMethod.DELETE);
-        configuration.addAllowedOrigin("localhost:6500");
-        cors.registerCorsConfiguration(V1_RESOURCES + "/**", configuration);
-        return cors;
     }
 
     @Bean
