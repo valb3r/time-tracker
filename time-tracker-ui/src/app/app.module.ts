@@ -31,12 +31,12 @@ import {MAT_DATE_FORMATS} from "@angular/material/core";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
-import { MainScreenComponent } from './main-screen/main-screen.component';
-import { MyProfileComponent } from './my-profile/my-profile.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ReportsComponent } from './reports/reports.component';
-import { LogoutComponent } from './logout/logout.component';
-import { ManagementComponent } from './management/management.component';
+import {MainScreenComponent} from './main-screen/main-screen.component';
+import {MyProfileComponent} from './my-profile/my-profile.component';
+import {ChangePasswordComponent} from './change-password/change-password.component';
+import {ReportsComponent} from './reports/reports.component';
+import {LogoutComponent} from './logout/logout.component';
+import {ManagementComponent} from './management/management.component';
 import {MatTreeModule} from "@angular/material/tree";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
@@ -68,7 +68,7 @@ export const AppDateFormats = {
     ChangePasswordComponent,
     ReportsComponent,
     LogoutComponent,
-    ManagementComponent
+    ManagementComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,11 +99,8 @@ export const AppDateFormats = {
     MatListModule
   ],
   entryComponents: [TimeCardEditComponent],
-  providers: [{
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptorService,
-      multi: true
-    },
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}
   ],
   bootstrap: [AppComponent]

@@ -1,17 +1,23 @@
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {Component, OnInit} from '@angular/core';
+import {NestedTreeControl, TreeControl} from '@angular/cdk/tree';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {AdminApiService, GroupDto, GroupDtoWithPath, ProjectDto, UserDto} from "../service/admin-api/admin-api-service";
+import {BehaviorSubject, Observable} from "rxjs";
 
 export enum Kind {
   GROUP, PROJECT, USER
 }
 
-interface GroupNode {
-  id: number;
-  name: string;
-  children?: GroupNode[];
-  kind: Kind;
+class GroupNode {
+  childrenChange = new BehaviorSubject<GroupNode[]>([]);
+  constructor(public id: number, public name: string, public kind: Kind, public expandable: boolean) {
+  }
+}
+
+@Injectable()
+export class GroupDatabase {
+  dataChange = new BehaviorSubject<GroupNode[]>([]);
+  constructor() {}
 }
 
 @Component({
@@ -20,8 +26,12 @@ interface GroupNode {
   styleUrls: ['management.component.scss'],
 })
 export class ManagementComponent implements OnInit {
-  treeControl = new NestedTreeControl<GroupNode>(node => node.children);
+  getChildren = (node: GroupNode): Observable<GroupNode[]> => node.childrenChange;
+  hasChild = (_: number, node: GroupNode): boolean => node.expandable;
+
+  treeControl = new NestedTreeControl<GroupNode>(this.getChildren);
   dataSource = new MatTreeNestedDataSource<GroupNode>();
+  database: GroupDatabase = new GroupDatabase();
 
   public kind = Kind;
 
@@ -29,11 +39,15 @@ export class ManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.ownOwnedGroups().subscribe(res => {
-      this.dataSource.data = this.buildFileTree(res);
-    })
-  }
+    this.database.dataChange.subscribe(data => {
+      this.dataSource.data = data;
+    });
 
+    this.api.ownOwnedGroups().subscribe(res => {
+      const data = this.buildFileTree(res);
+      this.database.dataChange.next(data);
+    });
+  }
 
   buildFileTree(groups: GroupDtoWithPath[]): GroupNode[] {
     let roots: string[] = [];
@@ -54,20 +68,18 @@ export class ManagementComponent implements OnInit {
       } else {
         // is a root
         roots.push(grp.path);
-        rootNodes.push({
-          id: grp.entry.id,
-          name: grp.entry.name,
-          children: this.buildChildren(grp.entry),
-          kind: Kind.GROUP
-        })
+        let rootNode = new GroupNode(grp.entry.id, grp.entry.name, Kind.GROUP, true);
+        rootNodes.push(rootNode);
+        rootNode.childrenChange.next(this.buildChildren(grp.entry));
       }
     });
 
-    children.forEach((values, key) => key.children = key.children.concat(this.buildFileTree(values)));
+    children.forEach((values, parent) => {
+      parent.expandable = true;
+      parent.childrenChange.next(this.buildFileTree(values))
+    });
     return rootNodes;
   };
-
-  hasChild = (_: number, node: GroupDto) => !!node.children && node.children.length > 0;
 
   addGroup(parent: GroupNode) {
 
@@ -97,11 +109,15 @@ export class ManagementComponent implements OnInit {
     let res: GroupNode[] = [];
 
     if (!!node.users && node.users.length > 0) {
-      res.push({id: node.id, name: "Users", children: ManagementComponent.buildUsers(node.users), kind: Kind.USER});
+      let users = new GroupNode(node.id, "Users", Kind.USER, true);
+      res.push(users);
+      users.childrenChange.next(ManagementComponent.buildUsers(node.users));
     }
 
     if (!!node.projects && node.projects.length > 0) {
-      res.push({id: node.id, name: "Projects", children: this.buildProjects(node.projects), kind: Kind.PROJECT});
+      let projects = new GroupNode(node.id, "Projects", Kind.PROJECT, true);
+      res.push(projects);
+      projects.childrenChange.next(this.buildProjects(node.projects));
     }
 
     return res;
@@ -109,20 +125,24 @@ export class ManagementComponent implements OnInit {
 
   private static buildUsers(nodes: UserDto[]): GroupNode[] {
     let res: GroupNode[] = [];
-    nodes.forEach(it => res.push({id: it.id, name: it.name, children: [], kind: Kind.USER}));
+    nodes.forEach(it => {
+      let user = new GroupNode(it.id, it.name, Kind.USER, false);
+      res.push(user)
+    });
     return res;
   }
 
   private buildProjects(nodes: ProjectDto[]): GroupNode[] {
     let res: GroupNode[] = [];
     nodes.forEach(it => {
-      let project = {id: it.id, name: it.name, children: [], kind: Kind.PROJECT};
+      let project = new GroupNode(it.id, it.name, Kind.PROJECT, true);
       res.push(project);
 
       this.api.projectActors(project.id).subscribe(actors => {
-        console.log("Received actors for : " + project.id);
-        console.log(actors);
-        actors.forEach(actor => project.children.push({id: actor.id, name: actor.name, children: [], kind: Kind.USER}))
+        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false));
+        project.expandable = true;
+        project.childrenChange.next(mappedActors);
+        this.database.dataChange.next(this.database.dataChange.value);
       });
     });
 
