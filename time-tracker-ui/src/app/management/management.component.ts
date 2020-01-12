@@ -106,7 +106,9 @@ export class ManagementComponent implements OnInit {
   }
 
   removeUserCompletely(target: GroupNode) {
-
+    this.api.removeUserCompletely(target.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
   }
 
   removeUserFromProject(target: GroupNode) {

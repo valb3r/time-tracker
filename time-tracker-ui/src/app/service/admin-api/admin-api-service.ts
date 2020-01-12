@@ -12,6 +12,7 @@ export class AdminApiService {
   private ownOwnedGroupsUri = this.base + "resources/owned-resources";
   private projectActorsUri = this.base + "resources/roles/in/project/";
   private removeGroupUri = this.base + "resources/groups/";
+  private removeUserUri = this.base + "resources/users/";
 
 
   constructor(private httpClient: HttpClient) { }
@@ -34,6 +35,10 @@ export class AdminApiService {
 
   removeGroup(groupId: number) {
     return this.httpClient.delete(this.removeGroupUri + groupId);
+  }
+
+  removeUserCompletely(userId: number) {
+    return this.httpClient.delete(this.removeUserUri + userId);
   }
 }
 
