@@ -1,4 +1,4 @@
-package ua.timetracker.shared.dto;
+package ua.timetracker.shared.restapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

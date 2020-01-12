@@ -6,7 +6,7 @@ import org.neo4j.driver.internal.value.ListValue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
-import ua.timetracker.shared.dto.PathEntry;
+import ua.timetracker.shared.restapi.dto.PathEntry;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 

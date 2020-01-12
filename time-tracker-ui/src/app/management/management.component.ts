@@ -57,7 +57,7 @@ export class ManagementComponent implements OnInit {
         rootNodes.push({
           id: grp.entry.id,
           name: grp.entry.name,
-          children: ManagementComponent.buildChildren(grp.entry),
+          children: this.buildChildren(grp.entry),
           kind: Kind.GROUP
         })
       }
@@ -93,7 +93,7 @@ export class ManagementComponent implements OnInit {
 
   }
 
-  private static buildChildren(node: GroupDto): GroupNode[] {
+  private buildChildren(node: GroupDto): GroupNode[] {
     let res: GroupNode[] = [];
 
     if (!!node.users && node.users.length > 0) {
@@ -101,7 +101,7 @@ export class ManagementComponent implements OnInit {
     }
 
     if (!!node.projects && node.projects.length > 0) {
-      res.push({id: node.id, name: "Projects", children: ManagementComponent.buildProjects(node.projects), kind: Kind.PROJECT});
+      res.push({id: node.id, name: "Projects", children: this.buildProjects(node.projects), kind: Kind.PROJECT});
     }
 
     return res;
@@ -113,9 +113,19 @@ export class ManagementComponent implements OnInit {
     return res;
   }
 
-  private static buildProjects(nodes: ProjectDto[]): GroupNode[] {
+  private buildProjects(nodes: ProjectDto[]): GroupNode[] {
     let res: GroupNode[] = [];
-    nodes.forEach(it => res.push({id: it.id, name: it.name, children: [], kind: Kind.PROJECT}));
+    nodes.forEach(it => {
+      let project = {id: it.id, name: it.name, children: [], kind: Kind.PROJECT};
+      res.push(project);
+
+      this.api.projectActors(project.id).subscribe(actors => {
+        console.log("Received actors for : " + project.id);
+        console.log(actors);
+        actors.forEach(actor => project.children.push({id: actor.id, name: actor.name, children: [], kind: Kind.USER}))
+      });
+    });
+
     return res;
   }
 

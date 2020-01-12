@@ -10,6 +10,7 @@ export class AdminApiService {
   private base = environment.adminBaseUri;
   private loginUri = this.base + "login";
   private ownOwnedGroupsUri = this.base + "resources/owned-resources";
+  private projectActorsUri = this.base + "resources/roles/in/project/";
 
 
   constructor(private httpClient: HttpClient) { }
@@ -24,6 +25,10 @@ export class AdminApiService {
 
   ownOwnedGroups() {
     return this.httpClient.get<GroupDtoWithPath[]>(this.ownOwnedGroupsUri);
+  }
+
+  projectActors(projectId: number) {
+    return this.httpClient.get<UserDto[]>(this.projectActorsUri + "/" + projectId);
   }
 }
 

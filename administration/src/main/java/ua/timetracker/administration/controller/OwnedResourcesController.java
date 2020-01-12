@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.OwnerResourcesService;
-import ua.timetracker.shared.dto.PathEntry;
+import ua.timetracker.shared.restapi.dto.PathEntry;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 
 import static ua.timetracker.shared.restapi.Paths.V1_OWNED;

@@ -3,9 +3,12 @@ package ua.timetracker.administration.service.users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
+import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
+import ua.timetracker.shared.restapi.dto.user.UserDto;
 
 import java.util.Set;
 
@@ -18,6 +21,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.ProjectRol
 @RequiredArgsConstructor
 public class RoleManager {
 
+    private final ProjectsRepository projects;
     private final GroupsRepository groups;
 
     @Transactional(REACTIVE_TX_MANAGER)
@@ -44,5 +48,11 @@ public class RoleManager {
         }
 
         throw new IllegalStateException("Unknown role: " + role);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Flux<UserDto> projectActors(long projectId) {
+        return projects.actorsOnProjects(projectId)
+            .map(UserDto.MAP::map);
     }
 }

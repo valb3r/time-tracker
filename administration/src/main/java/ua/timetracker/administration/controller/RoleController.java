@@ -4,15 +4,18 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.RoleManager;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
+import ua.timetracker.shared.restapi.dto.user.UserDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -34,7 +37,7 @@ public class RoleController {
         @Parameter(hidden = true) Authentication user,
         @Valid @NotBlank @PathVariable("role") ProjectRole role,
         @ManagedResourceId @Valid @PathVariable("user_or_group_ids") Set<@NotNull Long> userOrGroupIds,
-        @ManagedResourceId @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds
+        @ManagedResourceId @Valid @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds
     ) {
         return manager.addRoles(role, userOrGroupIds, projectOrGroupIds);
     }
@@ -45,8 +48,17 @@ public class RoleController {
         @Parameter(hidden = true) Authentication user,
         @Valid @NotBlank @PathVariable("role") ProjectRole role,
         @ManagedResourceId @Valid @PathVariable("user_or_group_ids") Set<@NotNull Long> userOrGroupIds,
-        @ManagedResourceId @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds
+        @ManagedResourceId @Valid @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds
     ) {
         return manager.removeRoles(role, userOrGroupIds, projectOrGroupIds);
+    }
+
+    @OnlyResourceManagers
+    @GetMapping(path = "/in/project/{id}")
+    public Flux<UserDto> actorsOnProjects(
+        @Parameter(hidden = true) Authentication user,
+        @ManagedResourceId @PathVariable("id") long projectId
+    ) {
+        return manager.projectActors(projectId);
     }
 }
