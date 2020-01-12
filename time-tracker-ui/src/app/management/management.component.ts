@@ -50,10 +50,7 @@ export class ManagementComponent implements OnInit {
       this.dataSource.data = data;
     });
 
-    this.api.ownOwnedGroups().subscribe(res => {
-      const data = this.buildFileTree(res);
-      this.database.dataChange.next(data);
-    });
+    this.fetchDataFromServer();
   }
 
   buildFileTree(groups: GroupDtoWithPath[]): GroupNode[] {
@@ -100,6 +97,10 @@ export class ManagementComponent implements OnInit {
 
   }
 
+  editUser(target: GroupNode) {
+
+  }
+
   removeUserCompletely(target: GroupNode) {
 
   }
@@ -112,8 +113,19 @@ export class ManagementComponent implements OnInit {
 
   }
 
+  editProject(target: GroupNode) {
+
+  }
+
   removeProject(target: GroupNode) {
 
+  }
+
+  private fetchDataFromServer() {
+    this.api.ownOwnedGroups().subscribe(res => {
+      const data = this.buildFileTree(res);
+      this.database.dataChange.next(data);
+    });
   }
 
   private buildChildren(node: GroupDto): GroupNode[] {

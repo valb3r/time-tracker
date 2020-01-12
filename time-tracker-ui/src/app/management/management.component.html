@@ -1,94 +1,106 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Users, projects and groups management</mat-card-title>
+  </mat-card-header>
 
-  <ng-template #actionButtons let-node="node" let-kind="kind" let-hasChildren="hasChildren">
-    <span *ngIf="hasChildren && (node.kind === kind.GROUP)">
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
-        <mat-icon>more_vert</mat-icon>
-      </button>
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
+    <ng-template #actionButtons let-node="node" let-kind="kind" let-hasChildren="hasChildren">
+      <span *ngIf="hasChildren && (node.kind === kind.GROUP)">
+          <button mat-menu-item (click)="addGroup(node)">
+            <mat-icon>group_add</mat-icon>
+            <span>Add sub-group</span>
+          </button>
+          <button mat-menu-item (click)="addUser(node)">
+            <mat-icon>person_add</mat-icon>
+            <span>Add user</span>
+          </button>
+          <button mat-menu-item (click)="addProject(node)">
+            <mat-icon>note_add</mat-icon>
+            <span>Add project</span>
+          </button>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="addGroup(node)">
-          <mat-icon>group_add</mat-icon>
-          <span>Add sub-group</span>
-        </button>
-        <button mat-menu-item (click)="addUser(node)">
-          <mat-icon>person_add</mat-icon>
-          <span>Add user</span>
-        </button>
-        <button mat-menu-item (click)="addProject(node)">
-          <mat-icon>note_add</mat-icon>
-          <span>Add project</span>
-        </button>
+          <button mat-menu-item (click)="removeGroup(node)">
+            <mat-icon>delete</mat-icon>
+            <span>Remove group</span>
+          </button>
+      </span>
 
-        <button mat-menu-item (click)="removeGroup(node)">
+      <span *ngIf="node.kind === kind.PROJECT">
+        <button mat-menu-item *ngIf="node.isSurrogate" (click)="editProject(node)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit project</span>
+        </button>
+        <button mat-menu-item *ngIf="node.isSurrogate" (click)="removeProject(node)">
           <mat-icon>delete</mat-icon>
-          <span>Remove group</span>
+          <span>Remove project</span>
         </button>
-      </mat-menu>
-    </span>
+      </span>
 
-    <span *ngIf="!hasChildren">
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
-        <mat-icon>more_vert</mat-icon>
-      </button>
+      <span *ngIf="!hasChildren">
+          <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUser(node)">
+            <mat-icon>person_add</mat-icon>
+            <span>Add user to project</span>
+          </button>
+          <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="removeProject(node)">
+           <mat-icon>delete</mat-icon>
+           <span>Remove project</span>
+          </button>
+          <button mat-menu-item *ngIf="node.kind === kind.USER && !node.isSurrogate" (click)="editUser(node)">
+           <mat-icon>edit</mat-icon>
+            <span>Edit user</span>
+          </button>
+          <button mat-menu-item *ngIf="node.kind === kind.USER && !node.isSurrogate" (click)="removeUserCompletely(node)">
+           <mat-icon>delete</mat-icon>
+            <span>Remove user completely</span>
+          </button>
+          <button mat-menu-item *ngIf="node.kind === kind.USER && node.isSurrogate" (click)="removeUserFromProject(node)">
+           <mat-icon>delete</mat-icon>
+            <span>Remove from project</span>
+          </button>
+      </span>
+    </ng-template>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUser(node)">
-          <mat-icon>person_add</mat-icon>
-          <span>Add user to project</span>
-        </button>
-        <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="removeProject(node)">
-         <mat-icon>delete</mat-icon>
-         <span>Remove project</span>
-        </button>
-        <button mat-menu-item *ngIf="node.kind === kind.USER && !node.isSurrogate" (click)="removeUserCompletely(node)">
-         <mat-icon>delete</mat-icon>
-          <span>Remove user completely</span>
-        </button>
-        <button mat-menu-item *ngIf="node.kind === kind.USER && node.isSurrogate" (click)="removeUserFromProject(node)">
-         <mat-icon>delete</mat-icon>
-          <span>Remove from project</span>
-        </button>
-      </mat-menu>
-    </span>
-  </ng-template>
-
-  <!-- This is the tree node template for leaf groups -->
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-    <li class="mat-tree-node">
-      <button mat-icon-button disabled [ngSwitch]="node.kind">
-        <mat-icon *ngSwitchCase="kind.GROUP">supervised_user_circle</mat-icon>
-        <mat-icon *ngSwitchCase="kind.PROJECT">assignment</mat-icon>
-        <mat-icon *ngSwitchCase="kind.USER">perm_identity</mat-icon>
-      </button>
-      {{node.name}}
-      <ng-container
-        *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: false}"></ng-container>
-    </li>
-  </mat-tree-node>
-
-  <!-- This is the tree node template for expandable groups -->
-  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-    <li>
-      <div class="mat-tree-node">
-        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        </button>
-        <button mat-icon-button disabled>
+    <!-- This is the tree node template for leaf groups -->
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+      <li class="mat-tree-node">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
           <mat-icon *ngIf="node.kind == kind.GROUP">supervised_user_circle</mat-icon>
-          <mat-icon *ngIf="node.kind == kind.PROJECT && !node.isSurrogate">menu_book</mat-icon>
-          <mat-icon *ngIf="node.kind == kind.PROJECT && node.isSurrogate">assignment</mat-icon>
-          <mat-icon *ngIf="node.kind == kind.USER">group</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.PROJECT">assignment</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.USER">perm_identity</mat-icon>
         </button>
+        <mat-menu #menu>
+          <ng-container
+            *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: false}"></ng-container>
+        </mat-menu>
         {{node.name}}
-        <ng-container
-          *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: true}"></ng-container>
-      </div>
-      <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
-        <ng-container matTreeNodeOutlet></ng-container>
-      </ul>
-    </li>
-  </mat-nested-tree-node>
-</mat-tree>
+      </li>
+    </mat-tree-node>
+
+    <!-- This is the tree node template for expandable groups -->
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+      <li>
+        <div class="mat-tree-node">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+            <mat-icon *ngIf="node.kind == kind.GROUP">supervised_user_circle</mat-icon>
+            <mat-icon *ngIf="node.kind == kind.PROJECT && !node.isSurrogate">menu_book</mat-icon>
+            <mat-icon *ngIf="node.kind == kind.PROJECT && node.isSurrogate">assignment</mat-icon>
+            <mat-icon *ngIf="node.kind == kind.USER">group</mat-icon>
+          </button>
+          <mat-menu #menu>
+          <ng-container
+            *ngTemplateOutlet="actionButtons; context: {node: node, kind: kind, hasChildren: true}"></ng-container>
+          </mat-menu>
+          {{node.name}}
+        </div>
+        <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </ul>
+      </li>
+    </mat-nested-tree-node>
+  </mat-tree>
+</mat-card>
