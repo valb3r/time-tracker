@@ -5,7 +5,8 @@
     "changeOrigin": true,
     "pathRewrite": {
       "^/admin-api": ""
-    }
+    },
+    "logLevel": "debug"
   },
   "/tracker-api/*": {
     "target": "http://localhost:20080",

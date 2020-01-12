@@ -67,6 +67,7 @@
           <mat-icon *ngIf="node.kind == kind.GROUP">supervised_user_circle</mat-icon>
           <mat-icon *ngIf="node.kind == kind.PROJECT">assignment</mat-icon>
           <mat-icon *ngIf="node.kind == kind.USER">perm_identity</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.INHERITED_USER">folder_shared</mat-icon>
         </button>
         <mat-menu #menu>
           <ng-container

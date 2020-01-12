@@ -1,11 +1,11 @@
 package ua.timetracker.shared.persistence.repository.reactive;
 
+import org.neo4j.driver.internal.value.ListValue;
 import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import ua.timetracker.shared.persistence.entity.projects.Project;
-import ua.timetracker.shared.persistence.entity.user.User;
 
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.DEVELOPER_ROLE;
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.MANAGER_ROLE;
@@ -28,6 +28,8 @@ public interface ProjectsRepository extends ReactiveCrudRepository<Project, Long
     /**
      * Related to {@link ProjectsRepository#timeLoggableProjects(long)}.
      */
-    @Query("MATCH (m:User)-[:" + MANAGER_ROLE + "|" + DEVELOPER_ROLE + "|" + IN_GROUP + "|" + OWNS + "*]->(p:Project) WHERE id(p) = $projectId RETURN m")
-    Flux<User> actorsOnProjects(@Param("projectId") long projectId);
+    @Query(
+        "MATCH path = (m:User)-[:" + MANAGER_ROLE + "|" + DEVELOPER_ROLE + "|" + IN_GROUP + "|" + OWNS + "*]->(p:Project) WHERE id(p) = $projectId " +
+        "RETURN [node IN nodes(path) | id(node)]")
+    Flux<ListValue> actorsOnProjects(@Param("projectId") long projectId);
 }

@@ -6,7 +6,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
 
 export enum Kind {
-  GROUP, PROJECT, USER
+  GROUP, PROJECT, USER, INHERITED_USER
 }
 
 class GroupNode {
@@ -25,10 +25,9 @@ class GroupNode {
 @Injectable()
 export class GroupDatabase {
   private expandedMemoize = new Set<string>();
-
   dataChange = new BehaviorSubject<GroupNode[]>([]);
-  constructor(private treeControl: TreeControl, private dataSource: MatTreeNestedDataSource<GroupNode>) {
 
+  constructor(private treeControl: TreeControl) {
     this.treeControl.expansionModel.changed.subscribe(change => {
       if ((change as SelectionChange<GroupNode>).added ||
         (change as SelectionChange<GroupNode>).removed) {
@@ -68,7 +67,7 @@ export class ManagementComponent implements OnInit {
 
   treeControl = new NestedTreeControl<GroupNode>(this.getChildren);
   dataSource = new MatTreeNestedDataSource<GroupNode>();
-  database: GroupDatabase = new GroupDatabase(this.treeControl, this.dataSource);
+  database: GroupDatabase = new GroupDatabase(this.treeControl);
 
   public kind = Kind;
 
@@ -204,7 +203,29 @@ export class ManagementComponent implements OnInit {
 
       this.api.projectActors(project.id).subscribe(actors => {
         let mappedActors = actors.map(
-          actor => new GroupNode(actor.id, path + "/" + actor.id, actor.name, Kind.USER, false, true, project)
+          actor => {
+            if (!!actor.source) {
+              return new GroupNode(
+                actor.user.id,
+                path + "/" + actor.user.id,
+                actor.source.name + ": -> " + actor.user.name,
+                Kind.INHERITED_USER,
+                false,
+                true,
+                project
+              )
+            } else {
+              return new GroupNode(
+                actor.user.id,
+                path + "/" + actor.user.id,
+                actor.user.name,
+                Kind.USER,
+                false,
+                true,
+                project
+              )
+            }
+          }
         );
         project.expandable = true;
         project.childrenChange.next(mappedActors);

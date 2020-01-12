@@ -15,7 +15,7 @@ import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.RoleManager;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
-import ua.timetracker.shared.restapi.dto.user.UserDto;
+import ua.timetracker.shared.restapi.dto.project.ProjectActorDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -55,7 +55,7 @@ public class RoleController {
 
     @OnlyResourceManagers
     @GetMapping(path = "/in/project/{id}")
-    public Flux<UserDto> actorsOnProjects(
+    public Flux<ProjectActorDto> actorsOnProjects(
         @Parameter(hidden = true) Authentication user,
         @ManagedResourceId @PathVariable("id") long projectId
     ) {

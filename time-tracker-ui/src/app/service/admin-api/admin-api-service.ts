@@ -31,7 +31,7 @@ export class AdminApiService {
   }
 
   projectActors(projectId: number) {
-    return this.httpClient.get<UserDto[]>(this.projectActorsUri + projectId);
+    return this.httpClient.get<ProjectActorDto[]>(this.projectActorsUri + projectId);
   }
 
   removeGroup(groupId: number) {
@@ -79,3 +79,7 @@ export class GroupDtoWithPath {
   entry: GroupDto;
 }
 
+export class ProjectActorDto {
+  user: UserDto;
+  source: GroupDto;
+}
