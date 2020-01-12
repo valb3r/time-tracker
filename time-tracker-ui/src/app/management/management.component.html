@@ -41,9 +41,13 @@
          <mat-icon>delete</mat-icon>
          <span>Remove project</span>
         </button>
-        <button mat-menu-item *ngIf="node.kind === kind.USER" (click)="removeUser(node)">
+        <button mat-menu-item *ngIf="node.kind === kind.USER && !node.isSurrogate" (click)="removeUserCompletely(node)">
          <mat-icon>delete</mat-icon>
           <span>Remove user completely</span>
+        </button>
+        <button mat-menu-item *ngIf="node.kind === kind.USER && node.isSurrogate" (click)="removeUserFromProject(node)">
+         <mat-icon>delete</mat-icon>
+          <span>Remove from project</span>
         </button>
       </mat-menu>
     </span>
@@ -72,10 +76,11 @@
             {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
           </mat-icon>
         </button>
-        <button mat-icon-button disabled [ngSwitch]="node.kind">
-          <mat-icon *ngSwitchCase="kind.GROUP">supervised_user_circle</mat-icon>
-          <mat-icon *ngSwitchCase="kind.PROJECT">menu_book</mat-icon>
-          <mat-icon *ngSwitchCase="kind.USER">group</mat-icon>
+        <button mat-icon-button disabled>
+          <mat-icon *ngIf="node.kind == kind.GROUP">supervised_user_circle</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.PROJECT && !node.isSurrogate">menu_book</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.PROJECT && node.isSurrogate">assignment</mat-icon>
+          <mat-icon *ngIf="node.kind == kind.USER">group</mat-icon>
         </button>
         {{node.name}}
         <ng-container

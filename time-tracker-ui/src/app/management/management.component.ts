@@ -10,7 +10,14 @@ export enum Kind {
 
 class GroupNode {
   childrenChange = new BehaviorSubject<GroupNode[]>([]);
-  constructor(public id: number, public name: string, public kind: Kind, public expandable: boolean) {
+
+  public isSurrogate: boolean = false;
+
+  constructor(public id: number, public name: string, public kind: Kind, public expandable: boolean,
+              isSurrogate?: boolean) {
+    if (isSurrogate) {
+      this.isSurrogate = isSurrogate;
+    }
   }
 }
 
@@ -93,7 +100,11 @@ export class ManagementComponent implements OnInit {
 
   }
 
-  removeUser(target: GroupNode) {
+  removeUserCompletely(target: GroupNode) {
+
+  }
+
+  removeUserFromProject(target: GroupNode) {
 
   }
 
@@ -135,11 +146,11 @@ export class ManagementComponent implements OnInit {
   private buildProjects(nodes: ProjectDto[]): GroupNode[] {
     let res: GroupNode[] = [];
     nodes.forEach(it => {
-      let project = new GroupNode(it.id, it.name, Kind.PROJECT, true);
+      let project = new GroupNode(it.id, it.name, Kind.PROJECT, true, true);
       res.push(project);
 
       this.api.projectActors(project.id).subscribe(actors => {
-        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false));
+        let mappedActors = actors.map(actor => new GroupNode(actor.id, actor.name, Kind.USER, false, true));
         project.expandable = true;
         project.childrenChange.next(mappedActors);
         this.database.dataChange.next(this.database.dataChange.value);
