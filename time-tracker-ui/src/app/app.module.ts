@@ -17,7 +17,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {LoginComponent} from './login/login.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ErrorInterceptorService} from "./service/interceptor/error-interceptor-service";
@@ -40,6 +40,7 @@ import {ManagementComponent} from './management/management.component';
 import {MatTreeModule} from "@angular/material/tree";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { AddGroupDialogComponent } from './management/dialogs/add-group-dialog/add-group-dialog.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -69,6 +70,7 @@ export const AppDateFormats = {
     ReportsComponent,
     LogoutComponent,
     ManagementComponent,
+    AddGroupDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,9 +98,10 @@ export const AppDateFormats = {
     MatDatepickerModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    FormsModule
   ],
-  entryComponents: [TimeCardEditComponent],
+  entryComponents: [AddGroupDialogComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}

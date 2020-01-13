@@ -12,7 +12,7 @@ export class AdminApiService {
   private loginUri = this.base + "login";
   private ownOwnedGroupsUri = this.base + "resources/owned-resources";
   private projectActorsUri = this.base + "resources/roles/in/project/";
-  private removeGroupUri = this.base + "resources/groups/";
+  private baseGroupUri = this.base + "resources/groups/";
   private removeUserUri = this.base + "resources/users/";
   private removeProjectUri = this.base + "resources/projects/";
 
@@ -34,8 +34,15 @@ export class AdminApiService {
     return this.httpClient.get<ProjectActorDto[]>(this.projectActorsUri + projectId);
   }
 
+  addGroup(parentId: number, name: string) {
+    return this.httpClient.put<GroupDto>(
+      this.baseGroupUri + parentId + "/children",
+      {"name": name}
+      );
+  }
+
   removeGroup(groupId: number) {
-    return this.httpClient.delete(this.removeGroupUri + groupId);
+    return this.httpClient.delete(this.baseGroupUri + groupId);
   }
 
   removeUserCompletely(userId: number) {

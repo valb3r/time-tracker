@@ -4,6 +4,8 @@ import {MatTreeNestedDataSource} from '@angular/material/tree';
 import {AdminApiService, GroupDto, GroupDtoWithPath, ProjectDto, UserDto} from "../service/admin-api/admin-api-service";
 import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
+import {MatDialog} from "@angular/material/dialog";
+import {AddGroupDialogComponent} from "./dialogs/add-group-dialog/add-group-dialog.component";
 
 export enum Kind {
   GROUP, PROJECT, USER, INHERITED_USER
@@ -27,7 +29,7 @@ export class GroupDatabase {
   private expandedMemoize = new Set<string>();
   dataChange = new BehaviorSubject<GroupNode[]>([]);
 
-  constructor(private treeControl: TreeControl) {
+  constructor(private treeControl: TreeControl<GroupNode>) {
     this.treeControl.expansionModel.changed.subscribe(change => {
       if ((change as SelectionChange<GroupNode>).added ||
         (change as SelectionChange<GroupNode>).removed) {
@@ -71,7 +73,7 @@ export class ManagementComponent implements OnInit {
 
   public kind = Kind;
 
-  constructor(private api: AdminApiService) {
+  constructor(private api: AdminApiService, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -82,10 +84,20 @@ export class ManagementComponent implements OnInit {
     this.fetchDataFromServer();
   }
 
-  buildFileTree(groups: GroupDtoWithPath[]): GroupNode[] {
+  buildGroupTree(groups: GroupDtoWithPath[]): GroupNode[] {
     let roots: string[] = [];
     let rootNodes: GroupNode[] = [];
-    let fromShortest = groups.sort(grp => -grp.path.length);
+    let fromShortest = groups.sort((s1 ,s2) => {
+      let l1 = s1.path.split("/").length;
+      let l2 = s2.path.split("/").length;
+
+      if (l1 == l2) {
+        return s1.path.localeCompare(s2.path)
+      }
+
+      return l1 - l2
+    });
+
     let children: Map<GroupNode, GroupDtoWithPath[]> = new Map<GroupNode, GroupDtoWithPath[]>();
 
     fromShortest.forEach(grp => {
@@ -103,21 +115,33 @@ export class ManagementComponent implements OnInit {
         roots.push(grp.path);
         let rootNode = new GroupNode(grp.entry.id, grp.path, grp.entry.name, Kind.GROUP, true);
         rootNodes.push(rootNode);
-        rootNode.childrenChange.next(this.buildChildren(grp.path, grp.entry));
+        rootNode.childrenChange.next(this.buildInternalGroups(grp.path, grp.entry));
       }
     });
 
     children.forEach((values, parent) => {
       parent.expandable = true;
-      let children = this.buildFileTree(values);
+      let children = this.buildGroupTree(values);
       children.forEach(child => child.parent = parent);
-      parent.childrenChange.next(children);
+      parent.childrenChange.value.push(...children);
+      parent.childrenChange.next(parent.childrenChange.value);
     });
+
     return rootNodes;
   };
 
   addGroup(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddGroupDialogComponent, {
+      data: {name: ""}
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.addGroup(parent.id, result).subscribe(res => {
+          this.fetchDataFromServer();
+        });
+      }
+    });
   }
 
   removeGroup(target: GroupNode) {
@@ -162,13 +186,13 @@ export class ManagementComponent implements OnInit {
 
   private fetchDataFromServer() {
     this.api.ownOwnedGroups().subscribe(res => {
-      const data = this.buildFileTree(res);
+      const data = this.buildGroupTree(res);
       this.database.dataChange.next(data);
       this.database.keepExpandedNodesState(data);
     });
   }
 
-  private buildChildren(path: string, node: GroupDto): GroupNode[] {
+  private buildInternalGroups(path: string, node: GroupDto): GroupNode[] {
     let res: GroupNode[] = [];
 
     if (!!node.users && node.users.length > 0) {
