@@ -11,6 +11,7 @@ import {Subject} from "rxjs";
 import {addDays, addHours, endOfDay, endOfMonth, isSameDay, isSameMonth, startOfDay, subDays} from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
+import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
 
 const colors: any = {
   red: {
@@ -117,7 +118,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private api: TimeCardApiService) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {

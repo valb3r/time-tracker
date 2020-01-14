@@ -42,7 +42,7 @@ public class TimeLog {
     private Collection<String> tags;
     private Duration duration;
     private String description;
-    private Location location;
+    private String location;
 
     @Relationship(type = OWNER, direction = OUTGOING)
     private User user;

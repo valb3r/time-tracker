@@ -17,7 +17,7 @@ export interface TimeCardUpload {
 })
 export class TimeCardEditComponent implements OnInit {
 
-  locations = LocationCode;
+  locations = Object.keys(LocationCode);
 
   activities = new Set<string>();
   projects: ProjectWithId[];
@@ -56,7 +56,7 @@ export class TimeCardEditComponent implements OnInit {
     this.api.listAvailableProjects()
       .subscribe(resp => {
         this.projects = resp;
-      });
+    });
 
     this.filteredDurations = this.durationControl.valueChanges
       .pipe(
@@ -71,6 +71,16 @@ export class TimeCardEditComponent implements OnInit {
       return
     }
 
+    this.api.uploadTimeCard({
+      projectid: this.projectControl.value.id,
+      description: this.descriptionControl.value,
+      duration: "PT" + this.durationControl.value.minutes + "M",
+      location: this.locationControl.value,
+      timestamp: this.dateControl.value,
+      tags: [this.activityControl.value]})
+      .subscribe(res => {
+        this.dialogRef.close();
+    })
   }
 
   handleCancelClick() {

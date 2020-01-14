@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {plainToClass} from "class-transformer";
 
 @Injectable({
@@ -18,21 +18,27 @@ export class TimeCardApiService {
     return this.httpClient.get<ProjectWithId[]>(this.listProjectsUri);
   }
 
+  listTimeCards(from: Date, to: Date) {
+    return this.httpClient.get<TimeLogUpload>(
+      this.timeLogsUri,
+      {params: new HttpParams().append("from", from.toISOString()).append("to", to.toISOString()) });
+  }
+
   uploadTimeCard(timecard: TimeLogUpload) {
     return this.httpClient.put<TimeLogUpload>(this.timeLogsUri, timecard);
   }
 }
 
 export enum LocationCode {
-  OFFICE,
-  HOME_OFFICE,
-  ON_CLIENT_SITE,
-  EN_ROUTE,
-  REMOTE_FIRST,
-  UNKNOWN
+  OFFICE = "OFFICE",
+  HOME_OFFICE = "HOME_OFFICE",
+  ON_CLIENT_SITE = "ON_CLIENT_SITE",
+  EN_ROUTE = "EN_ROUTE",
+  REMOTE_FIRST = "REMOTE_FIRST",
+  UNKNOWN = "UNKNOWN"
 }
 
-export class ProjectWithId {
+export interface ProjectWithId {
 
   id: number;
   name: string;
@@ -40,15 +46,16 @@ export class ProjectWithId {
   activities: Set<string>;
 }
 
-export class LocationUpload {
+export interface LocationUpload {
   code: LocationCode;
 }
 
-export class TimeLogUpload {
-  id: number;
+export interface TimeLogUpload {
+  id?: number;
+  projectid: number;
   tags: string[];
   duration: string;
   description: string;
-  location: LocationUpload;
+  location: string;
   timestamp: Date;
 }

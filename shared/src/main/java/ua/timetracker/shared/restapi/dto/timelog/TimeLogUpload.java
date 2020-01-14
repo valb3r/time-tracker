@@ -22,7 +22,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 public class TimeLogUpload implements WithProjectId {
 
     @NotNull
-    private Long projectId;
+    private Long projectid;
 
     @NotEmpty
     private Collection<String> tags;
@@ -36,8 +36,13 @@ public class TimeLogUpload implements WithProjectId {
     private String description;
 
     @NotNull
-    private LocationUpload location;
+    private String location;
 
     @NotNull
-    private LocalDateTime loggedFor;
+    private LocalDateTime timestamp;
+
+    @Override
+    public Long getProjectId() {
+        return projectid;
+    }
 }
