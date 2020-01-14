@@ -8,40 +8,71 @@
 </mat-card-header>
 
 <mat-card-content fxLayout="column">
-  <mat-form-field>
-    <input type="text" placeholder="User or group" aria-label="Number" matInput [formControl]="usersAndGroups" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let userOrGroup of filteredSelectables | async" [value]="userOrGroup.name">
-        <span [ngSwitch]="userOrGroup.type">
-          <mat-icon *ngSwitchCase="type.GROUP">group</mat-icon>
-          <mat-icon *ngSwitchCase="type.USER">person</mat-icon>
-        </span>
-        {{userOrGroup.name}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+  <form [formGroup]="addToProjectForm">
+    <mat-form-field>
+      <input type="text" placeholder="User or group" aria-label="Number" matInput [formControl]="usersAndGroups" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let userOrGroup of filteredSelectables | async" [value]="userOrGroup">
+          <span [ngSwitch]="userOrGroup.type">
+            <mat-icon *ngSwitchCase="type.GROUP">group</mat-icon>
+            <mat-icon *ngSwitchCase="type.USER">person</mat-icon>
+          </span>
+          {{userOrGroup.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="usersAndGroups.hasError('required')">
+        Actor to add is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>With role</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let role of roles" [value]="role">
-        {{role}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <br/>
 
-  <br/>
+    <mat-form-field>
+      <mat-label>With role</mat-label>
+      <mat-select [formControl]="roleControl">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{role}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="roleControl.hasError('required')">
+        Role is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input name="fullname" matInput placeholder="Hourly rate" type="text" [formControl]="hourlyRateControl" [errorStateMatcher]="fieldMatcher">
-    <mat-error *ngIf="hourlyRateControl.hasError('required')">
-      Default rate is <strong>required</strong>
-    </mat-error>
-    <mat-error *ngIf="hourlyRateControl.hasError('min') && !hourlyRateControl.hasError('required')">
-      0 is minimal value
-    </mat-error>
-  </mat-form-field>
+    <br/>
 
+    <mat-form-field>
+      <input name="fullname" matInput placeholder="Hourly rate" type="text" [formControl]="hourlyRateControl" [errorStateMatcher]="fieldMatcher">
+      <mat-error *ngIf="hourlyRateControl.hasError('required')">
+        Default rate is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="hourlyRateControl.hasError('min') && !hourlyRateControl.hasError('required')">
+        0 is minimal value
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="pickerFrom" placeholder="From" [formControl]="fromDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
+      <mat-error *ngIf="fromDate.hasError('required') || toDate.hasError('minLength')">
+        From date <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="pickerTo" placeholder="To" [formControl]="toDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+      <mat-error *ngIf="toDate.hasError('required') || toDate.hasError('minLength')">
+        To date <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
 </mat-card-content>
 
 <mat-card-actions>

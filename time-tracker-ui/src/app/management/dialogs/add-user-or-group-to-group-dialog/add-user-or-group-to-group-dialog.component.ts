@@ -22,7 +22,7 @@ export class AddUserOrGroupToGroupDialogComponent implements OnInit {
   kind = Kind;
   type = SelectableType;
 
-  usersAndGroups = new FormControl();
+  usersAndGroups = new FormControl("", [Validators.required]);
 
   parent: GroupNode;
   existing = new Set<string>();

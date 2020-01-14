@@ -213,7 +213,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.api.addUsersOrGroupsToProject(result.role, result.userOrGroupIdsToAdd, parent.id, result).subscribe(res => {
+        this.api.addUsersOrGroupsToProject(result.role, result.id, parent.id, result).subscribe(res => {
           this.fetchDataFromServer();
         });
       }

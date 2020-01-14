@@ -19,6 +19,9 @@
         {{userOrGroup.name}}
       </mat-option>
     </mat-autocomplete>
+    <mat-error *ngIf="usersAndGroups.hasError('required')">
+      Actor to add is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
   <br/>
 </mat-card-content>

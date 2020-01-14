@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ProjectWithId, TimeCardApiService} from "../service/timecard-api/time-card-api.service";
-import {classToClass, plainToClass} from "class-transformer";
 import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";

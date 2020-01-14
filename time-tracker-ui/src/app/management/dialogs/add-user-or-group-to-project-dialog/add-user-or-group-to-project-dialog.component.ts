@@ -24,7 +24,10 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
 
   roles: Role[] = [Role.DEVELOPER, Role.MANAGER];
 
-  usersAndGroups = new FormControl();
+  usersAndGroups = new FormControl("", [Validators.required]);
+  roleControl = new FormControl("", [Validators.required]);
+  fromDate = new FormControl(new Date(), [Validators.minLength(10), Validators.required]);
+  toDate = new FormControl(new Date(), [Validators.minLength(10), Validators.required]);
 
   parent: GroupNode;
   existing = new Set<string>();
@@ -37,7 +40,17 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
     Validators.min(0)
   ]);
 
+  addToProjectForm = this.fb.group({
+    userOrGroup: this.usersAndGroups,
+    role: this.roleControl,
+    rate: this.hourlyRateControl,
+    from: this.fromDate,
+    to: this.toDate
+  });
+
   constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<AddUserOrGroupToProjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GroupNodesWithParentName
   ) {
     this.parent = data.parent;
@@ -46,7 +59,8 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
     this.filteredSelectables = this.usersAndGroups.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value))
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filter(name) : this.selectables.slice())
       );
   }
 
@@ -54,17 +68,18 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
   }
 
   onAddClick() {
-    if (!this.newProjectForm.valid || this.activitiesControl.controls.filter(it => !it.valid).length > 0) {
+    if (!this.addToProjectForm.valid) {
       return
     }
 
     this.dialogRef.close(
       {
-        code: this.projectCodeControl.value,
-        name: this.projectNameControl.value,
-        activities: this.activitiesControl.controls.map(it => it.value),
-        description: this.projectDescriptionControl.value}
-    );
+        id: this.usersAndGroups.value.id,
+        role: this.roleControl.value,
+        rate: this.hourlyRateControl.value,
+        from: this.fromDate.value,
+        to: this.toDate.value
+      });
   }
 
   onCancelClick() {
@@ -75,6 +90,10 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.selectables.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
+  displayFn(user?: SelectableDto): string | undefined {
+    return user ? user.name : undefined;
   }
 
   private populateSelectables(roots: GroupNode[]) {
