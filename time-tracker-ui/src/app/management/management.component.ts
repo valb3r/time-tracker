@@ -199,7 +199,7 @@ export class ManagementComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.api.addUsersOrGroupsToGroup(parent.id, result.userOrGroupIdsToAdd).subscribe(res => {
+        this.api.addUsersOrGroupsToGroup(parent.id, result.id).subscribe(res => {
           this.fetchDataFromServer();
         });
       }
@@ -224,6 +224,10 @@ export class ManagementComponent implements OnInit {
     this.api.removeUserFromProject(target.id, target.parent.id).subscribe(res => {
       this.fetchDataFromServer();
     });
+  }
+
+  removeInheritedFromProject(target: GroupNode) {
+
   }
 
   addProject(parent: GroupNode) {

@@ -65,6 +65,11 @@
            <mat-icon>delete</mat-icon>
             <span>Remove user from project</span>
           </button>
+
+          <button mat-menu-item *ngIf="node.kind === kind.INHERITED_USER" (click)="removeInheritedFromProject(node)">
+            <mat-icon>delete</mat-icon>
+            <span>Remove group from project</span>
+          </button>
       </span>
     </ng-template>
 

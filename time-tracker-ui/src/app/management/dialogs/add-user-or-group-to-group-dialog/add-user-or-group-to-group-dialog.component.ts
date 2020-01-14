@@ -31,6 +31,7 @@ export class AddUserOrGroupToGroupDialogComponent implements OnInit {
   fieldMatcher = new FieldErrorStateMatcher();
 
   constructor(
+    public dialogRef: MatDialogRef<AddUserOrGroupToGroupDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GroupNodesWithParentName
   ) {
     this.parent = data.parent;
@@ -39,7 +40,8 @@ export class AddUserOrGroupToGroupDialogComponent implements OnInit {
     this.filteredSelectables = this.usersAndGroups.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value))
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filter(name) : this.selectables.slice())
       );
   }
 
@@ -47,9 +49,22 @@ export class AddUserOrGroupToGroupDialogComponent implements OnInit {
   }
 
   onAddClick() {
+    if (!this.usersAndGroups.valid) {
+      return
+    }
+
+    this.dialogRef.close(
+      {
+        id: this.usersAndGroups.value.id
+      });
   }
 
   onCancelClick() {
+    this.dialogRef.close();
+  }
+
+  displayFn(user?: SelectableDto): string | undefined {
+    return user ? user.name : undefined;
   }
 
   private _filter(value: string): SelectableDto[] {
@@ -104,10 +119,4 @@ export interface SelectableDto {
   id: number;
   type: SelectableType;
   name: string;
-}
-
-export interface AddUserOrProjectToGroupDto {
-
-  role: Role;
-  userOrGroupIdsToAdd: number[];
 }

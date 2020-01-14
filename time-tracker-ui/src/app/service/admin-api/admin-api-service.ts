@@ -77,7 +77,7 @@ export class AdminApiService {
   }
 
   addUsersOrGroupsToGroup(groupId: number, userOrGroupToAddIds: number[]) {
-    return this.httpClient.post<GroupDto>(this.baseGroupUri + `${groupId}/users-and-groups/${userOrGroupToAddIds}`, {})
+    return this.httpClient.post<GroupDto>(this.baseGroupUri + `${groupId}/children/users-and-groups/${userOrGroupToAddIds}`, {})
   }
 
   removeUserCompletely(userId: number) {

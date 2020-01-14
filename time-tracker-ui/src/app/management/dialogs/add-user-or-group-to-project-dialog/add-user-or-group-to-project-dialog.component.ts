@@ -54,9 +54,21 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
   }
 
   onAddClick() {
+    if (!this.newProjectForm.valid || this.activitiesControl.controls.filter(it => !it.valid).length > 0) {
+      return
+    }
+
+    this.dialogRef.close(
+      {
+        code: this.projectCodeControl.value,
+        name: this.projectNameControl.value,
+        activities: this.activitiesControl.controls.map(it => it.value),
+        description: this.projectDescriptionControl.value}
+    );
   }
 
   onCancelClick() {
+    this.dialogRef.close();
   }
 
   private _filter(value: string): SelectableDto[] {
