@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddGroupDialogComponent } from './add-group-dialog.component';
+import { AddOrEditGroupDialogComponent } from './add-or-edit-group-dialog.component';
 
 describe('AddGroupDialogComponent', () => {
-  let component: AddGroupDialogComponent;
-  let fixture: ComponentFixture<AddGroupDialogComponent>;
+  let component: AddOrEditGroupDialogComponent;
+  let fixture: ComponentFixture<AddOrEditGroupDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddGroupDialogComponent ]
+      declarations: [ AddOrEditGroupDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddGroupDialogComponent);
+    fixture = TestBed.createComponent(AddOrEditGroupDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

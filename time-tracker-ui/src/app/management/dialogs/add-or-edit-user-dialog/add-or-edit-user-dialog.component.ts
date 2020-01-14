@@ -25,10 +25,10 @@ class PasswordsMatchControl extends FormControl {
 
 @Component({
   selector: 'app-add-user-dialog',
-  templateUrl: './add-user-dialog.component.html',
-  styleUrls: ['./add-user-dialog.component.scss']
+  templateUrl: './add-or-edit-user-dialog.component.html',
+  styleUrls: ['./add-or-edit-user-dialog.component.scss']
 })
-export class AddUserDialogComponent implements OnInit {
+export class AddOrEditUserDialogComponent implements OnInit {
 
   userNameControl = new FormControl('', [
     Validators.required,
@@ -52,7 +52,7 @@ export class AddUserDialogComponent implements OnInit {
     fullname: this.fullNameControl,
     passwords: this.passwordControl,
     matchPasswords: this.passwordMatchControl
-  }, {validator: AddUserDialogComponent.checkPasswords});
+  }, {validator: AddOrEditUserDialogComponent.checkPasswords});
 
 
   fieldMatcher = new FieldErrorStateMatcher();
@@ -60,7 +60,7 @@ export class AddUserDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    public dialogRef: MatDialogRef<AddOrEditUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddNewUser
   ) {}
 

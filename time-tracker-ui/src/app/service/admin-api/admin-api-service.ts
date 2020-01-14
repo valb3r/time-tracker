@@ -14,7 +14,7 @@ export class AdminApiService {
   private projectActorsUri = this.base + "resources/roles/in/project/";
   private baseGroupUri = this.base + "resources/groups/";
   private baseUserUri = this.base + "resources/users/";
-  private removeProjectUri = this.base + "resources/projects/";
+  private baseProjectUri = this.base + "resources/projects/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -53,8 +53,12 @@ export class AdminApiService {
     return this.httpClient.delete(this.baseUserUri + userId);
   }
 
+  addProject(parentId: number, project: ProjectCreateOrUpdateDto) {
+    return this.httpClient.put<ProjectDto>(this.baseProjectUri + parentId, project);
+  }
+
   removeProject(projectId: number) {
-    return this.httpClient.delete(this.removeProjectUri + projectId);
+    return this.httpClient.delete(this.baseProjectUri + projectId);
   }
 
   removeUserFromProject(userId: number, projectId: number) {
@@ -100,4 +104,12 @@ export class GroupDtoWithPath {
 export class ProjectActorDto {
   user: UserDto;
   source: GroupDto;
+}
+
+export interface ProjectCreateOrUpdateDto {
+
+  code: string;
+  name: string;
+  activities: string[];
+  description: string;
 }

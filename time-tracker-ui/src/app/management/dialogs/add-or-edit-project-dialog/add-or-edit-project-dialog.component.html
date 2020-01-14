@@ -1,0 +1,56 @@
+<mat-card-header>
+  <mat-card-title>Create new project</mat-card-title>
+</mat-card-header>
+
+<div fxLayout="column" fxLayoutAlign="space-around center">
+  <mat-card-content>
+    <form [formGroup]="newProjectForm">
+      <mat-form-field>
+        <input name="code" matInput placeholder="Project code" type="text" [(ngModel)]="data.code" [formControl]="projectCodeControl" [errorStateMatcher]="fieldMatcher">
+        <mat-error *ngIf="projectCodeControl.hasError('required')">
+          Project code is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="projectCodeControl.hasError('minlength') && !projectCodeControl.hasError('required')">
+          At least 3 characters
+        </mat-error>
+      </mat-form-field>
+
+      <br/>
+
+      <mat-form-field>
+        <input name="name" matInput placeholder="Project name" type="text" [(ngModel)]="data.name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
+        <mat-error *ngIf="projectNameControl.hasError('required')">
+          Project name is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="projectNameControl.hasError('minlength') && !projectNameControl.hasError('required')">
+          At least 3 characters
+        </mat-error>
+      </mat-form-field>
+
+      <br/>
+
+      <mat-action-list>
+        <button mat-list-item> Save </button>
+        <button mat-list-item > Undo </button>
+      </mat-action-list>
+
+      <br/>
+
+      <mat-form-field>
+        <mat-label>Project description</mat-label>
+        <textarea matInput
+                  [(ngModel)]="data.description"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="3"
+                  cdkAutosizeMaxRows="10"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</div>
+
+<mat-card-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onCreateClick()" color="primary">Create</button>
+</mat-card-actions>
+

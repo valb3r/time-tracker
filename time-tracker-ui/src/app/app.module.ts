@@ -40,12 +40,10 @@ import {ManagementComponent} from './management/management.component';
 import {MatTreeModule} from "@angular/material/tree";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import { AddGroupDialogComponent } from './management/dialogs/add-group-dialog/add-group-dialog.component';
-import { AddUserDialogComponent } from './management/dialogs/add-user-dialog/add-user-dialog.component';
+import { AddOrEditGroupDialogComponent } from './management/dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component';
+import { AddOrEditUserDialogComponent } from './management/dialogs/add-or-edit-user-dialog/add-or-edit-user-dialog.component';
 import { AddUserToProjectDialogComponent } from './management/dialogs/add-user-to-project-dialog/add-user-to-project-dialog.component';
-import { EditUserDialogComponent } from './management/dialogs/edit-user-dialog/edit-user-dialog.component';
-import { AddProjectDialogComponent } from './management/dialogs/add-project-dialog/add-project-dialog.component';
-import { EditProjectDialogComponent } from './management/dialogs/edit-project-dialog/edit-project-dialog.component';
+import { AddOrEditProjectDialogComponent } from './management/dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -75,12 +73,10 @@ export const AppDateFormats = {
     ReportsComponent,
     LogoutComponent,
     ManagementComponent,
-    AddGroupDialogComponent,
-    AddUserDialogComponent,
+    AddOrEditGroupDialogComponent,
+    AddOrEditUserDialogComponent,
     AddUserToProjectDialogComponent,
-    EditUserDialogComponent,
-    AddProjectDialogComponent,
-    EditProjectDialogComponent,
+    AddOrEditProjectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -111,7 +107,7 @@ export const AppDateFormats = {
     MatListModule,
     FormsModule
   ],
-  entryComponents: [AddGroupDialogComponent, AddUserDialogComponent],
+  entryComponents: [AddOrEditGroupDialogComponent, AddOrEditUserDialogComponent, AddOrEditProjectDialogComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}

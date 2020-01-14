@@ -5,8 +5,9 @@ import {AdminApiService, GroupDto, GroupDtoWithPath, ProjectDto, UserDto} from "
 import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
-import {AddGroupDialogComponent} from "./dialogs/add-group-dialog/add-group-dialog.component";
-import {AddUserDialogComponent} from "./dialogs/add-user-dialog/add-user-dialog.component";
+import {AddOrEditGroupDialogComponent} from "./dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component";
+import {AddOrEditUserDialogComponent} from "./dialogs/add-or-edit-user-dialog/add-or-edit-user-dialog.component";
+import {AddOrEditProjectDialogComponent} from "./dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component";
 
 export enum Kind {
   GROUP, PROJECT, USER, INHERITED_USER
@@ -132,7 +133,7 @@ export class ManagementComponent implements OnInit {
   };
 
   addGroup(parent: GroupNode) {
-    const dialogRef = this.dialog.open(AddGroupDialogComponent, {
+    const dialogRef = this.dialog.open(AddOrEditGroupDialogComponent, {
       data: {name: ""}
     });
 
@@ -152,7 +153,7 @@ export class ManagementComponent implements OnInit {
   }
 
   addUser(parent: GroupNode) {
-    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+    const dialogRef = this.dialog.open(AddOrEditUserDialogComponent, {
       data: {}
     });
 
@@ -186,7 +187,17 @@ export class ManagementComponent implements OnInit {
   }
 
   addProject(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddOrEditProjectDialogComponent, {
+      data: {}
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.addProject(parent.id, result).subscribe(res => {
+          this.fetchDataFromServer();
+        });
+      }
+    });
   }
 
   editProject(target: GroupNode) {
