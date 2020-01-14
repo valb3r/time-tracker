@@ -221,13 +221,15 @@ export class ManagementComponent implements OnInit {
   }
 
   removeUserFromProject(target: GroupNode) {
-    this.api.removeUserFromProject(target.id, target.parent.id).subscribe(res => {
+    this.api.removeUserOrGroupFromProject(target.id, target.parent.id).subscribe(res => {
       this.fetchDataFromServer();
     });
   }
 
   removeInheritedFromProject(target: GroupNode) {
-
+    this.api.removeUserOrGroupFromProject(target.sourceId, target.parent.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
   }
 
   addProject(parent: GroupNode) {
@@ -318,7 +320,8 @@ export class ManagementComponent implements OnInit {
                 Kind.INHERITED_USER,
                 false,
                 true,
-                project
+                project,
+                actor.source.id
               )
             } else {
               return new GroupNode(

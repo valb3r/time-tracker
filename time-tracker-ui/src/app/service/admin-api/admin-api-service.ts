@@ -100,9 +100,9 @@ export class AdminApiService {
     return this.httpClient.delete(this.baseProjectUri + projectId);
   }
 
-  removeUserFromProject(userId: number, projectId: number) {
-    let devUri = this.base + `resources/roles/DEVELOPER/actors/${userId}/in/${projectId}`;
-    let managerUri = this.base + `resources/roles/MANAGER/actors/${userId}/in/${projectId}`;
+  removeUserOrGroupFromProject(userOrGroupId: number, projectId: number) {
+    let devUri = this.base + `resources/roles/DEVELOPER/actors/${userOrGroupId}/in/${projectId}`;
+    let managerUri = this.base + `resources/roles/MANAGER/actors/${userOrGroupId}/in/${projectId}`;
 
     return forkJoin(this.httpClient.delete(devUri), this.httpClient.delete(managerUri), (x, y) => ({x, y}))
   }

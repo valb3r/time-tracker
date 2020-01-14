@@ -10,7 +10,7 @@ export class GroupNode {
   public isSurrogate: boolean = false;
 
   constructor(public id: number, public path: string, public name: string, public kind: Kind,
-              public expandable: boolean, isSurrogate?: boolean, public parent?: GroupNode) {
+              public expandable: boolean, isSurrogate?: boolean, public parent?: GroupNode, public sourceId?: number) {
     if (isSurrogate) {
       this.isSurrogate = isSurrogate;
     }
