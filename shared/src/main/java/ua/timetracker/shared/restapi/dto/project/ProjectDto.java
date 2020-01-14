@@ -5,6 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ua.timetracker.shared.persistence.entity.projects.Project;
 
+import java.util.Set;
+
 @Data
 public class ProjectDto {
 
@@ -14,6 +16,7 @@ public class ProjectDto {
     private String name;
     private String code;
     private String description;
+    private Set<String> activities;
 
     @Mapper
     public interface FromEntity {

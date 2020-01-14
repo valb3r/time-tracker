@@ -6,7 +6,7 @@
   <mat-card-content>
     <form [formGroup]="newProjectForm">
       <mat-form-field>
-        <input name="code" matInput placeholder="Project code" type="text" [(ngModel)]="data.code" [formControl]="projectCodeControl" [errorStateMatcher]="fieldMatcher">
+        <input name="code" matInput placeholder="Project code" type="text" [formControl]="projectCodeControl" [errorStateMatcher]="fieldMatcher">
         <mat-error *ngIf="projectCodeControl.hasError('required')">
           Project code is <strong>required</strong>
         </mat-error>
@@ -18,7 +18,7 @@
       <br/>
 
       <mat-form-field>
-        <input name="name" matInput placeholder="Project name" type="text" [(ngModel)]="data.name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
+        <input name="name" matInput placeholder="Project name" type="text" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
         <mat-error *ngIf="projectNameControl.hasError('required')">
           Project name is <strong>required</strong>
         </mat-error>
@@ -32,25 +32,32 @@
       <h5>Project activities:</h5>
       <div *ngFor="let ctrl of activitiesControl.controls">
         <mat-form-field >
-          <input name="name" matInput placeholder="Activity name" type="text" [(ngModel)]="ctrl.value" [formControl]="ctrl" [errorStateMatcher]="fieldMatcher">
-          <mat-error *ngIf="projectNameControl.hasError('required')">
+          <input name="name" matInput placeholder="Activity name" type="text" [formControl]="ctrl" [errorStateMatcher]="fieldMatcher">
+          <mat-error *ngIf="ctrl.hasError('required')">
             Activity name is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="projectNameControl.hasError('minlength') && !ctrl.hasError('required')">
+          <mat-error *ngIf="ctrl.hasError('minlength') && !ctrl.hasError('required')">
             At least 3 characters
           </mat-error>
         </mat-form-field>
+        <button mat-icon-button matSuffix (click)="removeProjectActivity(ctrl)" [attr.aria-label]="'Add activity'">
+          <mat-icon>remove_circle</mat-icon>
+        </button>
       </div>
       <button mat-icon-button matSuffix (click)="addProjectActivity()" [attr.aria-label]="'Add activity'">
         <mat-icon>add_circle</mat-icon>
       </button>
 
+      <mat-error *ngIf="newProjectForm.hasError('noActivities')">
+        At least 1 activity required
+      </mat-error>
+      <mat-divider></mat-divider>
       <br/>
 
       <mat-form-field>
         <mat-label>Project description</mat-label>
         <textarea matInput
-                  [(ngModel)]="data.description"
+                  [formControl]="projectDescriptionControl"
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMinRows="3"

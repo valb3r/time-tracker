@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FieldErrorStateMatcher} from "../../../app.component";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {GroupDto} from "../../../service/admin-api/admin-api-service";
 
 @Component({
   selector: 'app-add-group-dialog',
@@ -19,8 +20,11 @@ export class AddOrEditGroupDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddOrEditGroupDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AddNewGroup
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: GroupDto
+  ) {
+
+    this.projectNameControl.setValue(data.name);
+  }
 
   ngOnInit() {
   }
@@ -30,14 +34,11 @@ export class AddOrEditGroupDialogComponent implements OnInit {
       return
     }
 
-    this.dialogRef.close(this.data.name);
+    this.data.name = this.projectNameControl.value;
+    this.dialogRef.close(this.data);
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-}
-
-export interface AddNewGroup {
-  name: string;
 }

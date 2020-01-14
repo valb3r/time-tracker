@@ -34,18 +34,15 @@ export class AdminApiService {
     return this.httpClient.get<ProjectActorDto[]>(this.projectActorsUri + projectId);
   }
 
-  addGroup(parentId: number, name: string) {
-    return this.httpClient.put<GroupDto>(
-      this.baseGroupUri + parentId + "/children",
-      {"name": name}
-      );
+  addGroup(parentId: number, group: GroupDto) {
+    return this.httpClient.put<GroupDto>(this.baseGroupUri + parentId + "/children", group);
   }
 
   removeGroup(groupId: number) {
     return this.httpClient.delete(this.baseGroupUri + groupId);
   }
 
-  addUser(parentId: number, user: AddNewUser) {
+  addUser(parentId: number, user: AddNewOrEditUserDto) {
     return this.httpClient.put<UserDto>(this.baseUserUri + "of_group/" + parentId, user);
   }
 
@@ -54,7 +51,7 @@ export class AdminApiService {
   }
 
   addProject(parentId: number, project: ProjectCreateOrUpdateDto) {
-    return this.httpClient.put<ProjectDto>(this.baseProjectUri + parentId, project);
+    return this.httpClient.put<ProjectDto>(this.baseProjectUri + "of_group/" + parentId, project);
   }
 
   removeProject(projectId: number) {
@@ -84,7 +81,7 @@ export class UserDto {
   fullname: string;
 }
 
-export interface AddNewUser {
+export interface AddNewOrEditUserDto {
   username: string;
   fullname: string;
   password: string;

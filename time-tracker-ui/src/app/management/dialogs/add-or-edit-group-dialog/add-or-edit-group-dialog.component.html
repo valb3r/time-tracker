@@ -4,7 +4,7 @@
 
 <mat-dialog-content>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.name" placeholder="New group name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
+    <input matInput placeholder="New group name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
     <mat-error *ngIf="projectNameControl.hasError('required')">
       Group name is <strong>required</strong>
     </mat-error>

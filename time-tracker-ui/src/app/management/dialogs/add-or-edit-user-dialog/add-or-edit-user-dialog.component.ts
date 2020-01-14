@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {AddNewUser} from "../../../service/admin-api/admin-api-service";
+import {AddNewOrEditUserDto} from "../../../service/admin-api/admin-api-service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {FieldErrorStateMatcher, ParentOrFieldErrorStateMatcher} from "../../../app.component";
 
@@ -61,8 +61,11 @@ export class AddOrEditUserDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddOrEditUserDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AddNewUser
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: AddNewOrEditUserDto
+  ) {
+    this.userNameControl.setValue(data.username);
+    this.fullNameControl.setValue(data.fullname);
+  }
 
   ngOnInit() {
   }
@@ -72,7 +75,12 @@ export class AddOrEditUserDialogComponent implements OnInit {
       return
     }
 
-    this.dialogRef.close(this.data);
+    this.dialogRef.close(
+      {
+        username: this.userNameControl.value,
+        fullname: this.fullNameControl.value,
+        password: this.passwordControl.value
+      });
   }
 
   onNoClick(): void {

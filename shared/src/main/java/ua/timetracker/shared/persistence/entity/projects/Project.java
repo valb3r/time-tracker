@@ -2,7 +2,6 @@ package ua.timetracker.shared.persistence.entity.projects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +12,8 @@ import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import ua.timetracker.shared.restapi.dto.project.ProjectCreateOrUpdate;
+
+import java.util.Set;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
@@ -34,6 +35,7 @@ public class Project {
     private String name;
     private String code;
     private String description;
+    private Set<String> activities;
 
     // SDN / RX Neo4J currently does not work properly with abstract relationship classes. Omitting them and using queries.
 
