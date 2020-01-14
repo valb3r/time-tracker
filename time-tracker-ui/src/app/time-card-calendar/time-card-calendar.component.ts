@@ -122,8 +122,9 @@ export class TimeCardCalendarComponent implements OnInit {
     this.events = this.events.filter(event => event !== eventToDelete);
   }
 
-  closeOpenMonthViewDay() {
+  viewDateChanged() {
     this.activeDayIsOpen = false;
+    this.fetchTimeCards();
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
@@ -139,7 +140,7 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   private fetchTimeCards() {
-    this.api.listTimeCards(startOfMonth(new Date()), endOfMonth(new Date()))
+    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
       .subscribe(res => {
         this.events = [];
         res.forEach(card => {

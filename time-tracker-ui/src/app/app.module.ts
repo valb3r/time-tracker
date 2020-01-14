@@ -46,6 +46,7 @@ import { AddUserOrGroupToProjectDialogComponent } from './management/dialogs/add
 import { AddUserOrGroupToGroupDialogComponent } from './management/dialogs/add-user-or-group-to-group-dialog/add-user-or-group-to-group-dialog.component';
 import { CreateNewUserDialogComponent } from './management/dialogs/create-new-user/create-new-user-dialog.component';
 import { EditUserDialogComponent } from './management/dialogs/edit-user/edit-user-dialog.component';
+import {MatGridListModule} from "@angular/material/grid-list";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -110,7 +111,8 @@ export const AppDateFormats = {
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    FormsModule
+    FormsModule,
+    MatGridListModule
   ],
   entryComponents: [
     TimeCardEditComponent,
