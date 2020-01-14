@@ -40,6 +40,11 @@ export class AddOrEditUserDialogComponent implements OnInit {
     Validators.minLength(3)
   ]);
 
+  hourlyRateControl = new FormControl('', [
+    Validators.required,
+    Validators.min(0)
+  ]);
+
   passwordControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3)
@@ -50,6 +55,7 @@ export class AddOrEditUserDialogComponent implements OnInit {
   registerForm = this.fb.group({
     username: this.userNameControl,
     fullname: this.fullNameControl,
+    rate: this.hourlyRateControl,
     passwords: this.passwordControl,
     matchPasswords: this.passwordMatchControl
   }, {validator: AddOrEditUserDialogComponent.checkPasswords});
@@ -65,6 +71,7 @@ export class AddOrEditUserDialogComponent implements OnInit {
   ) {
     this.userNameControl.setValue(data.username);
     this.fullNameControl.setValue(data.fullname);
+    this.hourlyRateControl.setValue(data.rate);
   }
 
   ngOnInit() {
@@ -79,7 +86,8 @@ export class AddOrEditUserDialogComponent implements OnInit {
       {
         username: this.userNameControl.value,
         fullname: this.fullNameControl.value,
-        password: this.passwordControl.value
+        password: this.passwordControl.value,
+        rate: this.hourlyRateControl.value
       });
   }
 

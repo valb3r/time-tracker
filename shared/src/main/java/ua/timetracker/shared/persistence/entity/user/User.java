@@ -15,6 +15,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import ua.timetracker.shared.restapi.dto.user.UserCreate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -31,11 +32,13 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String username;
 
     private String fullname;
 
     private String encodedPassword;
+
+    private BigDecimal rate;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -45,10 +48,6 @@ public class User {
 
     @LastModifiedBy
     private String modifiedBy;
-
-    public User(UserCreate toCreate) {
-        this.name = toCreate.getUsername();
-    }
 
     @Mapper
     public interface FromDto {

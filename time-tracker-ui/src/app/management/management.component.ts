@@ -8,23 +8,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddOrEditGroupDialogComponent} from "./dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component";
 import {AddOrEditUserDialogComponent} from "./dialogs/add-or-edit-user-dialog/add-or-edit-user-dialog.component";
 import {AddOrEditProjectDialogComponent} from "./dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component";
-
-export enum Kind {
-  GROUP, PROJECT, USER, INHERITED_USER
-}
-
-class GroupNode {
-  childrenChange = new BehaviorSubject<GroupNode[]>([]);
-
-  public isSurrogate: boolean = false;
-
-  constructor(public id: number, public path: string, public name: string, public kind: Kind,
-              public expandable: boolean, isSurrogate?: boolean, public parent?: GroupNode) {
-    if (isSurrogate) {
-      this.isSurrogate = isSurrogate;
-    }
-  }
-}
+import {AddUserOrProjectToProjectOrGroupDialogComponent} from "./dialogs/add-user-or-project-to-project-or-group-dialog/add-user-or-project-to-project-or-group-dialog.component";
+import {GroupNode, GroupNodesWithParentName, Kind} from "../common-types/common-types";
 
 @Injectable()
 export class GroupDatabase {
@@ -152,7 +137,7 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addUser(parent: GroupNode) {
+  createNewUser(parent: GroupNode) {
     const dialogRef = this.dialog.open(AddOrEditUserDialogComponent, {
       data: {}
     });
@@ -166,8 +151,18 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addUserToProject(parent: GroupNode) {
+  addExistingUserOrGroupToGroupOrProject(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddUserOrProjectToProjectOrGroupDialogComponent, {
+      data: new GroupNodesWithParentName(parent, this.dataSource.data)
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.addUsersOrGroupsToProjectOrGroup(result.role, result.userOrGroupIdsToAdd, parent.id).subscribe(res => {
+          this.fetchDataFromServer();
+        });
+      }
+    });
   }
 
   editUser(target: GroupNode) {

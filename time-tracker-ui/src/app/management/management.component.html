@@ -8,11 +8,15 @@
       <span *ngIf="hasChildren && (node.kind === kind.GROUP)">
           <button mat-menu-item (click)="addGroup(node)">
             <mat-icon>group_add</mat-icon>
-            <span>Add sub-group</span>
+            <span>Create new sub-group</span>
           </button>
-          <button mat-menu-item (click)="addUser(node)">
+          <button mat-menu-item (click)="createNewUser(node)">
             <mat-icon>person_add</mat-icon>
-            <span>Add user</span>
+            <span>Create new user</span>
+          </button>
+          <button mat-menu-item (click)="addExistingUserOrGroupToGroupOrProject(node)">
+            <mat-icon>contacts</mat-icon>
+            <span>Add existing user/group</span>
           </button>
           <button mat-menu-item (click)="addProject(node)">
             <mat-icon>note_add</mat-icon>
@@ -26,6 +30,10 @@
       </span>
 
       <span *ngIf="node.kind === kind.PROJECT">
+        <button mat-menu-item *ngIf="node.isSurrogate" (click)="addExistingUserOrGroupToGroupOrProject(node)">
+            <mat-icon>contacts</mat-icon>
+            <span>Add user/group to project</span>
+          </button>
         <button mat-menu-item *ngIf="node.isSurrogate" (click)="editProject(node)">
           <mat-icon>edit</mat-icon>
           <span>Edit project</span>
@@ -37,10 +45,6 @@
       </span>
 
       <span *ngIf="!hasChildren">
-          <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUserToProject(node)">
-            <mat-icon>person_add</mat-icon>
-            <span>Add user to project</span>
-          </button>
           <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="removeProject(node)">
            <mat-icon>delete</mat-icon>
            <span>Remove project</span>

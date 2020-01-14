@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -21,4 +22,7 @@ public class UserCreate {
 
     @NotBlank
     private String password;
+
+    @NotNull
+    private String rate;
 }

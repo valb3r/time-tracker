@@ -30,6 +30,18 @@
       <br/>
 
       <mat-form-field>
+        <input name="fullname" matInput placeholder="Hourly rate" type="text" [formControl]="hourlyRateControl" [errorStateMatcher]="fieldMatcher">
+        <mat-error *ngIf="hourlyRateControl.hasError('required')">
+          Default rate is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="hourlyRateControl.hasError('min') && !hourlyRateControl.hasError('required')">
+          0 is minimal value
+        </mat-error>
+      </mat-form-field>
+
+      <br/>
+
+      <mat-form-field>
         <input name="password" matInput placeholder="New user password" [type]="passwordMatchControl.visible() ? 'password' : 'text'" [formControl]="passwordControl" [errorStateMatcher]="parentOrFieldMatcher">
         <button mat-icon-button matSuffix
                 (click)="

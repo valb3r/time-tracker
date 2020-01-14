@@ -26,7 +26,7 @@ public class UserManager {
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<UserDto> createUser(long parentGroupId, UserCreate userToCreate) {
         val group = groups.findById(parentGroupId);
-        val toSave = new User(userToCreate);
+        val toSave = User.MAP.map(userToCreate);
         toSave.setEncodedPassword(encoder.encode(userToCreate.getPassword()));
         val newUser = users.save(toSave);
 

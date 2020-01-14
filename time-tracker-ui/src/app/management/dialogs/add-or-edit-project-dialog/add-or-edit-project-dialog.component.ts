@@ -38,7 +38,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddOrEditProjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProjectCreateOrUpdateDto
   ) {
-    this.activitiesControl = this.newProjectForm.controls.activities;
+    this.activitiesControl = this.newProjectForm.controls.activities as FormArray;
 
     this.projectCodeControl.setValue(data.code);
     this.projectNameControl.setValue(data.name);

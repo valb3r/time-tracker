@@ -42,8 +42,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { AddOrEditGroupDialogComponent } from './management/dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component';
 import { AddOrEditUserDialogComponent } from './management/dialogs/add-or-edit-user-dialog/add-or-edit-user-dialog.component';
-import { AddUserToProjectDialogComponent } from './management/dialogs/add-user-to-project-dialog/add-user-to-project-dialog.component';
 import { AddOrEditProjectDialogComponent } from './management/dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component';
+import { AddUserOrProjectToProjectOrGroupDialogComponent } from './management/dialogs/add-user-or-project-to-project-or-group-dialog/add-user-or-project-to-project-or-group-dialog.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -75,8 +75,8 @@ export const AppDateFormats = {
     ManagementComponent,
     AddOrEditGroupDialogComponent,
     AddOrEditUserDialogComponent,
-    AddUserToProjectDialogComponent,
-    AddOrEditProjectDialogComponent
+    AddOrEditProjectDialogComponent,
+    AddUserOrProjectToProjectOrGroupDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +107,11 @@ export const AppDateFormats = {
     MatListModule,
     FormsModule
   ],
-  entryComponents: [AddOrEditGroupDialogComponent, AddOrEditUserDialogComponent, AddOrEditProjectDialogComponent],
+  entryComponents: [
+    AddOrEditGroupDialogComponent,
+    AddOrEditUserDialogComponent,
+    AddOrEditProjectDialogComponent,
+    AddUserOrProjectToProjectOrGroupDialogComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}

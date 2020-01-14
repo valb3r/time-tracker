@@ -3,6 +3,11 @@ import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {forkJoin, Observable} from "rxjs";
 
+export enum Role {
+  DEVELOPER = "DEVELOPER",
+  MANAGER = "MANAGER"
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,11 +15,14 @@ export class AdminApiService {
 
   private base = environment.adminBaseUri;
   private loginUri = this.base + "login";
+
   private ownOwnedGroupsUri = this.base + "resources/owned-resources";
   private projectActorsUri = this.base + "resources/roles/in/project/";
+
   private baseGroupUri = this.base + "resources/groups/";
   private baseUserUri = this.base + "resources/users/";
   private baseProjectUri = this.base + "resources/projects/";
+  private baseRolesUri = this.base + "resources/roles/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -44,6 +52,12 @@ export class AdminApiService {
 
   addUser(parentId: number, user: AddNewOrEditUserDto) {
     return this.httpClient.put<UserDto>(this.baseUserUri + "of_group/" + parentId, user);
+  }
+
+  addUsersOrGroupsToProjectOrGroup(role: Role, userGroupsToAddIds: number[], projectOrGroupId: number) {
+    return this.httpClient.post<UserDto>(
+      this.baseRolesUri + `${role}/actors/${userGroupsToAddIds}/in/${projectOrGroupId}`, {}
+    );
   }
 
   removeUserCompletely(userId: number) {
@@ -85,6 +99,7 @@ export interface AddNewOrEditUserDto {
   username: string;
   fullname: string;
   password: string;
+  rate: string;
 }
 
 export class ProjectDto {
