@@ -13,7 +13,7 @@ import org.neo4j.springframework.data.core.schema.Node;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
+import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,6 +51,6 @@ public class User {
 
     @Mapper
     public interface FromDto {
-        User map(UserCreate user);
+        User map(UserCreateDto user);
     }
 }

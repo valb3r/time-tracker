@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
+import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
@@ -24,7 +24,7 @@ public class UserManager {
     private final PasswordEncoder encoder;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<UserDto> createUser(long parentGroupId, UserCreate userToCreate) {
+    public Mono<UserDto> createUser(long parentGroupId, UserCreateDto userToCreate) {
         val group = groups.findById(parentGroupId);
         val toSave = User.MAP.map(userToCreate);
         toSave.setEncodedPassword(encoder.encode(userToCreate.getPassword()));
@@ -43,7 +43,7 @@ public class UserManager {
 
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<UserDto> findUser(String name) {
-        return users.findByName(name).map(UserDto.MAP::map);
+        return users.findByUsername(name).map(UserDto.MAP::map);
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

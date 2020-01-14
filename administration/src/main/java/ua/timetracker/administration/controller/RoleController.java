@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -16,12 +17,14 @@ import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers
 import ua.timetracker.administration.service.users.RoleManager;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
 import ua.timetracker.shared.restapi.dto.project.ProjectActorDto;
+import ua.timetracker.shared.restapi.dto.role.RoleDetailsDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ua.timetracker.shared.restapi.Paths.V1_ROLES;
 
 @RestController
@@ -32,14 +35,15 @@ public class RoleController {
     private final RoleManager manager;
 
     @OnlyResourceManagers
-    @PostMapping(path = "/{role}/actors/{user_or_group_ids}/in/{project_or_group_ids}")
+    @PostMapping(path = "/{role}/actors/{user_or_group_ids}/in/{project_or_group_ids}", consumes = APPLICATION_JSON_VALUE)
     public Mono<Long> assignUserRoles(
         @Parameter(hidden = true) Authentication user,
         @Valid @NotBlank @PathVariable("role") ProjectRole role,
         @ManagedResourceId @Valid @PathVariable("user_or_group_ids") Set<@NotNull Long> userOrGroupIds,
-        @ManagedResourceId @Valid @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds
+        @ManagedResourceId @Valid @PathVariable("project_or_group_ids") Set<@NotNull Long> projectOrGroupIds,
+        @Valid @RequestBody RoleDetailsDto details
     ) {
-        return manager.addRoles(role, userOrGroupIds, projectOrGroupIds);
+        return manager.addRoles(role, userOrGroupIds, projectOrGroupIds, details);
     }
 
     @OnlyResourceManagers

@@ -12,12 +12,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreate {
+public class UserCreateDto {
 
     @NotBlank
     private String username;
 
-    @NotBlank
     private String fullname;
 
     @NotBlank

@@ -6,5 +6,5 @@ import ua.timetracker.shared.persistence.entity.user.User;
 
 public interface UsersRepository extends ReactiveCrudRepository<User, Long> {
 
-    Mono<User> findByName(String name);
+    Mono<User> findByUsername(String name);
 }

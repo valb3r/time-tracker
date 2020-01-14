@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.groups.Group;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import static ua.timetracker.shared.persistence.entity.realationships.ProjectRole.Constants.DEVELOPER_ROLE;
@@ -20,11 +21,13 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
 
     Mono<Group> findByName(String name);
 
-    @Query("MATCH (r),(d) WHERE id(r) IN $resources AND id(d) IN $developers AND (r:Project OR r:Group) AND (d:User OR d:Group) CREATE (r)<-[:" + DEVELOPER_ROLE +"]-(d) RETURN COUNT(r)")
-    Mono<Long> addDevs(@Param("resources") Collection<Long> resourceIds, @Param("developers") Collection<Long> developers);
+    @Query("MATCH (r),(d) WHERE id(r) IN $resources AND id(d) IN $developers AND (r:Project OR r:Group) AND (d:User OR d:Group) CREATE (r)<-[:" + DEVELOPER_ROLE +" {from: $from, to: $to, rate: $rate}]-(d) RETURN COUNT(r)")
+    Mono<Long> addDevs(@Param("resources") Collection<Long> resourceIds, @Param("developers") Collection<Long> developers,
+                       @Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("rate") String rate);
 
-    @Query("MATCH (r),(m) WHERE id(r) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) CREATE (r)<-[:" + MANAGER_ROLE + "]-(m) RETURN COUNT(r)")
-    Mono<Long> addManagers(@Param("resources") Collection<Long> resourceIds, @Param("managers") Collection<Long> managers);
+    @Query("MATCH (r),(m) WHERE id(r) IN $resources AND id(m) IN $managers AND (r:Project OR r:Group) AND (m:User OR m:Group) CREATE (r)<-[:" + MANAGER_ROLE + " {from: $from, to: $to, rate: $rate}]-(m) RETURN COUNT(r)")
+    Mono<Long> addManagers(@Param("resources") Collection<Long> resourceIds, @Param("managers") Collection<Long> managers,
+                           @Param("from") LocalDateTime from, @Param("to") LocalDateTime to, @Param("rate") String rate);
 
     @Query("MATCH (d)-[role:" + DEVELOPER_ROLE + "]->(p) WHERE id(p) IN $resources AND id(d) IN $developers AND (p:Project OR p:Group) AND (d:User OR d:Group) DELETE role RETURN COUNT(role)")
     Mono<Long> removeDevs(@Param("resources") Collection<Long> resourceIds, @Param("developers") Collection<Long> developers);

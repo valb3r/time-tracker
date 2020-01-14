@@ -35,10 +35,7 @@ export class AddOrEditUserDialogComponent implements OnInit {
     Validators.minLength(3)
   ]);
 
-  fullNameControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(3)
-  ]);
+  fullNameControl = new FormControl('', []);
 
   hourlyRateControl = new FormControl('', [
     Validators.required,

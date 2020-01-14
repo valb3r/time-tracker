@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
+import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 
 import javax.annotation.PostConstruct;
 
@@ -25,7 +25,7 @@ public class InitialUserCreation {
             .switchIfEmpty(Mono.defer(
                 () -> groups
                     .findByName("Root admins group")
-                    .flatMap(admins -> users.createUser(admins.getId(), new UserCreate("admin", "super", "admin", "0"))))
+                    .flatMap(admins -> users.createUser(admins.getId(), new UserCreateDto("admin", "super", "admin", "0"))))
             ).subscribe();
     }
 }

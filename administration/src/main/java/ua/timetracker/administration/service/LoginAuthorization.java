@@ -40,7 +40,7 @@ public class LoginAuthorization {
 
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<TokenDto> issueTokenIfAuthorized(String username, String password) {
-        return users.findByName(username)
+        return users.findByUsername(username)
             .filter(it -> encoder.matches(password, it.getEncodedPassword()))
             .map(this::buildToken);
     }

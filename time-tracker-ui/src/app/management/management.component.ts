@@ -234,7 +234,7 @@ export class ManagementComponent implements OnInit {
   private static buildUsers(path: string, nodes: UserDto[]): GroupNode[] {
     let res: GroupNode[] = [];
     nodes.forEach(it => {
-      let user = new GroupNode(it.id, path + "/" + it.id, it.name, Kind.USER, false);
+      let user = new GroupNode(it.id, path + "/" + it.id, it.username, Kind.USER, false);
       res.push(user)
     });
     return res;
@@ -253,7 +253,7 @@ export class ManagementComponent implements OnInit {
               return new GroupNode(
                 actor.user.id,
                 path + "/" + actor.user.id,
-                actor.source.name + ": -> " + actor.user.name,
+                actor.source.name + ": -> " + actor.user.username,
                 Kind.INHERITED_USER,
                 false,
                 true,
@@ -263,7 +263,7 @@ export class ManagementComponent implements OnInit {
               return new GroupNode(
                 actor.user.id,
                 path + "/" + actor.user.id,
-                actor.user.name,
+                actor.user.username,
                 Kind.USER,
                 false,
                 true,

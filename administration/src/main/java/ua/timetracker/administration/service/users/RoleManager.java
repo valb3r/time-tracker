@@ -14,6 +14,7 @@ import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 import ua.timetracker.shared.restapi.dto.project.ProjectActorDto;
+import ua.timetracker.shared.restapi.dto.role.RoleDetailsDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 
 import java.util.Set;
@@ -32,13 +33,26 @@ public class RoleManager {
     private final GroupsRepository groups;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<Long> addRoles(ProjectRole role, Set<Long> userOrGroupIds, Set<Long> projectOrGroupIds) {
+    public Mono<Long> addRoles(ProjectRole role, Set<Long> userOrGroupIds, Set<Long> projectOrGroupIds,
+                               RoleDetailsDto details) {
         if (DEVELOPER == role) {
-            return groups.addDevs(projectOrGroupIds, userOrGroupIds);
+            return groups.addDevs(
+                projectOrGroupIds,
+                userOrGroupIds,
+                details.getFrom(),
+                details.getTo(),
+                details.getRate()
+            );
         }
 
         if (MANAGER == role) {
-            return groups.addManagers(projectOrGroupIds, userOrGroupIds);
+            return groups.addManagers(
+                projectOrGroupIds,
+                userOrGroupIds,
+                details.getFrom(),
+                details.getTo(),
+                details.getRate()
+            );
         }
 
         throw new IllegalStateException("Unknown role: " + role);

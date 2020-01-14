@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
+import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.UserManager;
-import ua.timetracker.shared.restapi.dto.user.UserCreate;
+import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 
 import javax.validation.Valid;
@@ -33,7 +33,7 @@ public class UserController {
     public Mono<UserDto> createUser(
         @Parameter(hidden = true) Authentication user,
         @ManagedResourceId @PathVariable("parent_group_id") long parentGroupId,
-        @Valid @RequestBody UserCreate userToCreate
+        @Valid @RequestBody UserCreateDto userToCreate
     ) {
         return manager.createUser(parentGroupId, userToCreate);
     }

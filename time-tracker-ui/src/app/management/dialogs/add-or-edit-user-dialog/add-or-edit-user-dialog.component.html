@@ -19,12 +19,6 @@
 
       <mat-form-field>
         <input name="fullname" matInput placeholder="New user fullname" type="text" [formControl]="fullNameControl" [errorStateMatcher]="fieldMatcher">
-        <mat-error *ngIf="fullNameControl.hasError('required')">
-          Full user name is <strong>required</strong>
-        </mat-error>
-        <mat-error *ngIf="fullNameControl.hasError('minlength') && !fullNameControl.hasError('required')">
-          At least 3 characters
-        </mat-error>
       </mat-form-field>
 
       <br/>
