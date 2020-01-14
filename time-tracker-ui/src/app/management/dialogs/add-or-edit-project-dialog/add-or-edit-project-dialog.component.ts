@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, Validators} from "@angular/forms";
 import {FieldErrorStateMatcher, ParentOrFieldErrorStateMatcher} from "../../../app.component";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ProjectCreateOrUpdateDto} from "../../../service/admin-api/admin-api-service";
@@ -21,11 +21,15 @@ export class AddOrEditProjectDialogComponent implements OnInit {
     Validators.minLength(3)
   ]);
 
+  activitiesControl = new FormArray<ActivityControl>(
+    [],
+    [Validators.minLength(1)]
+  );
+
   newProjectForm = this.fb.group({
     username: this.projectCodeControl,
     fullname: this.projectNameControl,
   });
-
 
   fieldMatcher = new FieldErrorStateMatcher();
 
@@ -36,6 +40,15 @@ export class AddOrEditProjectDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+  }
+
+  addProjectActivity() {
+    let control = new ActivityControl("", [
+      Validators.required,
+      Validators.minLength(3)]
+    );
+
+    this.activitiesControl.controls.push(control);
   }
 
   onCreateClick(): void {
@@ -49,4 +62,9 @@ export class AddOrEditProjectDialogComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
+}
+
+export class ActivityControl extends FormControl {
+
+  value: string;
 }

@@ -110,6 +110,6 @@ export interface ProjectCreateOrUpdateDto {
 
   code: string;
   name: string;
-  activities: string[];
+  activities: Set<string>;
   description: string;
 }

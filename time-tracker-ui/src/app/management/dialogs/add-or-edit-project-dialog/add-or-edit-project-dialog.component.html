@@ -29,10 +29,21 @@
 
       <br/>
 
-      <mat-action-list>
-        <button mat-list-item> Save </button>
-        <button mat-list-item > Undo </button>
-      </mat-action-list>
+      <h5>Project activities:</h5>
+      <div *ngFor="let ctrl of activitiesControl.controls">
+        <mat-form-field >
+          <input name="name" matInput placeholder="Activity name" type="text" [(ngModel)]="ctrl.value" [formControl]="ctrl" [errorStateMatcher]="fieldMatcher">
+          <mat-error *ngIf="projectNameControl.hasError('required')">
+            Activity name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="projectNameControl.hasError('minlength') && !ctrl.hasError('required')">
+            At least 3 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-icon-button matSuffix (click)="addProjectActivity()" [attr.aria-label]="'Add activity'">
+        <mat-icon>add_circle</mat-icon>
+      </button>
 
       <br/>
 
