@@ -91,6 +91,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
+        this.fetchTimeCards();
       }
     });
   }
@@ -134,26 +135,31 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.listTimeCards(startOfMonth(new Date()), endOfMonth(new Date()))
-        .subscribe(res => {
-            res.forEach(card => {
-              let event = {
-                start: parseISO(card.timestamp),
-                end: parseISO(card.timestamp),
-                title: card.description,
-                color: colors.red,
-                actions: this.actions,
-                allDay: true,
-                meta: {
-                  hoursValue: card.durationminutes / 60.0
-                },
-                draggable: true
-              };
+    this.fetchTimeCards();
+  }
 
-              this.events.push(event);
-          });
-          this.refresh.next();
-    })
+  private fetchTimeCards() {
+    this.api.listTimeCards(startOfMonth(new Date()), endOfMonth(new Date()))
+      .subscribe(res => {
+        this.events = [];
+        res.forEach(card => {
+          let event = {
+            start: parseISO(card.timestamp),
+            end: parseISO(card.timestamp),
+            title: card.description,
+            color: colors.red,
+            actions: this.actions,
+            allDay: true,
+            meta: {
+              hoursValue: card.durationminutes / 60.0
+            },
+            draggable: true
+          };
+
+          this.events.push(event);
+        });
+        this.refresh.next();
+      })
   }
 }
 

@@ -76,10 +76,10 @@ export class TimeCardEditComponent implements OnInit {
       description: this.descriptionControl.value,
       duration: "PT" + this.durationControl.value.minutes + "M",
       location: this.locationControl.value,
-      timestamp: endOfDay(this.dateControl.value).toISOString(),
+      timestamp: endOfDay(this.dateControl.value instanceof Date ? this.dateControl.value : this.dateControl.value.toDate()).toISOString(),
       tags: [this.activityControl.value]})
       .subscribe(res => {
-        this.dialogRef.close();
+        this.dialogRef.close(res);
     })
   }
 
