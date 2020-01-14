@@ -19,9 +19,10 @@ export class TimeCardApiService {
   }
 
   listTimeCards(from: Date, to: Date) {
-    return this.httpClient.get<TimeLogUpload>(
+    return this.httpClient.get<TimeLogUpload[]>(
       this.timeLogsUri,
-      {params: new HttpParams().append("from", from.toISOString()).append("to", to.toISOString()) });
+      {params: new HttpParams().append("from", from.toISOString()).append("to", to.toISOString()) }
+      );
   }
 
   uploadTimeCard(timecard: TimeLogUpload) {
@@ -55,7 +56,8 @@ export interface TimeLogUpload {
   projectid: number;
   tags: string[];
   duration: string;
+  durationminutes?: number;
   description: string;
   location: string;
-  timestamp: Date;
+  timestamp: string;
 }

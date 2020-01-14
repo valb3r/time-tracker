@@ -13,7 +13,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.Relationsh
 public interface TimeLogsRepository extends ReactiveCrudRepository<TimeLog, Long> {
 
     @Query(
-        "MATCH (t:TimeLog)-[:" + OWNER + "]->(o:User) WHERE id(o) = $userId AND t.loggedFor >= $from AND t.loggedFor <= $to RETURN t"
+        "MATCH (t:TimeLog)-[:" + OWNER + "]->(o:User) WHERE id(o) = $userId AND t.timestamp >= $from AND t.timestamp <= $to RETURN t"
     )
     Flux<TimeLog> listUploadedCards(
         @Param("userId") long userId,

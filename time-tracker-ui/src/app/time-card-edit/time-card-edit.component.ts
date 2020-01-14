@@ -4,7 +4,7 @@ import {LocationCode, ProjectWithId, TimeCardApiService} from "../service/timeca
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-import {SelectableDto} from "../management/dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
+import {endOfDay} from "date-fns";
 
 export interface TimeCardUpload {
   date: Date;
@@ -76,7 +76,7 @@ export class TimeCardEditComponent implements OnInit {
       description: this.descriptionControl.value,
       duration: "PT" + this.durationControl.value.minutes + "M",
       location: this.locationControl.value,
-      timestamp: this.dateControl.value,
+      timestamp: endOfDay(this.dateControl.value).toISOString(),
       tags: [this.activityControl.value]})
       .subscribe(res => {
         this.dialogRef.close();

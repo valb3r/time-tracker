@@ -8,7 +8,7 @@ import {
 } from "angular-calendar";
 import {Subject} from "rxjs";
 
-import {addDays, addHours, endOfDay, endOfMonth, isSameDay, isSameMonth, startOfDay, subDays} from 'date-fns';
+import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
 import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
@@ -66,55 +66,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      meta: {
-        hoursValue: 0.5
-      },
-      draggable: true
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-      meta: {
-        hoursValue: 1.5
-      },
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      meta: {
-        hoursValue: 2.3
-      },
-      draggable: true
-    }
-  ];
+  events: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
 
@@ -134,7 +86,7 @@ export class TimeCardCalendarComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(TimeCardEditComponent, {
-      data: {date: this.viewDate, apiUrl: "122", username: "user", password: "pass"}
+      data: {date: this.viewDate}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -165,29 +117,8 @@ export class TimeCardCalendarComponent implements OnInit {
     this.modalData = { event, action };
   }
 
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        }
-      }
-    ];
-  }
-
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter(event => event !== eventToDelete);
-  }
-
-  setView(view: CalendarView) {
-    this.view = view;
   }
 
   closeOpenMonthViewDay() {
@@ -203,6 +134,26 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.api.listTimeCards(startOfMonth(new Date()), endOfMonth(new Date()))
+        .subscribe(res => {
+            res.forEach(card => {
+              let event = {
+                start: parseISO(card.timestamp),
+                end: parseISO(card.timestamp),
+                title: card.description,
+                color: colors.red,
+                actions: this.actions,
+                allDay: true,
+                meta: {
+                  hoursValue: card.durationminutes / 60.0
+                },
+                draggable: true
+              };
+
+              this.events.push(event);
+          });
+          this.refresh.next();
+    })
   }
 }
 
