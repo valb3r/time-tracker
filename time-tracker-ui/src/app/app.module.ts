@@ -41,6 +41,11 @@ import {MatTreeModule} from "@angular/material/tree";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { AddGroupDialogComponent } from './management/dialogs/add-group-dialog/add-group-dialog.component';
+import { AddUserDialogComponent } from './management/dialogs/add-user-dialog/add-user-dialog.component';
+import { AddUserToProjectDialogComponent } from './management/dialogs/add-user-to-project-dialog/add-user-to-project-dialog.component';
+import { EditUserDialogComponent } from './management/dialogs/edit-user-dialog/edit-user-dialog.component';
+import { AddProjectDialogComponent } from './management/dialogs/add-project-dialog/add-project-dialog.component';
+import { EditProjectDialogComponent } from './management/dialogs/edit-project-dialog/edit-project-dialog.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -71,6 +76,11 @@ export const AppDateFormats = {
     LogoutComponent,
     ManagementComponent,
     AddGroupDialogComponent,
+    AddUserDialogComponent,
+    AddUserToProjectDialogComponent,
+    EditUserDialogComponent,
+    AddProjectDialogComponent,
+    EditProjectDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -101,7 +111,7 @@ export const AppDateFormats = {
     MatListModule,
     FormsModule
   ],
-  entryComponents: [AddGroupDialogComponent],
+  entryComponents: [AddGroupDialogComponent, AddUserDialogComponent],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}

@@ -14,6 +14,7 @@ public class UserDto {
 
     private Long id;
     private String name;
+    private String fullname;
     private LocalDateTime createdAt;
 
     @Mapper

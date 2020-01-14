@@ -37,7 +37,7 @@
       </span>
 
       <span *ngIf="!hasChildren">
-          <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUser(node)">
+          <button mat-menu-item *ngIf="node.kind === kind.PROJECT" (click)="addUserToProject(node)">
             <mat-icon>person_add</mat-icon>
             <span>Add user to project</span>
           </button>

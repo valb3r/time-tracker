@@ -17,5 +17,8 @@ public class UserCreate {
     private String username;
 
     @NotBlank
+    private String fullname;
+
+    @NotBlank
     private String password;
 }

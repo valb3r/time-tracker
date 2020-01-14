@@ -33,6 +33,8 @@ public class User {
 
     private String name;
 
+    private String fullname;
+
     private String encodedPassword;
 
     @CreatedDate

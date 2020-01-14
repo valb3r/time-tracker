@@ -13,7 +13,7 @@ export class AdminApiService {
   private ownOwnedGroupsUri = this.base + "resources/owned-resources";
   private projectActorsUri = this.base + "resources/roles/in/project/";
   private baseGroupUri = this.base + "resources/groups/";
-  private removeUserUri = this.base + "resources/users/";
+  private baseUserUri = this.base + "resources/users/";
   private removeProjectUri = this.base + "resources/projects/";
 
   constructor(private httpClient: HttpClient) { }
@@ -45,8 +45,12 @@ export class AdminApiService {
     return this.httpClient.delete(this.baseGroupUri + groupId);
   }
 
+  addUser(parentId: number, user: AddNewUser) {
+    return this.httpClient.put<UserDto>(this.baseUserUri + "of_group/" + parentId, user);
+  }
+
   removeUserCompletely(userId: number) {
-    return this.httpClient.delete(this.removeUserUri + userId);
+    return this.httpClient.delete(this.baseUserUri + userId);
   }
 
   removeProject(projectId: number) {
@@ -73,6 +77,13 @@ export class GroupDto {
 export class UserDto {
   id: number;
   name: string;
+  fullname: string;
+}
+
+export interface AddNewUser {
+  username: string;
+  fullname: string;
+  password: string;
 }
 
 export class ProjectDto {

@@ -6,6 +6,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
 import {AddGroupDialogComponent} from "./dialogs/add-group-dialog/add-group-dialog.component";
+import {AddUserDialogComponent} from "./dialogs/add-user-dialog/add-user-dialog.component";
 
 export enum Kind {
   GROUP, PROJECT, USER, INHERITED_USER
@@ -151,6 +152,20 @@ export class ManagementComponent implements OnInit {
   }
 
   addUser(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.addUser(parent.id, result).subscribe(res => {
+          this.fetchDataFromServer();
+        });
+      }
+    });
+  }
+
+  addUserToProject(parent: GroupNode) {
 
   }
 
