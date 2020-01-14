@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,6 +48,15 @@ public class ProjectController {
         @RequestBody ProjectCreateOrUpdate update
     ) {
         return manager.updateProject(projectId, update);
+    }
+
+    @OnlyResourceManagers
+    @GetMapping(path = "/{id}")
+    public Mono<ProjectDto> getProject(
+        @Parameter(hidden = true) Authentication user,
+        @ManagedResourceId @PathVariable("id") long projectId
+    ) {
+        return manager.getProject(projectId);
     }
 
     @OnlyResourceManagers

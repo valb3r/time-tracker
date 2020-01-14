@@ -49,6 +49,12 @@ public class ProjectManager {
     }
 
     @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<ProjectDto> getProject(long projectId) {
+        return projects.findById(projectId)
+            .map(ProjectDto.MAP::map);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
     public Mono<Void> deleteProject(long projectId) {
         return projects.deleteById(projectId);
     }

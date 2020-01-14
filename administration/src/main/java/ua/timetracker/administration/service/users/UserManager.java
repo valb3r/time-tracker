@@ -11,6 +11,7 @@ import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
+import ua.timetracker.shared.restapi.dto.user.UserUpdateDto;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
@@ -42,8 +43,23 @@ public class UserManager {
     }
 
     @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<UserDto> getUser(long userId) {
+        return users.findById(userId).map(UserDto.MAP::map);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
     public Mono<UserDto> findUser(String name) {
         return users.findByUsername(name).map(UserDto.MAP::map);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<UserDto> updateUser(long userId, UserUpdateDto updateDto) {
+        return users.findById(userId)
+            .flatMap(it -> {
+                User.UPDATE.update(updateDto, it);
+                return users.save(it);
+            }).map(UserDto.MAP::map);
+
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

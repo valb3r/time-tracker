@@ -46,6 +46,14 @@ export class AdminApiService {
     return this.httpClient.put<GroupDto>(this.baseGroupUri + parentId + "/children", group);
   }
 
+  getGroup(groupId: number) {
+    return this.httpClient.get<GroupDto>(this.baseGroupUri + groupId);
+  }
+
+  updateGroup(groupId: number, group: GroupDto) {
+    return this.httpClient.post<GroupDto>(this.baseGroupUri + groupId, group);
+  }
+
   removeGroup(groupId: number) {
     return this.httpClient.delete(this.baseGroupUri + groupId);
   }
@@ -54,10 +62,22 @@ export class AdminApiService {
     return this.httpClient.put<UserDto>(this.baseUserUri + "of_group/" + parentId, user);
   }
 
-  addUsersOrGroupsToProjectOrGroup(role: Role, userGroupsToAddIds: number[], projectOrGroupId: number) {
+  getUser(userId: number) {
+    return this.httpClient.get<UserDto>(this.baseUserUri + userId);
+  }
+
+  updateUser(userId: number, user: AddNewOrEditUserDto) {
+    return this.httpClient.post<UserDto>(this.baseUserUri + userId, user);
+  }
+
+  addUsersOrGroupsToProject(role: Role, userGroupsToAddIds: number[], projectId: number, details: RoleDetailsDto) {
     return this.httpClient.post<UserDto>(
-      this.baseRolesUri + `${role}/actors/${userGroupsToAddIds}/in/${projectOrGroupId}`, {}
+      this.baseRolesUri + `${role}/actors/${userGroupsToAddIds}/in/${projectId}`, details
     );
+  }
+
+  addUsersOrGroupsToGroup(groupId: number, userOrGroupToAddIds: number[]) {
+    return this.httpClient.post<GroupDto>(this.baseGroupUri + `${groupId}/users-and-groups/${userOrGroupToAddIds}`, {})
   }
 
   removeUserCompletely(userId: number) {
@@ -66,6 +86,14 @@ export class AdminApiService {
 
   addProject(parentId: number, project: ProjectCreateOrUpdateDto) {
     return this.httpClient.put<ProjectDto>(this.baseProjectUri + "of_group/" + parentId, project);
+  }
+
+  getProject(projectId: number) {
+    return this.httpClient.get<ProjectDto>(this.baseProjectUri + projectId);
+  }
+
+  updateProject(projectId: number, project: ProjectCreateOrUpdateDto) {
+    return this.httpClient.post<ProjectDto>(this.baseProjectUri + projectId, project);
   }
 
   removeProject(projectId: number) {
@@ -124,4 +152,10 @@ export interface ProjectCreateOrUpdateDto {
   name: string;
   activities: Set<string>;
   description: string;
+}
+
+export class RoleDetailsDto {
+  from: Date;
+  to: Date;
+  rate: string;
 }

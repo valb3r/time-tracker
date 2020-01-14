@@ -1,10 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Role} from "../../../service/admin-api/admin-api-service";
-import {FormBuilder, FormControl} from "@angular/forms";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {GroupNode, GroupNodesWithParentName, Kind} from "../../../common-types/common-types";
+import {FieldErrorStateMatcher} from "../../../app.component";
 
 export enum SelectableType {
   GROUP,
@@ -12,16 +13,14 @@ export enum SelectableType {
 }
 
 @Component({
-  selector: 'app-add-user-or-project-to-project-or-group-dialog',
-  templateUrl: './add-user-or-project-to-project-or-group-dialog.component.html',
-  styleUrls: ['./add-user-or-project-to-project-or-group-dialog.component.scss']
+  selector: 'app-add-user-or-group-to-group-dialog',
+  templateUrl: './add-user-or-group-to-group-dialog.component.html',
+  styleUrls: ['./add-user-or-group-to-group-dialog.component.scss']
 })
-export class AddUserOrProjectToProjectOrGroupDialogComponent implements OnInit {
+export class AddUserOrGroupToGroupDialogComponent implements OnInit {
 
   kind = Kind;
   type = SelectableType;
-
-  roles: Role[] = [Role.DEVELOPER, Role.MANAGER];
 
   usersAndGroups = new FormControl();
 
@@ -29,10 +28,9 @@ export class AddUserOrProjectToProjectOrGroupDialogComponent implements OnInit {
   existing = new Set<string>();
   selectables: SelectableDto[] = [];
   filteredSelectables: Observable<SelectableDto[]>;
+  fieldMatcher = new FieldErrorStateMatcher();
 
   constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AddUserOrProjectToProjectOrGroupDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GroupNodesWithParentName
   ) {
     this.parent = data.parent;

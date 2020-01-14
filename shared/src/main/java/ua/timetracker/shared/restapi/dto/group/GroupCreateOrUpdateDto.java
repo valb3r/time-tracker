@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class GroupCreate {
+public class GroupCreateOrUpdateDto {
 
     @NotBlank
     private String name;

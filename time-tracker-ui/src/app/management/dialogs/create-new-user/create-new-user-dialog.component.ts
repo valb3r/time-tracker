@@ -24,11 +24,11 @@ class PasswordsMatchControl extends FormControl {
 }
 
 @Component({
-  selector: 'app-add-user-dialog',
-  templateUrl: './add-or-edit-user-dialog.component.html',
-  styleUrls: ['./add-or-edit-user-dialog.component.scss']
+  selector: 'app-create-new-user',
+  templateUrl: './create-new-user-dialog.component.html',
+  styleUrls: ['./create-new-user-dialog.component.scss']
 })
-export class AddOrEditUserDialogComponent implements OnInit {
+export class CreateNewUserDialogComponent implements OnInit {
 
   userNameControl = new FormControl('', [
     Validators.required,
@@ -55,7 +55,7 @@ export class AddOrEditUserDialogComponent implements OnInit {
     rate: this.hourlyRateControl,
     passwords: this.passwordControl,
     matchPasswords: this.passwordMatchControl
-  }, {validator: AddOrEditUserDialogComponent.checkPasswords});
+  }, {validator: CreateNewUserDialogComponent.checkPasswords});
 
 
   fieldMatcher = new FieldErrorStateMatcher();
@@ -63,7 +63,7 @@ export class AddOrEditUserDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AddOrEditUserDialogComponent>,
+    public dialogRef: MatDialogRef<CreateNewUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddNewOrEditUserDto
   ) {
     this.userNameControl.setValue(data.username);

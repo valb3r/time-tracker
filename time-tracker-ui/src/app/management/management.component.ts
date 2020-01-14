@@ -6,10 +6,12 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
 import {AddOrEditGroupDialogComponent} from "./dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component";
-import {AddOrEditUserDialogComponent} from "./dialogs/add-or-edit-user-dialog/add-or-edit-user-dialog.component";
 import {AddOrEditProjectDialogComponent} from "./dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component";
-import {AddUserOrProjectToProjectOrGroupDialogComponent} from "./dialogs/add-user-or-project-to-project-or-group-dialog/add-user-or-project-to-project-or-group-dialog.component";
 import {GroupNode, GroupNodesWithParentName, Kind} from "../common-types/common-types";
+import {AddUserOrGroupToGroupDialogComponent} from "./dialogs/add-user-or-group-to-group-dialog/add-user-or-group-to-group-dialog.component";
+import {EditUserDialogComponent} from "./dialogs/edit-user/edit-user-dialog.component";
+import {CreateNewUserDialogComponent} from "./dialogs/create-new-user/create-new-user-dialog.component";
+import {AddUserOrGroupToProjectDialogComponent} from "./dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
 
 @Injectable()
 export class GroupDatabase {
@@ -131,6 +133,23 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  editGroup(target: GroupNode) {
+    this.api.getGroup(target.id).subscribe(res => {
+      const dialogRef = this.dialog.open(AddOrEditGroupDialogComponent, {
+        data: res
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.api.updateGroup(target.id, result).subscribe(res => {
+            this.fetchDataFromServer();
+          });
+        }
+      });
+    });
+  }
+
+
   removeGroup(target: GroupNode) {
     this.api.removeGroup(target.id).subscribe(res => {
       this.fetchDataFromServer();
@@ -138,7 +157,7 @@ export class ManagementComponent implements OnInit {
   }
 
   createNewUser(parent: GroupNode) {
-    const dialogRef = this.dialog.open(AddOrEditUserDialogComponent, {
+    const dialogRef = this.dialog.open(CreateNewUserDialogComponent, {
       data: {}
     });
 
@@ -151,27 +170,53 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addExistingUserOrGroupToGroupOrProject(parent: GroupNode) {
-    const dialogRef = this.dialog.open(AddUserOrProjectToProjectOrGroupDialogComponent, {
+  editUser(target: GroupNode) {
+    this.api.getUser(target.id).subscribe(res => {
+      const dialogRef = this.dialog.open(EditUserDialogComponent, {
+        data: res
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.api.updateUser(target.id, result).subscribe(res => {
+            this.fetchDataFromServer();
+          });
+        }
+      });
+    });
+  }
+
+  removeUserCompletely(target: GroupNode) {
+    this.api.removeUserCompletely(target.id).subscribe(res => {
+      this.fetchDataFromServer();
+    });
+  }
+
+  addExistingUserOrGroupToGroup(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddUserOrGroupToGroupDialogComponent, {
       data: new GroupNodesWithParentName(parent, this.dataSource.data)
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.api.addUsersOrGroupsToProjectOrGroup(result.role, result.userOrGroupIdsToAdd, parent.id).subscribe(res => {
+        this.api.addUsersOrGroupsToGroup(parent.id, result.userOrGroupIdsToAdd).subscribe(res => {
           this.fetchDataFromServer();
         });
       }
     });
   }
 
-  editUser(target: GroupNode) {
+  addExistingUserOrGroupToProject(parent: GroupNode) {
+    const dialogRef = this.dialog.open(AddUserOrGroupToProjectDialogComponent, {
+      data: new GroupNodesWithParentName(parent, this.dataSource.data)
+    });
 
-  }
-
-  removeUserCompletely(target: GroupNode) {
-    this.api.removeUserCompletely(target.id).subscribe(res => {
-      this.fetchDataFromServer();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.addUsersOrGroupsToProject(result.role, result.userOrGroupIdsToAdd, parent.id, result).subscribe(res => {
+          this.fetchDataFromServer();
+        });
+      }
     });
   }
 
@@ -196,7 +241,19 @@ export class ManagementComponent implements OnInit {
   }
 
   editProject(target: GroupNode) {
+    this.api.getProject(target.id).subscribe(res => {
+      const dialogRef = this.dialog.open(AddOrEditProjectDialogComponent, {
+        data: res
+      });
 
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.api.updateProject(target.id, result).subscribe(res => {
+            this.fetchDataFromServer();
+          });
+        }
+      });
+    });
   }
 
   removeProject(target: GroupNode) {

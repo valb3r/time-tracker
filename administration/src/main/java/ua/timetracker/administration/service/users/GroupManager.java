@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.groups.Group;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
-import ua.timetracker.shared.restapi.dto.group.GroupCreate;
+import ua.timetracker.shared.restapi.dto.group.GroupCreateOrUpdateDto;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 
 import java.util.Set;
@@ -24,7 +24,7 @@ public class GroupManager {
     private final GroupsRepository groups;
 
     @Transactional(value = REACTIVE_TX_MANAGER)
-    public Mono<GroupDto> createGroup(long parentGroupId, GroupCreate groupToCreate) {
+    public Mono<GroupDto> createGroup(long parentGroupId, GroupCreateOrUpdateDto groupToCreate) {
         return groups.save(Group.MAP.map(groupToCreate))
             .flatMap(newGroup -> groups.mergeToParent(newGroup.getId(), parentGroupId))
             .map(GroupDto.MAP::map);
@@ -38,6 +38,15 @@ public class GroupManager {
     @Transactional(REACTIVE_TX_MANAGER)
     public Mono<GroupDto> groupById(long groupId) {
         return groups.findById(groupId).map(GroupDto.MAP::map);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<GroupDto> updateGroup(long groupId, GroupCreateOrUpdateDto updateDto) {
+        return groups.findById(groupId)
+            .flatMap(it -> {
+                Group.UPDATE.update(updateDto, it);
+                return groups.save(it);
+            }).map(GroupDto.MAP::map);
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
@@ -13,11 +14,12 @@ import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import ua.timetracker.shared.persistence.entity.projects.Project;
 import ua.timetracker.shared.persistence.entity.user.User;
-import ua.timetracker.shared.restapi.dto.group.GroupCreate;
+import ua.timetracker.shared.restapi.dto.group.GroupCreateOrUpdateDto;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.INCOMING;
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
@@ -32,6 +34,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.Relationsh
 public class Group {
 
     public static final Group.FromDto MAP = Mappers.getMapper(Group.FromDto.class);
+    public static final Group.Merge UPDATE = Mappers.getMapper(Group.Merge.class);
 
     @Id
     @GeneratedValue
@@ -57,6 +60,11 @@ public class Group {
 
     @Mapper
     public interface FromDto {
-        Group map(GroupCreate group);
+        Group map(GroupCreateOrUpdateDto group);
+    }
+
+    @Mapper(nullValuePropertyMappingStrategy = IGNORE)
+    public interface Merge {
+        void update(GroupCreateOrUpdateDto updated, @MappingTarget Group result);
     }
 }

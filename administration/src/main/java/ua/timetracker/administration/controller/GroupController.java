@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.users.GroupManager;
-import ua.timetracker.shared.restapi.dto.group.GroupCreate;
+import ua.timetracker.shared.restapi.dto.group.GroupCreateOrUpdateDto;
 import ua.timetracker.shared.restapi.dto.group.GroupDto;
 
 import javax.validation.Valid;
@@ -37,7 +37,7 @@ public class GroupController {
     public Mono<GroupDto> createGroup(
         @Parameter(hidden = true) Authentication user,
         @ManagedResourceId @PathVariable("parent_group_id") long parentGroupId,
-        @Valid @RequestBody GroupCreate groupToCreate
+        @Valid @RequestBody GroupCreateOrUpdateDto groupToCreate
     ) {
         return manager.createGroup(parentGroupId, groupToCreate);
     }
@@ -49,6 +49,16 @@ public class GroupController {
         @ManagedResourceId @PathVariable("id") long groupId
     ) {
         return manager.groupById(groupId);
+    }
+
+    @OnlyResourceManagers
+    @PostMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    public Mono<GroupDto> updateGroup(
+        @Parameter(hidden = true) Authentication user,
+        @ManagedResourceId @PathVariable("id") long groupId,
+        @Valid @RequestBody GroupCreateOrUpdateDto groupToUpdate
+    ) {
+        return manager.updateGroup(groupId, groupToUpdate);
     }
 
     @OnlyResourceManagers

@@ -78,7 +78,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
     this.projectNameControl.updateValueAndValidity();
   }
 
-  onCreateClick(): void {
+  onSaveClick(): void {
     if (!this.newProjectForm.valid || this.activitiesControl.controls.filter(it => !it.valid).length > 0) {
       return
     }

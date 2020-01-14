@@ -14,7 +14,7 @@
             <mat-icon>person_add</mat-icon>
             <span>Create new user</span>
           </button>
-          <button mat-menu-item (click)="addExistingUserOrGroupToGroupOrProject(node)">
+          <button mat-menu-item (click)="addExistingUserOrGroupToGroup(node)">
             <mat-icon>contacts</mat-icon>
             <span>Add existing user/group</span>
           </button>
@@ -23,6 +23,10 @@
             <span>Add project</span>
           </button>
 
+          <button mat-menu-item (click)="editGroup(node)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit group</span>
+          </button>
           <button mat-menu-item (click)="removeGroup(node)">
             <mat-icon>delete</mat-icon>
             <span>Remove group</span>
@@ -30,7 +34,7 @@
       </span>
 
       <span *ngIf="node.kind === kind.PROJECT">
-        <button mat-menu-item *ngIf="node.isSurrogate" (click)="addExistingUserOrGroupToGroupOrProject(node)">
+        <button mat-menu-item *ngIf="node.isSurrogate" (click)="addExistingUserOrGroupToProject(node)">
             <mat-icon>contacts</mat-icon>
             <span>Add user/group to project</span>
           </button>
