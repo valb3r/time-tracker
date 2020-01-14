@@ -24,7 +24,7 @@ public class TimeLogDto {
     private String description;
     private Location location;
     private Set<ProjectDto> projects;
-    private LocalDateTime loggedFor;
+    private LocalDateTime timestamp;
 
     @Mapper
     public interface FromEntity {

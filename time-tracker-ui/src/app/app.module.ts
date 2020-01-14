@@ -113,6 +113,7 @@ export const AppDateFormats = {
     FormsModule
   ],
   entryComponents: [
+    TimeCardEditComponent,
     AddOrEditGroupDialogComponent,
     CreateNewUserDialogComponent,
     EditUserDialogComponent,

@@ -2,45 +2,90 @@
   <mat-card-title>Add timecard</mat-card-title>
 </mat-card-header>
 <mat-card-content fxLayout="column">
-  <mat-form-field>
-    <input matInput [matDatepicker]="picker3" placeholder="Worked on" [value]="date.value">
-    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-    <mat-datepicker #picker3></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Project worked on</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let project of projects" [value]="project.id">
-        [{{project.code}}] {{project.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Type of work</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let tag of tags" [value]="tag.id">
-        {{tag.id}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <input type="text" placeholder="How long have you worked" aria-label="Number" matInput [formControl]="duration" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let duration of filteredDurations | async" [value]="duration">
-        {{duration}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Work description</mat-label>
-    <textarea matInput
-              cdkTextareaAutosize
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="3"
-              cdkAutosizeMaxRows="10"></textarea>
-  </mat-form-field>
+  <form [formGroup]="addTimecard">
+    <mat-form-field>
+      <input matInput [matDatepicker]="workDate" placeholder="Worked on" [formControl]="dateControl">
+      <mat-datepicker-toggle matSuffix [for]="workDate"></mat-datepicker-toggle>
+      <mat-datepicker #workDate></mat-datepicker>
+      <mat-error *ngIf="dateControl.hasError('required') || dateControl.hasError('minLength')">
+        Date <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Project worked on</mat-label>
+      <mat-select [formControl]="projectControl">
+        <mat-option *ngFor="let project of projects" [value]="project"
+                    (onSelectionChange)="activities = project.activities; activityControl.setValue('')">
+          [{{project.code}}] {{project.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="projectControl.hasError('required')">
+        Project is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Type of work</mat-label>
+      <mat-select [formControl]="activityControl">
+        <mat-option *ngFor="let activity of activities" [value]="activity">
+          {{activity}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="activityControl.hasError('required')">
+        Activity is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Location of work</mat-label>
+      <mat-select [formControl]="locationControl">
+        <mat-option *ngFor="let location of locations" [value]="location">
+          {{location}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="locationControl.hasError('required')">
+        Location is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <input type="text" placeholder="How long have you worked" aria-label="Number" matInput [formControl]="durationControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let duration of filteredDurations | async" [value]="duration">
+          {{duration.name}}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="durationControl.hasError('required')">
+        Duration is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <br/>
+
+    <mat-form-field>
+      <mat-label>Work description</mat-label>
+      <textarea matInput
+                [formControl]="descriptionControl"
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="10"></textarea>
+      <mat-error *ngIf="descriptionControl.hasError('required') || descriptionControl.hasError('minLength')">
+        Description is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
 </mat-card-content>
 <mat-card-actions>
-  <button color="primary" mat-button (click)="handleAddTimecardClick()">Add timecard</button>
   <button mat-button (click)="handleCancelClick()">Cancel</button>
+  <button color="primary" mat-button (click)="handleAddTimecardClick()">Add timecard</button>
 </mat-card-actions>

@@ -50,7 +50,7 @@ public class TimeLog {
     @Relationship(type = LOGGED_FOR, direction = OUTGOING)
     private Set<Project> projects;
 
-    private LocalDateTime loggedFor;
+    private LocalDateTime timestamp;
 
     @CreatedDate
     private LocalDateTime createdAt;
