@@ -18,7 +18,7 @@
       <mat-label>Project worked on</mat-label>
       <mat-select [formControl]="projectControl">
         <mat-option *ngFor="let project of projects" [value]="project"
-                    (onSelectionChange)="activities = project.activities; activityControl.setValue('')">
+                    (onSelectionChange)="activities = project.activities; activityControl.setValue(defaultActivity);">
           [{{project.code}}] {{project.name}}
         </mat-option>
       </mat-select>

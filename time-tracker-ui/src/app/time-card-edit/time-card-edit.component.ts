@@ -20,6 +20,7 @@ export class TimeCardEditComponent implements OnInit {
 
   locations = Object.keys(LocationCode);
 
+  defaultActivity = "";
   activities = new Set<string>();
   projects: ProjectWithId[];
 
@@ -98,7 +99,7 @@ export class TimeCardEditComponent implements OnInit {
 
     // TODO: Not working
     if (this.data.tags && this.data.tags[0]) {
-      this.activityControl.setValue(this.data.tags[0]);
+      this.defaultActivity = this.data.tags[0];
     }
   }
 
