@@ -34,6 +34,11 @@ export class AdminApiService {
     );
   }
 
+  logout() {
+    return this.httpClient.delete(this.loginUri, {observe: 'response'});
+  }
+
+
   ownOwnedGroups() {
     return this.httpClient.get<GroupDtoWithPath[]>(this.ownOwnedGroupsUri);
   }
@@ -66,8 +71,16 @@ export class AdminApiService {
     return this.httpClient.get<UserDto>(this.baseUserUri + userId);
   }
 
+  getMyself() {
+    return this.httpClient.get<UserDto>(this.baseUserUri + "me");
+  }
+
   updateUser(userId: number, user: AddNewOrEditUserDto) {
     return this.httpClient.post<UserDto>(this.baseUserUri + userId, user);
+  }
+
+  updateSelf(userId: number, user: AddNewOrEditUserDto) {
+    return this.httpClient.post<UserDto>(this.baseUserUri + "self-update/" + userId, user);
   }
 
   addUsersOrGroupsToProject(role: Role, userGroupsToAddIds: number[], projectId: number, details: RoleDetailsDto) {

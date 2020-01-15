@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,11 @@ public class LoginController {
         return authorization.issueTokenIfAuthorized(loginDto.getUsername(), loginDto.getPassword())
             .map(user -> buildResponse(user, response))
             .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
+    }
+
+    @DeleteMapping
+    public Mono<? extends ResponseEntity> logout(@Parameter(hidden = true) ServerHttpResponse response) {
+        return Mono.just(buildResponse(new TokenDto(), response));
     }
 
     private ResponseEntity buildResponse(TokenDto user, ServerHttpResponse response) {

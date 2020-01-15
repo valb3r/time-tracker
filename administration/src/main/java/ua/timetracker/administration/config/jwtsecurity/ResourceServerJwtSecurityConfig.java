@@ -70,7 +70,7 @@ public class ResourceServerJwtSecurityConfig {
 
         private BearerTokenAuthenticationToken readToken(ServerWebExchange exchange) {
             HttpCookie cookie = exchange.getRequest().getCookies().getFirst(AUTHORIZATION_COOKIE);
-            if (null == cookie) {
+            if (null == cookie || "".equals(cookie.getValue())) {
                 return null;
             }
 

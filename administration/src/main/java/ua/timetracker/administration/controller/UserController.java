@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.UserManager;
+import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
+import ua.timetracker.shared.restapi.dto.user.SimpleUserUpdateDto;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 import ua.timetracker.shared.restapi.dto.user.UserUpdateDto;
@@ -23,13 +25,21 @@ import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ua.timetracker.shared.restapi.Paths.V1_USERS;
+import static ua.timetracker.shared.util.UserIdUtil.id;
 
 @RestController
 @RequestMapping(value = V1_USERS)
 @RequiredArgsConstructor
 public class UserController {
 
+    private final UsersRepository users;
     private final UserManager manager;
+
+    @GetMapping(path = "/me")
+    public Mono<UserDto> createUser(@Parameter(hidden = true) Authentication user) {
+        return users.findById(id(user))
+            .map(UserDto.MAP::map);
+    }
 
     @OnlyResourceManagers
     @PutMapping(path = "/of_group/{parent_group_id}", consumes = APPLICATION_JSON_VALUE)
@@ -58,6 +68,15 @@ public class UserController {
         @Valid @RequestBody UserUpdateDto userUpdateDto
         ) {
         return manager.updateUser(userToUpdate, userUpdateDto);
+    }
+
+    @PostMapping(path = "/self-update/{id}", consumes = APPLICATION_JSON_VALUE)
+    public Mono<UserDto> updateUser(
+        @Parameter(hidden = true) Authentication user,
+        @ManagedResourceId @PathVariable("id") long userToUpdate,
+        @Valid @RequestBody SimpleUserUpdateDto userUpdateDto
+    ) {
+        return manager.updateUser(userToUpdate, SimpleUserUpdateDto.MAP.map(userUpdateDto));
     }
 
     @OnlyResourceManagers
