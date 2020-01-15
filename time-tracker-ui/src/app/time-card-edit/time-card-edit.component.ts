@@ -1,14 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {LocationCode, ProjectWithId, TimeCardApiService} from "../service/timecard-api/time-card-api.service";
+import {
+  LocationCode,
+  ProjectWithId,
+  TimeCardApiService,
+  TimeLogUpload
+} from "../service/timecard-api/time-card-api.service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {endOfDay} from "date-fns";
-
-export interface TimeCardUpload {
-  date: Date;
-}
 
 @Component({
   selector: 'app-time-card-edit',
@@ -29,12 +30,12 @@ export class TimeCardEditComponent implements OnInit {
 
   filteredDurations: Observable<Duration[]>;
 
-  durationControl = new FormControl("", [Validators.required]);
+  durationControl = new FormControl( "", [Validators.required]);
   projectControl = new FormControl("", [Validators.required]);
   activityControl = new FormControl("", [Validators.required]);
-  locationControl = new FormControl("", [Validators.required]);
-  descriptionControl = new FormControl("", [Validators.minLength(3), Validators.required]);
-  dateControl = new FormControl(this.data.date, [Validators.minLength(10), Validators.required]);
+  locationControl = new FormControl(this.data.location, [Validators.required]);
+  descriptionControl = new FormControl(this.data.description, [Validators.minLength(3), Validators.required]);
+  dateControl = new FormControl(new Date(this.data.timestamp), [Validators.minLength(10), Validators.required]);
 
   addTimecard = this.fb.group({
     durationControl: this.durationControl,
@@ -49,13 +50,14 @@ export class TimeCardEditComponent implements OnInit {
     private api: TimeCardApiService,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<TimeCardEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TimeCardUpload
+    @Inject(MAT_DIALOG_DATA) public data: TimeLogUpload
   ) {}
 
   ngOnInit() {
     this.api.listAvailableProjects()
       .subscribe(resp => {
         this.projects = resp;
+        this.prefillProjectAndActivityAndDuration();
     });
 
     this.filteredDurations = this.durationControl.valueChanges
@@ -71,20 +73,33 @@ export class TimeCardEditComponent implements OnInit {
       return
     }
 
-    this.api.uploadTimeCard({
+    this.dialogRef.close({
       projectid: this.projectControl.value.id,
       description: this.descriptionControl.value,
       duration: "PT" + this.durationControl.value.minutes + "M",
       location: this.locationControl.value,
       timestamp: endOfDay(this.dateControl.value instanceof Date ? this.dateControl.value : this.dateControl.value.toDate()).toISOString(),
-      tags: [this.activityControl.value]})
-      .subscribe(res => {
-        this.dialogRef.close(res);
-    })
+      tags: [this.activityControl.value]}
+      );
   }
 
   handleCancelClick() {
     this.dialogRef.close();
+  }
+
+  private prefillProjectAndActivityAndDuration() {
+    if (this.data.durationminutes) {
+      this.durationControl.setValue(new Duration(this.data.durationminutes, TimeCardEditComponent.parseTime(this.data.durationminutes)))
+    }
+
+    if (this.data.projectid) {
+      this.projectControl.setValue(this.projects.filter(it => it.id == this.data.projectid).pop());
+    }
+
+    // TODO: Not working
+    if (this.data.tags && this.data.tags[0]) {
+      this.activityControl.setValue(this.data.tags[0]);
+    }
   }
 
   private _filter(value: string): Duration[] {

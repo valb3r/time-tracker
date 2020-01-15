@@ -101,7 +101,9 @@ export class TimeCardCalendarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.fetchTimeCards();
+        this.api.uploadTimeCard(result).subscribe(res => {
+          this.fetchTimeCards();
+        });
       }
     });
   }
