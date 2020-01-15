@@ -33,6 +33,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-batch'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
+    compile 'org.neo4j:neo4j-ogm-bolt-native-types:3.2.5'
 
     compile "org.jxls:jxls:${versions.jxls}"
 

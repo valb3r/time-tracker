@@ -4,6 +4,7 @@ import org.neo4j.driver.internal.value.ListValue;
 import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import ua.timetracker.shared.persistence.entity.projects.Project;
 
@@ -13,6 +14,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.Relationsh
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
 
+@Repository
 public interface ProjectsRepository extends ReactiveCrudRepository<Project, Long> {
 
     /**

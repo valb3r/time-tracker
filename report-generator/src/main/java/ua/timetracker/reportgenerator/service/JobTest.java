@@ -8,7 +8,6 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -21,7 +20,7 @@ public class JobTest {
     private final StepBuilderFactory stepBuilderFactory;
 
     @SneakyThrows
-    @Scheduled(initialDelay = 0, fixedDelay = 1000000)
+    //@Scheduled(initialDelay = 0, fixedDelay = 1000000)
     void runJob() {
         val job = jobBuilderFactory.get("FOO")
             .start(stepBuilderFactory.get("ONE").tasklet((a, b) -> {
