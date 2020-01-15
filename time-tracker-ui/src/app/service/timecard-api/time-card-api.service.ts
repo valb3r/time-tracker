@@ -25,6 +25,14 @@ export class TimeCardApiService {
       );
   }
 
+  updateTimeCard(id: number, timecard: TimeLogUpload) {
+    return this.httpClient.post<TimeLogUpload>(this.timeLogsUri + "/" + id, timecard);
+  }
+
+  deleteTimeCard(id: number) {
+    return this.httpClient.delete<TimeLogUpload>(this.timeLogsUri + "/" + id);
+  }
+
   uploadTimeCard(timecard: TimeLogUpload) {
     return this.httpClient.put<TimeLogUpload>(this.timeLogsUri, timecard);
   }

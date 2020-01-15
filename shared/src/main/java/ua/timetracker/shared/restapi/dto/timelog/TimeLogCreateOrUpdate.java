@@ -19,7 +19,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TimeLogUpload implements WithProjectId {
+public class TimeLogCreateOrUpdate implements WithProjectId {
 
     @NotNull
     private Long projectid;

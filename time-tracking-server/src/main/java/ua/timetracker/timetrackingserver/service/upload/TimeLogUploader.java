@@ -10,8 +10,8 @@ import ua.timetracker.shared.persistence.entity.projects.TimeLog;
 import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
-import ua.timetracker.shared.restapi.dto.timelog.TimeLogUpload;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
@@ -25,7 +25,7 @@ public class TimeLogUploader {
     private final TimeLogsRepository timeLogs;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<TimeLogDto> upload(long userId, TimeLogUpload uploaded) {
+    public Mono<TimeLogDto> upload(long userId, TimeLogCreateOrUpdate uploaded) {
 
         val user = users.findById(userId);
         val project = projects.findById(uploaded.getProjectId());

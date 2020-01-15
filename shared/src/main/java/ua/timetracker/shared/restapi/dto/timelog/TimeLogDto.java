@@ -19,6 +19,7 @@ public class TimeLogDto {
 
     private Long id;
 
+    private Long projectid; // should be replaced by projects field
     private Collection<String> tags;
     private Duration duration;
     private long durationminutes;

@@ -14,17 +14,9 @@ import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component"
 import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
 
 const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
-  },
   blue: {
-    primary: '#1e90ff',
+    primary: '#3f51b5',
     secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
   }
 };
 
@@ -52,6 +44,19 @@ export class TimeCardCalendarComponent implements OnInit {
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
+
+        const dialogRef = this.dialog.open(TimeCardEditComponent, {
+          data: event.meta.src
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result !== undefined) {
+            this.api.updateTimeCard(event.meta.src.id, result)
+              .subscribe(res => {
+                this.fetchTimeCards();
+              });
+          }
+        });
       }
     },
     {
@@ -60,6 +65,11 @@ export class TimeCardCalendarComponent implements OnInit {
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
         this.handleEvent('Deleted', event);
+        this.api.deleteTimeCard(event.meta.src.id)
+          .subscribe(res => {
+            this.fetchTimeCards();
+          });
+
       }
     }
   ];
@@ -103,6 +113,11 @@ export class TimeCardCalendarComponent implements OnInit {
                     }: CalendarEventTimesChangedEvent): void {
     this.events = this.events.map(iEvent => {
       if (iEvent === event) {
+        event.meta.src.timestamp = newStart;
+        this.api.updateTimeCard(event.meta.src.id, event.meta.src)
+          .subscribe(res => {
+            this.fetchTimeCards();
+          });
         return {
           ...event,
           start: newStart,
@@ -116,10 +131,6 @@ export class TimeCardCalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter(event => event !== eventToDelete);
   }
 
   viewDateChanged() {
@@ -148,11 +159,12 @@ export class TimeCardCalendarComponent implements OnInit {
             start: parseISO(card.timestamp),
             end: parseISO(card.timestamp),
             title: card.description,
-            color: colors.red,
+            color: colors.blue,
             actions: this.actions,
             allDay: true,
             meta: {
-              hoursValue: card.durationminutes / 60.0
+              hoursValue: card.durationminutes / 60.0,
+              src: card
             },
             draggable: true
           };
