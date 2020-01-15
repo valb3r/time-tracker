@@ -96,7 +96,7 @@ export class TimeCardCalendarComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(TimeCardEditComponent, {
-      data: {date: this.viewDate}
+      data: {timestamp: this.viewDate}
     });
 
     dialogRef.afterClosed().subscribe(result => {
