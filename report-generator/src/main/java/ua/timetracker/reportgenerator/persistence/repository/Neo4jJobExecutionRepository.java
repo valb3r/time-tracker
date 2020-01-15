@@ -8,7 +8,6 @@ import ua.timetracker.reportgenerator.persistence.entity.Neo4jJobExecution;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface Neo4jJobExecutionRepository extends CrudRepository<Neo4jJobExecution, Long> {
@@ -22,5 +21,5 @@ public interface Neo4jJobExecutionRepository extends CrudRepository<Neo4jJobExec
     @Query("MATCH (e:Neo4jJobExecution)-[:PARENT]->(i:Neo4jJobInstance) " +
         "WHERE i.jobName = $name AND e.startTime IS NOT NULL AND e.endTime IS NULL RETURN e " +
         "ORDER BY e.id DESC")
-    Set<Neo4jJobExecution> findRunningJobExecutions(@Param("name") String jobName);
+    List<Neo4jJobExecution> findRunningJobExecutions(@Param("name") String jobName);
 }

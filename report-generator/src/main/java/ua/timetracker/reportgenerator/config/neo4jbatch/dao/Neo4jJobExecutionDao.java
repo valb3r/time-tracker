@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.timetracker.reportgenerator.persistence.entity.Neo4jJobExecution;
 import ua.timetracker.reportgenerator.persistence.repository.Neo4jJobExecutionRepository;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,7 +57,7 @@ public class Neo4jJobExecutionDao implements JobExecutionDao {
         return jobExecs.findRunningJobExecutions(jobName)
             .stream()
             .map(it -> Neo4jJobExecution.MAP.map(it, new CycleAvoidingMappingContext()))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

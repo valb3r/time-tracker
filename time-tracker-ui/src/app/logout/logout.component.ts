@@ -12,6 +12,6 @@ export class LogoutComponent implements OnInit {
   constructor(private api: AdminApiService, private router: Router) { }
 
   ngOnInit() {
-    this.api.logout().subscribe(res => this.router.navigate(["/my-profile"]));
+    this.api.logout().subscribe(res => this.router.navigate(["main-screen/my-profile"]));
   }
 }
