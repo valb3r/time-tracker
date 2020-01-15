@@ -47,6 +47,7 @@ import { AddUserOrGroupToGroupDialogComponent } from './management/dialogs/add-u
 import { CreateNewUserDialogComponent } from './management/dialogs/create-new-user/create-new-user-dialog.component';
 import { EditUserDialogComponent } from './management/dialogs/edit-user/edit-user-dialog.component';
 import {MatGridListModule} from "@angular/material/grid-list";
+import {Globals} from "./Globals";
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -124,6 +125,7 @@ export const AppDateFormats = {
     AddUserOrGroupToProjectDialogComponent
   ],
   providers: [
+    Globals,
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats}
   ],

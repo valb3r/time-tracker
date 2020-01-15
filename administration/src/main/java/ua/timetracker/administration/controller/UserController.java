@@ -20,6 +20,7 @@ import ua.timetracker.shared.restapi.dto.user.SimpleUserUpdateDto;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 import ua.timetracker.shared.restapi.dto.user.UserUpdateDto;
+import ua.timetracker.shared.restapi.dto.user.UserWithoutRateDto;
 
 import javax.validation.Valid;
 
@@ -36,9 +37,8 @@ public class UserController {
     private final UserManager manager;
 
     @GetMapping(path = "/me")
-    public Mono<UserDto> createUser(@Parameter(hidden = true) Authentication user) {
-        return users.findById(id(user))
-            .map(UserDto.MAP::map);
+    public Mono<UserWithoutRateDto> myself(@Parameter(hidden = true) Authentication user) {
+        return users.findById(id(user)).map(UserWithoutRateDto.MAP::map);
     }
 
     @OnlyResourceManagers

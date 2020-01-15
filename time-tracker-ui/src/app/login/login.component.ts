@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ErrorMessageUtil, FieldErrorStateMatcher} from "../app.component";
 import {AdminApiService} from "../service/admin-api/admin-api-service";
+import {Globals} from "../Globals";
 
 @Component({
   selector: 'login',
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit {
 
   fieldMatcher = new FieldErrorStateMatcher();
 
-  constructor(private api: AdminApiService, private router: Router, private fb: FormBuilder) { }
+  constructor(private api: AdminApiService, private router: Router, private fb: FormBuilder,
+              private globals: Globals) { }
 
   ngOnInit() {
   }
@@ -42,6 +44,9 @@ export class LoginComponent implements OnInit {
     this.api.login(this.userNameControl.value, this.passwordControl.value)
       .subscribe(
         success => {
+          this.api.ownOwnedGroups().subscribe(res => {
+            this.globals.isManagerSubject.next(res.length > 0);
+          });
           this.router.navigate(['/main-screen/my-timecards']);
         },
         error => {

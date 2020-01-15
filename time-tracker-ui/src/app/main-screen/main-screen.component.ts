@@ -1,5 +1,8 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
+import {Observable} from "rxjs";
+import {map, startWith} from "rxjs/operators";
+import {Globals} from "../Globals";
 
 @Component({
   selector: 'main-screen',
@@ -11,23 +14,28 @@ export class MainScreenComponent implements OnInit {
   mobileQuery: MediaQueryList;
 
   fillerNav: Nav[] = [
-    new Nav("My profile", "my-profile"),
-    new Nav("My timecards", "my-timecards"),
-    new Nav("Management", "management"),
-    new Nav("Reporting", "reporting"),
-    new Nav("Change password", "change-password"),
-    new Nav("Logout", "logout")
+    new Nav("My profile", "my-profile", false),
+    new Nav("My timecards", "my-timecards", false),
+    new Nav("Management", "management", true),
+    new Nav("Reporting", "reporting", true),
+    new Nav("Change password", "change-password", false),
+    new Nav("Logout", "logout", false)
   ];
+
+  filteredNav: Nav[];
 
   private _mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private globals: Globals) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener("change", this._mobileQueryListener);
   }
 
   ngOnInit(): void {
+    this.globals.isManager.subscribe(res =>
+      this.filteredNav = res ? this.fillerNav : this.fillerNav.filter(res => !res.managerRoleRequired)
+    );
   }
 
   ngOnDestroy(): void {
@@ -36,9 +44,8 @@ export class MainScreenComponent implements OnInit {
 }
 
 class Nav {
-
   public destination: string;
-  constructor(public label: string, destination: string) {
+  constructor(public label: string, destination: string, public managerRoleRequired: boolean) {
     this.destination = "./" + destination;
   }
 }

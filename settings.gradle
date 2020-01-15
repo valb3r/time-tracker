@@ -1,13 +1,11 @@
 rootProject.name = 'time-tracker'
 
 include 'shared'
-include 'desktop-client'
 include 'time-tracking-server'
 include 'report-generator'
 include 'administration'
 
 project(":shared").projectDir = file("shared")
-project(":desktop-client").projectDir = file("desktop-client")
 project(":time-tracking-server").projectDir = file("time-tracking-server")
 project(":report-generator").projectDir = file("report-generator")
 project(":administration").projectDir = file("administration")

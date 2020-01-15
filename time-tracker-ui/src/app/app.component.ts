@@ -8,7 +8,6 @@ import {FormControl, FormGroupDirective, NgForm} from "@angular/forms";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'time-tracker-ui';
 }
 
 export class FieldErrorStateMatcher implements ErrorStateMatcher {

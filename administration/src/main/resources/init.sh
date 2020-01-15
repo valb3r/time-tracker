@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export COOKIE="X-Authorization=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNTc5MDEzMzgzLCJpYXQiOjE1NzkwMDk3ODN9.rZjrV3WJ-2j2Rp5-RQsaOyCmGLHI21x3Vo-MCSc8KqqFhldOyrmJDhdQmw73bqtW3AfS0wM92gO3MLyqJJeUW4hBEYdwx1BVAwuiNCraE3uUCjMBfbp62CqRXvG38X3VKoKWvdfSYP7zGYNIDE8fLLiY9SnNne3JThrqxft-sxu6Xfpt_tNwb_x1-7LK7K3HpaV5KvdmSTtb0VyEmkPMequxIUqQIUTHmY34tf1t_VQdtaoJIbf-y-fG5cdyX5dmGk-41vdbMoSSm66-9BoS5I1jGQpE7-N4c_PmF2MR4vy4Lp7oYxn5ef8LjP1a4rbK8UAqSgZKloIEnptFQJ5dPQ"
+export COOKIE="X-Authorization=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNTc5MDg0ODIwLCJpYXQiOjE1NzkwODEyMjB9.A3b_BU0jhbRig7kWckvbORTkFNEeH0yK8xBJYHC27uobglw-4oNyyr1c_HJfbvgAEmiuLDYSwlqo0wwg3hKJsalsQL6skkXekrg-jLG08k8F_dPExMObYhFMlqec_MoJIK5eywU2gE0LrSVqNyJ7CekXAPQzdyyRGWAp7ePfsRY5cRl-g5cwET4JYA-qE9f8u3doYCsqkup-2K-tEhs-pGbvAn30YSAUq2nBf_hPj9lz6uW3f5qd_avP97sQbio8-_gPk6sMKPD8YqreNIFIDJ7CoBf-AI6gDCFdUmBY_DQBIsDAsRg0MtZJsgyhVH_b-kOSYMVBSDKr_5Zk348dGQ"
 
 curl -X PUT --cookie "$COOKIE" "http://localhost:20081/v1/resources/groups/1/children" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Golden dimension\"}"
 curl -X PUT --cookie "$COOKIE" "http://localhost:20081/v1/resources/groups/3/children" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Managers\"}"
