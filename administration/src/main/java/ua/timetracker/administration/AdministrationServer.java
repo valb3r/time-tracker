@@ -23,7 +23,7 @@ import reactor.tools.agent.ReactorDebugAgent;
 public class AdministrationServer {
 
     public static void main(String[] args) {
-        ReactorDebugAgent.init(); // Should be not costly as is bytecode generated, otherwise no stacktraces in logs
+        ReactorDebugAgent.init(); // Requires JDK, Should be not costly as is bytecode generated, otherwise no stacktraces in logs
         SpringApplication.run(AdministrationServer.class, args);
     }
 }

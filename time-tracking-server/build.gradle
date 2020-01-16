@@ -60,7 +60,8 @@ apply from: "$rootProject.projectDir/shared.gradle"
 apply plugin: 'com.bmuschko.docker-remote-api'
 
 bootJar {
-    enabled = false
+    enabled = true
+    mainClassName = 'ua.timetracker.timetrackingserver.TimeTrackingServer'
 }
 
 jar {
@@ -69,14 +70,14 @@ jar {
 }
 
 task syncJar(type: Copy) {
-    dependsOn assemble
+    dependsOn bootJar
     from "${buildDir}/${libsDirName}"
     into dockerBuildDir
 }
 
 task createDockerfile(type: Dockerfile) {
     def cmd = "/app/time-tracker-${commitSha()}.jar";
-    from 'openjdk:8-jre-alpine'
+    from 'openjdk:8-jdk-alpine'
     label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
     copyFile(jar.archiveFileName.get(), cmd)
     entryPoint('java')

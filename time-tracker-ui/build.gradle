@@ -20,8 +20,7 @@ task createDockerfile(type: Dockerfile) {
   label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
   copyFile("nginx.conf", "/etc/nginx/nginx.conf")
   copyFile("time-tracker-ui", "/app/dist")
-  entryPoint('sh')
-  defaultCommand("nginx -g 'daemon off;'")
+  defaultCommand("nginx", "-g", "daemon off;")
   exposePort(80)
 }
 

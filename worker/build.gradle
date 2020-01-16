@@ -61,7 +61,8 @@ apply from: "$rootProject.projectDir/shared.gradle"
 apply plugin: 'com.bmuschko.docker-remote-api'
 
 bootJar {
-    enabled = false
+    enabled = true
+    mainClassName = 'ua.timetracker.reportgenerator.Worker'
 }
 
 jar {
@@ -70,7 +71,7 @@ jar {
 }
 
 task syncJar(type: Copy) {
-    dependsOn assemble
+    dependsOn bootJar
     from "${buildDir}/${libsDirName}"
     into dockerBuildDir
 }

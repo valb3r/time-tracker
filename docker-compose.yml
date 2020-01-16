@@ -1,0 +1,62 @@
+version: '3.7'
+
+volumes:
+  neo-db:
+
+networks:
+  time-tracker:
+
+services:
+  db:
+    image: neo4j/neo4j-experimental:4.0.0-rc01
+    restart: always
+    environment:
+      NEO4J_AUTH: 'neo4j/docker'
+    ports:
+      - '7687:7687'
+      - '7474:7474'
+    volumes:
+      - neo-db:/data
+    networks:
+      - time-tracker
+  ui:
+    image: ua-timetracker/time-tracker-ui:${TIMETRACKER_VERSION}
+    restart: always
+    ports:
+      - '6500:80'
+    networks:
+      - time-tracker
+  admin:
+    depends_on:
+      - db
+    image: ua-timetracker/administration:${TIMETRACKER_VERSION}
+    init: true
+    restart: always
+    environment:
+      ORG_NEO4J_DRIVER_URI: bolt://db:7687
+    ports:
+      - '20081:20081'
+    networks:
+      - time-tracker
+  tracker:
+    depends_on:
+      - db
+    image: ua-timetracker/time-tracker:${TIMETRACKER_VERSION}
+    init: true
+    restart: always
+    environment:
+      ORG_NEO4J_DRIVER_URI: bolt://db:7687
+    ports:
+      - '20080:20080'
+    networks:
+      - time-tracker
+  worker:
+    depends_on:
+      - db
+    image: ua-timetracker/worker:${TIMETRACKER_VERSION}
+    restart: always
+    environment:
+      SPRING_DATA_NEO4J_URI: bolt://db:7687
+    networks:
+      - time-tracker
+
