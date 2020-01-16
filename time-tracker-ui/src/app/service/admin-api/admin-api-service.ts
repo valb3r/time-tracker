@@ -38,6 +38,14 @@ export class AdminApiService {
     );
   }
 
+  updatePassword(update: UpdatePasswordDto) {
+    return this.httpClient.post(
+      this.baseUserUri + "update-password",
+      update,
+      {observe: 'response'}
+    );
+  }
+
   detectManager() {
     this.ownOwnedGroups().subscribe(res => {
       this.globals.isManagerSubject.next(res.length > 0);
@@ -283,3 +291,7 @@ export interface CreateReportDto {
   to: Date;
 }
 
+export interface UpdatePasswordDto {
+  current: string;
+  newpassword: string;
+}

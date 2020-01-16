@@ -16,6 +16,7 @@ import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.UserManager;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
+import ua.timetracker.shared.restapi.dto.user.PasswordUpdateDto;
 import ua.timetracker.shared.restapi.dto.user.SimpleUserUpdateDto;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
@@ -86,5 +87,13 @@ public class UserController {
         @ManagedResourceId @PathVariable("id") long userToDelete
     ) {
         return manager.deleteUser(userToDelete);
+    }
+
+    @PostMapping(path = "/update-password", consumes = APPLICATION_JSON_VALUE)
+    public Mono<UserDto> updatePassword(
+        @Parameter(hidden = true) Authentication user,
+        @Valid @RequestBody PasswordUpdateDto passwordUpdate
+    ) {
+        return manager.updatePassword(id(user), passwordUpdate);
     }
 }

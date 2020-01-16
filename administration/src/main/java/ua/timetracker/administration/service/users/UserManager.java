@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.user.User;
 import ua.timetracker.shared.persistence.repository.reactive.GroupsRepository;
 import ua.timetracker.shared.persistence.repository.reactive.UsersRepository;
+import ua.timetracker.shared.restapi.dto.user.PasswordUpdateDto;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserDto;
 import ua.timetracker.shared.restapi.dto.user.UserUpdateDto;
@@ -60,6 +61,16 @@ public class UserManager {
                 return users.save(it);
             }).map(UserDto.MAP::map);
 
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<UserDto> updatePassword(long userId, PasswordUpdateDto passwordUpdate) {
+        return users.findById(userId)
+            .filter(it -> encoder.matches(passwordUpdate.getCurrent(), it.getEncodedPassword()))
+            .flatMap(it -> {
+                it.setEncodedPassword(encoder.encode(passwordUpdate.getNewpassword()));
+                return users.save(it);
+            }).map(UserDto.MAP::map);
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

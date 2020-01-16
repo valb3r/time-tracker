@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {ErrorMessageUtil, FieldErrorStateMatcher} from "../app.component";
 import {AdminApiService} from "../service/admin-api/admin-api-service";
-import {Globals} from "../Globals";
 
 @Component({
   selector: 'login',
