@@ -44,7 +44,12 @@ export class NewUsersReportComponent implements OnInit {
 
   ngOnInit() {
     this.api.ownOwnedGroups().subscribe(res => {
-      res.forEach(it => this.users.push(...it.entry.users))
+      let ids = new Set<number>();
+      res.forEach(it => this.users.push(...it.entry.users.filter(user => {
+        let contains = !ids.has(user.id);
+        ids.add(user.id);
+        return contains;
+      })));
     });
 
     this.api.getAllReportTemplates().subscribe(res => {

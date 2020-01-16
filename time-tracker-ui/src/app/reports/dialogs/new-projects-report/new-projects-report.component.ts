@@ -38,7 +38,12 @@ export class NewProjectsReportComponent implements OnInit {
 
   ngOnInit() {
     this.api.ownOwnedGroups().subscribe(res => {
-      res.forEach(it => this.projects.push(...it.entry.projects))
+      let ids = new Set<number>();
+      res.forEach(it => this.projects.push(...it.entry.projects.filter(project => {
+        let contains = !ids.has(project.id);
+        ids.add(project.id);
+        return contains;
+      })));
     });
 
     this.api.getAllReportTemplates().subscribe(res => {
