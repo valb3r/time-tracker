@@ -33,9 +33,10 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-batch'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
-    compile 'org.neo4j:neo4j-ogm-bolt-native-types:3.2.5'
+    compile "org.neo4j:neo4j-ogm-bolt-native-types:${versions.boltNativeTypes}"
 
     compile "org.jxls:jxls:${versions.jxls}"
+    compile "org.jxls:jxls-poi:${versions.jxlsPoi}"
 
     compileOnly "org.projectlombok:lombok:${versions.lombok}"
     annotationProcessor "org.projectlombok:lombok:${versions.lombok}"

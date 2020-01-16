@@ -5,8 +5,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.dto.DevAndCardDto;
+import ua.timetracker.reportgenerator.persistence.repository.imperative.dto.ProjectAndCardDto;
 import ua.timetracker.shared.persistence.entity.projects.TimeLog;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.LOGGED_FOR;
@@ -16,8 +18,14 @@ import static ua.timetracker.shared.persistence.entity.realationships.Relationsh
 public interface TimeLogsRepository extends CrudRepository<TimeLog, Long> {
 
     @Query("MATCH (d:User)<-[" + OWNER + "]-(l:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) " +
-            "WHERE id(p) = $projectId AND l.timestamp >= localdatetime($fromDate) AND l.timestamp <= localdatetime($toDate)  " +
+            "WHERE id(p) = $projectId AND l.timestamp >= $fromDate AND l.timestamp <= $toDate  " +
             "RETURN d AS user, l as log ORDER BY d.name ASC, l.timestamp ASC")
     List<DevAndCardDto> allLogsForProject(
-            @Param("projectId") long projectId, @Param("fromDate") String fromDate, @Param("toDate") String toDate);
+        @Param("projectId") long projectId, @Param("fromDate") LocalDateTime fromDate, @Param("toDate") LocalDateTime toDate);
+
+    @Query("MATCH (d:User)<-[" + OWNER + "]-(l:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) " +
+        "WHERE id(d) = $userId AND l.timestamp >= $fromDate AND l.timestamp <= $toDate  " +
+        "RETURN p AS project, l as log ORDER BY p.name ASC, l.timestamp ASC")
+    List<ProjectAndCardDto> allLogsForUser(
+        @Param("userId") long userId, @Param("fromDate") LocalDateTime fromDate, @Param("toDate") LocalDateTime toDate);
 }

@@ -15,10 +15,12 @@ buildscript {
                 validator           : "6.1.0.Final",
                 ogmCore             : "3.2.4",
                 neo4jRx             : "1.0.0-beta02",
+                boltNativeTypes     : "3.2.5",
                 slf4j               : "1.7.29",
                 lombok              : "1.18.10",
                 mapstruct           : "1.3.1.Final",
-                jxls                : "2.7.2"
+                jxls                : "2.7.2",
+                jxlsPoi             : "2.6.0-rc1"
         ]
     }
     dependencies {
