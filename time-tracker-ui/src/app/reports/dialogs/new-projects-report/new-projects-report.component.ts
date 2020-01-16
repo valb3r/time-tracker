@@ -7,6 +7,7 @@ import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {endOfMonth, startOfMonth} from "date-fns";
+import {TemplateManagementDialogComponent} from "../template-management-dialog/template-management-dialog.component";
 
 @Component({
   selector: 'app-new-projects-report',
@@ -33,7 +34,7 @@ export class NewProjectsReportComponent implements OnInit {
   @ViewChild('projectInput', {static: false}) projectInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoProject', {static: false}) matAutocomplete: MatAutocomplete;
 
-  constructor(private api: AdminApiService, public dialogRef: MatDialogRef<NewProjectsReportComponent>) { }
+  constructor(private api: AdminApiService, private dialog: MatDialog, public dialogRef: MatDialogRef<NewProjectsReportComponent>) { }
 
   ngOnInit() {
     this.api.ownOwnedGroups().subscribe(res => {
@@ -60,10 +61,10 @@ export class NewProjectsReportComponent implements OnInit {
   }
 
   remove(project: ProjectDto): void {
-    const index = this.projects.indexOf(project);
+    const index = this.projectsSelected.indexOf(project);
 
     if (index >= 0) {
-      this.projects.splice(index, 1);
+      this.projectsSelected.splice(index, 1);
     }
   }
 
@@ -77,6 +78,13 @@ export class NewProjectsReportComponent implements OnInit {
   }
 
   onManageTemplatesClick() {
+    const dialogRef = this.dialog.open(TemplateManagementDialogComponent, {});
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.api.getAllReportTemplates().subscribe(res => {
+        this.templates = res;
+      });
+    });
   }
 
   onSaveClick() {
@@ -108,7 +116,7 @@ export class NewProjectsReportComponent implements OnInit {
     return project ? project.name : undefined;
   }
 
-  displayTemplateFn(project?: ProjectDto): string | undefined {
-    return project ? project.name : undefined;
+  displayTemplateFn(template?: ReportTemplateDto): string | undefined {
+    return template ? template.description : undefined;
   }
 }

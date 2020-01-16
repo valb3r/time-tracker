@@ -132,7 +132,8 @@ export const AppDateFormats = {
     AddUserOrGroupToGroupDialogComponent,
     AddUserOrGroupToProjectDialogComponent,
     NewProjectsReportComponent,
-    NewUsersReportComponent
+    NewUsersReportComponent,
+    TemplateManagementDialogComponent
   ],
   providers: [
     Globals,

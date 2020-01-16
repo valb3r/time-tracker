@@ -34,9 +34,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         DataSourceTransactionManagerAutoConfiguration.class
     }
 )
-public class ReportGenerationServer {
+public class Worker {
 
     public static void main(String[] args) {
-        SpringApplication.run(ReportGenerationServer.class, args);
+        SpringApplication.run(Worker.class, args);
     }
 }

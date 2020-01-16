@@ -1,1 +1,29 @@
-<p>template-management-dialog works!</p>
+<mat-card-header>
+  <mat-card-title>Report templates</mat-card-title>
+</mat-card-header>
+
+<mat-card-content fxLayout="column">
+  <mat-list>
+    <mat-list-item *ngFor="let template of templates">
+      <button mat-icon-button matSuffix (click)="onTemplateDownload(template)">
+        <mat-icon>library_books</mat-icon>
+      </button>
+      <button mat-icon-button matSuffix (click)="onTemplateDelete(template)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      {{template.description}}
+    </mat-list-item>
+  </mat-list>
+</mat-card-content>
+<mat-card-actions>
+  <button color="primary" mat-button (click)="uploader.click()">
+    Upload report template
+  </button>
+  <br/>
+  <button mat-button (click)="onCancel()">
+    Cancel
+  </button>
+  <br/>
+</mat-card-actions>
+
+<input hidden type="file" #uploader (change)="onTemplateUpload($event)"/>

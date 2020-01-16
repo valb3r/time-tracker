@@ -9,7 +9,9 @@
         <mat-icon matListIcon *ngIf="report.status == 'SCHEDULED'">schedule</mat-icon>
         <mat-icon matListIcon *ngIf="report.status == 'PROCESSING'">dynamic_feed</mat-icon>
         <mat-icon matListIcon *ngIf="report.status == 'FAILED'">error</mat-icon>
-        <mat-icon matListIcon *ngIf="report.status == 'DONE'">assignment</mat-icon>
+        <button mat-icon-button matSuffix *ngIf="report.status == 'DONE'" (click)="onReportDownload(report)">
+          <mat-icon>assignment</mat-icon>
+        </button>
         <button mat-icon-button matSuffix (click)="onReportDelete(report)">
           <mat-icon>delete</mat-icon>
         </button>

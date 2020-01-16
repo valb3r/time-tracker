@@ -150,16 +150,19 @@ export class AdminApiService {
     this.httpClient.get(
       this.baseReportTemplatesUri + templateId,
       {
+        observe: 'response',
         responseType: 'blob' as 'json'
       }
     ).subscribe(
       (response: any) => {
+        let contentDisposition = response.headers.get('content-disposition');
+        let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
         let dataType = response.type;
         let binaryData = [];
         binaryData.push(response);
         let downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
-        downloadLink.setAttribute('download', "template");
+        downloadLink.setAttribute('download', filename);
         document.body.appendChild(downloadLink);
         downloadLink.click();
       });
@@ -179,18 +182,21 @@ export class AdminApiService {
 
   downloadReport(reportId: number) {
     this.httpClient.get(
-      this.baseReportTemplatesUri + reportId,
+      this.baseReportsUri + reportId,
       {
+        observe: 'response',
         responseType: 'blob' as 'json'
       }
     ).subscribe(
       (response: any) => {
+        let contentDisposition = response.headers.get('content-disposition');
+        let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
         let dataType = response.type;
         let binaryData = [];
         binaryData.push(response);
         let downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
-        downloadLink.setAttribute('download', "report");
+        downloadLink.setAttribute('download', filename);
         document.body.appendChild(downloadLink);
         downloadLink.click();
       });

@@ -13,10 +13,12 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Service;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.ProjectsRepository;
+import ua.timetracker.reportgenerator.persistence.repository.imperative.ReportTemplatesRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.ReportsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.TimeLogsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.dto.DevAndCardDto;
 import ua.timetracker.shared.persistence.entity.report.Report;
+import ua.timetracker.shared.persistence.entity.report.ReportTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,6 +26,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ import static ua.timetracker.reportgenerator.service.Util.getExecution;
 @RequiredArgsConstructor
 public class ReportByProjectJob implements Tasklet {
 
+    private final ReportTemplatesRepository templates;
     private final ReportsRepository reports;
     private final ProjectsRepository projects;
     private final TimeLogsRepository logs;
@@ -78,12 +82,16 @@ public class ReportByProjectJob implements Tasklet {
         Context context = new Context();
         context.putVar("projects", projectCards);
 
+        // broken Relationship annotation due to rx-sdn -> ogm bridge
+        ReportTemplate template = templates.getByReport(report.getId());
         JxlsHelper.getInstance().processTemplate(
-            new ByteArrayInputStream(report.getTemplate().getTemplate()),
+            new ByteArrayInputStream(Base64.getDecoder().decode(template.getTemplate())),
             bos,
             context
         );
 
+        report.setResult(Base64.getEncoder().encodeToString(bos.toByteArray()));
+        reports.save(report);
         return RepeatStatus.FINISHED;
     }
 

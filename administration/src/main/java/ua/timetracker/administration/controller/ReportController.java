@@ -32,6 +32,7 @@ import ua.timetracker.shared.restapi.dto.report.ReportDto;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Base64;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -72,8 +73,7 @@ public class ReportController {
     @GetMapping
     @Transactional(REACTIVE_TX_MANAGER)
     public Flux<ReportDto> ownedReports(@Parameter(hidden = true) Authentication user) {
-        return reports.findByOwnerIdOrderByCreatedAtDesc(id(user)).map(ReportDto.MAP::map)
-            .switchIfEmpty(EntityNotFoundException.mono());
+        return reports.findByOwnerIdOrderByCreatedAtDesc(id(user)).map(ReportDto.MAP::map);
     }
 
     @GetMapping("/{id}")
@@ -85,11 +85,13 @@ public class ReportController {
     ) {
         return reports.findByIdAndOwnerId(reportId, id(user)).flatMap(it -> {
             ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
+            response.getHeaders().set(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
             response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + it.getType().name().toLowerCase() + ".xlsx");
             response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            byte[] value = Base64.getDecoder().decode(it.getResult());
             return zeroCopyResponse.writeWith(
                 DataBufferUtils.read(
-                    new ByteArrayResource(it.getResult()), new DefaultDataBufferFactory(), it.getResult().length
+                    new ByteArrayResource(value), new DefaultDataBufferFactory(), value.length
                 )
             );
         });

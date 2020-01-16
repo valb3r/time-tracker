@@ -28,6 +28,7 @@ import ua.timetracker.shared.restapi.dto.report.ReportTemplateDto;
 
 import java.io.InputStream;
 import java.io.SequenceInputStream;
+import java.util.Base64;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
@@ -62,7 +63,7 @@ public class ReportTemplatesController {
         return templates.save(
             ReportTemplate.builder()
                 .description(templateDescription)
-                .template(ByteStreams.toByteArray(is))
+                .template(Base64.getEncoder().encodeToString(ByteStreams.toByteArray(is)))
                 .build()
         );
     }
@@ -83,9 +84,10 @@ public class ReportTemplatesController {
             ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
             response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + it.getDescription() + ".xlsx");
             response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            byte[] value = Base64.getDecoder().decode(it.getTemplate());
             return zeroCopyResponse.writeWith(
                 DataBufferUtils.read(
-                    new ByteArrayResource(it.getTemplate()), new DefaultDataBufferFactory(), it.getTemplate().length
+                    new ByteArrayResource(value), new DefaultDataBufferFactory(), value.length
                 )
             );
         });

@@ -44,7 +44,8 @@ public class Report {
     private LocalDateTime to;
     private Set<Long> targets;
 
-    private byte[] result;
+    // BASE64 as OGM-SDN mapping has impedance when trying to map byte to string
+    private String result;
 
     private ReportStatus status = ReportStatus.SCHEDULED;
 
