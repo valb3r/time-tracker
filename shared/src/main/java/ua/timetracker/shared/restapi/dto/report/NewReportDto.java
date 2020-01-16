@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class NewReportDto {
 
     @NotNull
-    private Long templateId;
+    private Long templateid;
 
     @NotNull
     private LocalDateTime from;

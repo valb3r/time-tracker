@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.INCOMING;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.HAS_CHILD;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
 
 @Getter
@@ -34,6 +35,8 @@ public class Report {
     @GeneratedValue
     private Long id;
 
+    private ReportType type;
+
     private String job;
 
     private LocalDateTime from;
@@ -46,6 +49,9 @@ public class Report {
 
     @Relationship(type = OWNS, direction = INCOMING)
     private User owner;
+
+    @Relationship(type = HAS_CHILD, direction = INCOMING)
+    private ReportTemplate template;
 
     @Mapper
     public interface FromDto {
