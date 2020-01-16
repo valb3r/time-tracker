@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {NewProjectsReportComponent} from "./dialogs/new-projects-report/new-projects-report.component";
 import {interval} from "rxjs";
 import {startWith, switchMap} from "rxjs/operators";
+import {NewUsersReportComponent} from "./dialogs/new-users-report/new-users-report.component";
 
 @Component({
   selector: 'app-reports',
@@ -40,7 +41,13 @@ export class ReportsComponent implements OnInit {
   }
 
   onUserReportAdd() {
+    const dialogRef = this.dialog.open(NewUsersReportComponent, {});
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.api.getAllMineReports().subscribe(reports => this.reports = reports);
+      }
+    });
   }
 
   onProjectReportAdd() {

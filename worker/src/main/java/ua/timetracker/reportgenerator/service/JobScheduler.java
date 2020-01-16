@@ -50,7 +50,6 @@ public class JobScheduler {
         }
 
         reports.findAllByStatus(ReportStatus.SCHEDULED, availableExecs)
-            .stream()
             .forEach(it -> {
                 log.info("Picking {} for execution", it.getId());
                 it.setStatus(ReportStatus.PROCESSING);

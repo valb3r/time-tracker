@@ -159,7 +159,7 @@ export class AdminApiService {
         let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
         let dataType = response.type;
         let binaryData = [];
-        binaryData.push(response);
+        binaryData.push(response.body);
         let downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
         downloadLink.setAttribute('download', filename);
@@ -193,7 +193,7 @@ export class AdminApiService {
         let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
         let dataType = response.type;
         let binaryData = [];
-        binaryData.push(response);
+        binaryData.push(response.body);
         let downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
         downloadLink.setAttribute('download', filename);

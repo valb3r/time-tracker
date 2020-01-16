@@ -1,17 +1,66 @@
 <mat-card-header>
-  <mat-card-title>Create new group</mat-card-title>
+  <mat-card-title>Create project based report</mat-card-title>
 </mat-card-header>
 
 <mat-dialog-content>
   <mat-form-field>
-    <input matInput placeholder="New group name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
-    <mat-error *ngIf="projectNameControl.hasError('required')">
-      Group name is <strong>required</strong>
-    </mat-error>
-    <mat-error *ngIf="projectNameControl.hasError('minlength') && !projectNameControl.hasError('required')">
-      At least 3 characters
-    </mat-error>
+    <mat-chip-list #chipList aria-label="Users selection">
+      <mat-chip
+        *ngFor="let user of selectedUsers"
+        [removable]="true"
+        (removed)="remove(user)">
+        {{user.username}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+          #usersInput
+          placeholder="Select users"
+          [formControl]="usersControl"
+          [matAutocomplete]="autoUsers"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="true">
+    </mat-chip-list>
+    <mat-autocomplete #autoUsers="matAutocomplete" (optionSelected)="selected($event)" [displayWith]="displayUserFn">
+      <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+        {{user.username}}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
+
+  <br/>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="fromDate" placeholder="Report from" [formControl]="fromDateControl">
+    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromDate></mat-datepicker>
+  </mat-form-field>
+
+  <br/>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="toDate" placeholder="Report to" [formControl]="toDateControl">
+    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+    <mat-datepicker #toDate></mat-datepicker>
+  </mat-form-field>
+
+  <br/>
+
+  <mat-form-field>
+    <input type="text" placeholder="Select template" aria-label="Number" matInput [formControl]="templatesControl" [matAutocomplete]="autoTemplate">
+    <mat-autocomplete #autoTemplate="matAutocomplete" [displayWith]="displayTemplateFn">
+      <mat-option *ngFor="let template of filteredTemplates | async" [value]="template">
+        {{template.description}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <br/>
+
+  <button mat-icon-button matSuffix (click)="onManageTemplatesClick()" [attr.aria-label]="'Add project-based report'">
+    <mat-icon>library_add</mat-icon>
+    Manage templates
+  </button>
 </mat-dialog-content>
 
 <mat-card-actions>

@@ -60,14 +60,14 @@ public class ReportController {
     }
 
     @OnlyResourceManagers
-    @Transactional(REACTIVE_TX_MANAGER)
     @PutMapping(path = "/users/{user_ids}", consumes = APPLICATION_JSON_VALUE)
     public Mono<ReportDto> createReportForUsers(
             @Parameter(hidden = true) Authentication user,
             @ManagedResourceId @PathVariable("user_ids") @Valid @NotEmpty Set<@NotNull Long> userIds,
             @Valid @RequestBody NewReportDto reportDto
     ) {
-        return reportsSvc.createReport(id(user), ReportType.BY_USER, userIds, reportDto);
+        return reportsSvc.createReport(id(user), ReportType.BY_USER, userIds, reportDto)
+            .switchIfEmpty(EntityNotFoundException.mono());
     }
 
     @GetMapping
