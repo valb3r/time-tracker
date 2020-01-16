@@ -1,3 +1,6 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
 group 'ua.timetracker.timetrackingserver'
 version '0.1-SNAPSHOT'
 description = 'Time log receiver'
@@ -12,6 +15,9 @@ buildscript {
     }
 }
 
+apply from: "$rootProject.projectDir/shared.gradle"
+
+apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -50,6 +56,9 @@ dependencies {
     testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
 }
 
+apply from: "$rootProject.projectDir/shared.gradle"
+apply plugin: 'com.bmuschko.docker-remote-api'
+
 bootJar {
     enabled = false
 }
@@ -59,3 +68,25 @@ jar {
     enabled = true
 }
 
+task syncJar(type: Copy) {
+    dependsOn assemble
+    from "${buildDir}/${libsDirName}"
+    into dockerBuildDir
+}
+
+task createDockerfile(type: Dockerfile) {
+    def cmd = "/app/time-tracker-${commitSha()}.jar";
+    from 'openjdk:8-jre-alpine'
+    label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
+    copyFile(jar.archiveFileName.get(), cmd)
+    entryPoint('java')
+    defaultCommand('-jar', cmd)
+    exposePort(20081)
+}
+
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn createDockerfile, syncJar
+    inputDir.set(project.file(dockerBuildDir))
+    images.add("ua-timetracker/time-tracker:${commitSha()}")
+}
