@@ -1,6 +1,6 @@
 group 'ua.timetracker.reportgenerator'
 version '0.1-SNAPSHOT'
-description = 'Report generation for time spent by users on projects'
+description = 'Report generation/scheduled stuff for time spent by users on projects'
 
 buildscript {
     dependencies {

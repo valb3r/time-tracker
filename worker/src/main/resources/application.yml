@@ -14,5 +14,7 @@ spring:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
     property-naming-strategy: SNAKE_CASE
 
-job:
-  chunk-size: 1
+jobs:
+  pool: 2
+  schedule:
+    runner: "*/1 * * * * *"

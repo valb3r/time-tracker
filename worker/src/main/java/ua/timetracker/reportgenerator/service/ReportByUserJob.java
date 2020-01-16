@@ -9,9 +9,6 @@ import lombok.val;
 import org.apache.commons.codec.Resources;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.TimeLogsRepository;
@@ -36,10 +33,6 @@ public class ReportByUserJob {
 
     private final UsersRepository users;
     private final TimeLogsRepository logs;
-
-    private final JobRepository jobRepository;
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
 
     @SneakyThrows
     @Scheduled(initialDelay = 0, fixedDelay = 1000000)
