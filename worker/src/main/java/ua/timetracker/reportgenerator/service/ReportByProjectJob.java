@@ -1,22 +1,25 @@
 package ua.timetracker.reportgenerator.service;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.codec.Resources;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
+import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Service;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.ProjectsRepository;
+import ua.timetracker.reportgenerator.persistence.repository.imperative.ReportsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.TimeLogsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.dto.DevAndCardDto;
+import ua.timetracker.shared.persistence.entity.report.Report;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -25,35 +28,37 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ua.timetracker.reportgenerator.service.Const.REPORT_ID;
+import static ua.timetracker.reportgenerator.service.Util.getExecution;
+import static ua.timetracker.reportgenerator.service.Util.getFromContext;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReportByProjectJob {
+public class ReportByProjectJob implements Tasklet {
 
+    private final ReportsRepository reports;
     private final ProjectsRepository projects;
     private final TimeLogsRepository logs;
 
+    @Override
     @SneakyThrows
-    //@Scheduled(initialDelay = 0, fixedDelay = 1000000)
-    public void createByProjectExecution() {
-        List<Long> projectIds = ImmutableList.of(10L, 11L);
+    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+        Report report = reports.findById(getFromContext(getExecution(chunkContext), REPORT_ID, null)).get();
 
         List<ProjectDevelopersCards> projectCards = new ArrayList<>();
-        for (val projectId : projectIds) {
+        for (val projectId : report.getTargets()) {
             val project = projects.findById(projectId).get();
             ProjectDevelopersCards result = new ProjectDevelopersCards();
             result.setName(project.getName());
 
-            val allLogs = logs.allLogsForProject(
-                    projectId,
-                    LocalDateTime.parse("2010-01-01T00:00:00"),
-                    LocalDateTime.parse("2030-01-01T00:00:00"));
+            val allLogs = logs.allLogsForProject(projectId, report.getFrom(), report.getTo());
 
             Map<Long, DevelopersCards> devToCards = new LinkedHashMap<>();
             allLogs.forEach(it -> {
                 val devCard = devToCards.computeIfAbsent(
-                        it.getUser().getId(),
-                        id -> new DevelopersCards()
+                    it.getUser().getId(),
+                    id -> new DevelopersCards()
                 );
 
                 devCard.setName(it.getUser().getUsername());
@@ -70,13 +75,17 @@ public class ReportByProjectJob {
             projectCards.add(result);
         }
 
-        try(InputStream is = Resources.getInputStream("by-project.xlsx")) {
-            try (OutputStream os = new FileOutputStream("/home/valb3r/Documents/OpenSource/time-tracker/report-generator/src/main/resources/object_collection_output.xlsx")) {
-                Context context = new Context();
-                context.putVar("projects", projectCards);
-                JxlsHelper.getInstance().processTemplate(is, os, context);
-            }
-        }
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Context context = new Context();
+        context.putVar("projects", projectCards);
+
+        JxlsHelper.getInstance().processTemplate(
+            new ByteArrayInputStream(report.getTemplate().getTemplate()),
+            bos,
+            context
+        );
+
+        return RepeatStatus.FINISHED;
     }
 
     private BigDecimal hoursBilled(DevAndCardDto it) {

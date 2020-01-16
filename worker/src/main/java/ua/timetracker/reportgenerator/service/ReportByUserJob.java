@@ -1,23 +1,25 @@
 package ua.timetracker.reportgenerator.service;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.codec.Resources;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.stereotype.Service;
+import ua.timetracker.reportgenerator.persistence.repository.imperative.ReportsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.TimeLogsRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.UsersRepository;
 import ua.timetracker.reportgenerator.persistence.repository.imperative.dto.ProjectAndCardDto;
+import ua.timetracker.shared.persistence.entity.report.Report;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -26,30 +28,31 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ua.timetracker.reportgenerator.service.Const.REPORT_ID;
+import static ua.timetracker.reportgenerator.service.Util.getExecution;
+import static ua.timetracker.reportgenerator.service.Util.getFromContext;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReportByUserJob {
+public class ReportByUserJob implements Tasklet {
 
+    private final ReportsRepository reports;
     private final UsersRepository users;
     private final TimeLogsRepository logs;
 
     @SneakyThrows
-    @Scheduled(initialDelay = 0, fixedDelay = 1000000)
-    public void createByProjectExecution() {
-
-        List<Long> userIds = ImmutableList.of(16L, 18L);
+    @Override
+    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+        Report report = reports.findById(getFromContext(getExecution(chunkContext), REPORT_ID, null)).get();
 
         List<DeveloperProjectCards> developerCards = new ArrayList<>();
-        for (val userId : userIds) {
+        for (val userId : report.getTargets()) {
             val user = users.findById(userId).get();
             DeveloperProjectCards result = new DeveloperProjectCards();
             result.setName(user.getUsername());
 
-            val allLogs = logs.allLogsForUser(
-                userId,
-                LocalDateTime.parse("2010-01-01T00:00:00"),
-                LocalDateTime.parse("2030-01-01T00:00:00"));
+            val allLogs = logs.allLogsForUser(userId, report.getFrom(), report.getTo());
 
             Map<Long, ProjectCards> projToCards = new LinkedHashMap<>();
             allLogs.forEach(it -> {
@@ -73,13 +76,17 @@ public class ReportByUserJob {
             developerCards.add(result);
         }
 
-        try(InputStream is = Resources.getInputStream("by-developer.xlsx")) {
-            try (OutputStream os = new FileOutputStream("/home/valb3r/Documents/OpenSource/time-tracker/report-generator/src/main/resources/object_dev.xlsx")) {
-                Context context = new Context();
-                context.putVar("developers", developerCards);
-                JxlsHelper.getInstance().processTemplate(is, os, context);
-            }
-        }
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Context context = new Context();
+        context.putVar("developers", developerCards);
+
+        JxlsHelper.getInstance().processTemplate(
+            new ByteArrayInputStream(report.getTemplate().getTemplate()),
+            bos,
+            context
+        );
+
+        return RepeatStatus.FINISHED;
     }
 
     private BigDecimal hoursBilled(ProjectAndCardDto it) {
