@@ -50,6 +50,8 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {Globals} from "./Globals";
 import { NewUsersReportComponent } from './reports/dialogs/new-users-report/new-users-report.component';
 import { NewProjectsReportComponent } from './reports/dialogs/new-projects-report/new-projects-report.component';
+import {MatChipsModule} from "@angular/material/chips";
+import { TemplateManagementDialogComponent } from './reports/dialogs/template-management-dialog/template-management-dialog.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -87,7 +89,8 @@ export const AppDateFormats = {
     CreateNewUserDialogComponent,
     EditUserDialogComponent,
     NewUsersReportComponent,
-    NewProjectsReportComponent
+    NewProjectsReportComponent,
+    TemplateManagementDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -117,7 +120,8 @@ export const AppDateFormats = {
     MatSidenavModule,
     MatListModule,
     FormsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatChipsModule
   ],
   entryComponents: [
     TimeCardEditComponent,
@@ -126,7 +130,9 @@ export const AppDateFormats = {
     EditUserDialogComponent,
     AddOrEditProjectDialogComponent,
     AddUserOrGroupToGroupDialogComponent,
-    AddUserOrGroupToProjectDialogComponent
+    AddUserOrGroupToProjectDialogComponent,
+    NewProjectsReportComponent,
+    NewUsersReportComponent
   ],
   providers: [
     Globals,

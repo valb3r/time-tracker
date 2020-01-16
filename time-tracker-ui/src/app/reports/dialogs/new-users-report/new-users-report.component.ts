@@ -18,7 +18,7 @@ export class NewUsersReportComponent implements OnInit {
     });
   }
 
-  onAddClick() {
+  onSaveClick() {
   }
 
   onCancelClick() {

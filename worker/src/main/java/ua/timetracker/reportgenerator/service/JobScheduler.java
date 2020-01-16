@@ -50,6 +50,7 @@ public class JobScheduler {
         }
 
         reports.findAllByStatus(ReportStatus.SCHEDULED, availableExecs)
+            .stream()
             .forEach(it -> {
                 log.info("Picking {} for execution", it.getId());
                 it.setStatus(ReportStatus.PROCESSING);
@@ -80,6 +81,11 @@ public class JobScheduler {
             job.execute(exec);
         } catch (Exception ex) {
             log.error("Failed for {}:{}", report.getId(), report.getJob(), ex);
+
+            Report updated = reports.findById(report.getId()).get();
+            updated.setStatus(ReportStatus.FAILED);
+            reports.save(updated);
+
             throw new RuntimeException(ex);
         } finally {
             Thread.currentThread().setName(oldName);

@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ReportsRepository extends CrudRepository<Report, Long> {
 
-    @Query("MATCH (r:Report) WHERE r.status = $status ORDER BY r.createdAt ASC LIMIT $maxToRead")
+    @Query("MATCH (r:Report) WHERE r.status = $status RETURN r ORDER BY r.createdAt ASC LIMIT $maxToRead")
     List<Report> findAllByStatus(@Param("status") ReportStatus status, @Param("maxToRead") int maxToRead);
 }

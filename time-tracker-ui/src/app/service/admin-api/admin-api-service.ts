@@ -170,11 +170,11 @@ export class AdminApiService {
   }
 
   createUserBasedReport(userIds: number[], report: CreateReportDto) {
-    this.httpClient.put<ReportDto>(this.baseReportsUri + `users/${userIds}`, report);
+    return this.httpClient.put<ReportDto>(this.baseReportsUri + `users/${userIds}`, report);
   }
 
-  createProjectBasedReport(userIds: number[], report: CreateReportDto) {
-    this.httpClient.put<ReportDto>(this.baseReportsUri + `projects/${userIds}`, report);
+  createProjectBasedReport(projectIds: number[], report: CreateReportDto) {
+    return this.httpClient.put<ReportDto>(this.baseReportsUri + `projects/${projectIds}`, report);
   }
 
   downloadReport(reportId: number) {
@@ -263,6 +263,7 @@ export interface ReportDto {
   createdat: Date;
   from: Date;
   to: Date;
+  status: string;
 }
 
 export interface ReportTemplateDto {
@@ -272,7 +273,7 @@ export interface ReportTemplateDto {
 
 export interface CreateReportDto {
   templateid: number;
-  from: string;
-  to: string;
+  from: Date;
+  to: Date;
 }
 

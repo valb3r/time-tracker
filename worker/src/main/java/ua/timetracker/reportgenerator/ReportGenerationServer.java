@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EntityScan(basePackages = {
         "ua.timetracker.shared.persistence.entity",
+        "ua.timetracker.reportgenerator.persistence.entity",
         "ua.timetracker.reportgenerator.persistence.repository.imperative.dto"
 })
 @EnableScheduling

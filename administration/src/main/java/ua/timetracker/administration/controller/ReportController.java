@@ -25,6 +25,7 @@ import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.shared.persistence.entity.report.ReportType;
 import ua.timetracker.shared.persistence.repository.reactive.ReportsRepository;
+import ua.timetracker.shared.restapi.EntityNotFoundException;
 import ua.timetracker.shared.restapi.dto.report.NewReportDto;
 import ua.timetracker.shared.restapi.dto.report.ReportDto;
 
@@ -53,7 +54,8 @@ public class ReportController {
             @ManagedResourceId @PathVariable("project_ids") @Valid @NotEmpty Set<@NotNull Long> projectIds,
             @Valid @RequestBody NewReportDto reportDto
     ) {
-        return reportsSvc.createReport(id(user), ReportType.BY_PROJECT, projectIds, reportDto);
+        return reportsSvc.createReport(id(user), ReportType.BY_PROJECT, projectIds, reportDto)
+            .switchIfEmpty(EntityNotFoundException.mono());
     }
 
     @OnlyResourceManagers
@@ -70,7 +72,8 @@ public class ReportController {
     @GetMapping
     @Transactional(REACTIVE_TX_MANAGER)
     public Flux<ReportDto> ownedReports(@Parameter(hidden = true) Authentication user) {
-        return reports.findAllByOwnerIdOrderByCreatedAtDesc(id(user)).map(ReportDto.MAP::map);
+        return reports.findByOwnerIdOrderByCreatedAtDesc(id(user)).map(ReportDto.MAP::map)
+            .switchIfEmpty(EntityNotFoundException.mono());
     }
 
     @GetMapping("/{id}")
@@ -80,7 +83,7 @@ public class ReportController {
             @PathVariable("id") long reportId,
             ServerHttpResponse response
     ) {
-        return reports.findByIdAndOwnerId(id(user), reportId).flatMap(it -> {
+        return reports.findByIdAndOwnerId(reportId, id(user)).flatMap(it -> {
             ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
             response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + it.getType().name().toLowerCase() + ".xlsx");
             response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -98,6 +101,7 @@ public class ReportController {
             @Parameter(hidden = true) Authentication user,
             @PathVariable("id") long reportId
     ) {
-        return reports.findByIdAndOwnerId(id(user), reportId).flatMap(reports::delete);
+        return reports.findByIdAndOwnerId(reportId, id(user))
+            .flatMap(it -> reports.deleteById(it.getId()));
     }
 }

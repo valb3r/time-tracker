@@ -30,7 +30,6 @@ import java.util.Map;
 
 import static ua.timetracker.reportgenerator.service.Const.REPORT_ID;
 import static ua.timetracker.reportgenerator.service.Util.getExecution;
-import static ua.timetracker.reportgenerator.service.Util.getFromContext;
 
 @Slf4j
 @Service
@@ -44,7 +43,7 @@ public class ReportByProjectJob implements Tasklet {
     @Override
     @SneakyThrows
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-        Report report = reports.findById(getFromContext(getExecution(chunkContext), REPORT_ID, null)).get();
+        Report report = reports.findById(getExecution(chunkContext).getJobParameters().getLong(REPORT_ID)).get();
 
         List<ProjectDevelopersCards> projectCards = new ArrayList<>();
         for (val projectId : report.getTargets()) {

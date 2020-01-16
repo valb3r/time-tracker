@@ -37,6 +37,7 @@ public class ReportsService {
 
         return user
             .zipWith(template, (usr, tmplt) -> {
+                newReport.setJob(tmplt.getDescription());
                 newReport.setOwner(usr);
                 newReport.setTemplate(tmplt);
                 return newReport;

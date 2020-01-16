@@ -3,15 +3,29 @@
     <mat-card-title>My reports</mat-card-title>
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content fxLayout="column">
     <mat-list>
       <mat-list-item *ngFor="let report of reports">
-        <mat-icon matListIcon>folder</mat-icon>
-        <h3 matLine> {{report.job}} </h3>
-        <p matLine>
-          <span> {{report.createdat}} </span>
-        </p>
+        <mat-icon matListIcon *ngIf="report.status == 'SCHEDULED'">schedule</mat-icon>
+        <mat-icon matListIcon *ngIf="report.status == 'PROCESSING'">dynamic_feed</mat-icon>
+        <mat-icon matListIcon *ngIf="report.status == 'FAILED'">error</mat-icon>
+        <mat-icon matListIcon *ngIf="report.status == 'DONE'">assignment</mat-icon>
+        <button mat-icon-button matSuffix (click)="onReportDelete(report)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        {{report.job}} / {{report.createdat}}
       </mat-list-item>
     </mat-list>
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button matSuffix (click)="onProjectReportAdd()" [attr.aria-label]="'Add project-based report'">
+      <mat-icon>note_add</mat-icon>
+      Report by project
+    </button>
+    <br/>
+    <button mat-icon-button matSuffix (click)="onUserReportAdd()" [attr.aria-label]="'Add user-based report'">
+      <mat-icon>person_add</mat-icon>
+      Report by user
+    </button>
+    </mat-card-actions>
 </mat-card>

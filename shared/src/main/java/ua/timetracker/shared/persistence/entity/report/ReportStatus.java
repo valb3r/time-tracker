@@ -4,5 +4,6 @@ public enum ReportStatus {
 
     SCHEDULED,
     PROCESSING,
+    FAILED,
     DONE
 }

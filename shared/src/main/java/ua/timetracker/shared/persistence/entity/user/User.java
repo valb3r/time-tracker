@@ -12,8 +12,6 @@ import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import ua.timetracker.shared.restapi.dto.user.UserCreateDto;
 import ua.timetracker.shared.restapi.dto.user.UserUpdateDto;
 
@@ -47,12 +45,6 @@ public class User {
 
     @CreatedDate
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modified;
-
-    @LastModifiedBy
-    private String modifiedBy;
 
     @Mapper
     public interface FromDto {
