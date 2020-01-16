@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {forkJoin, Observable} from "rxjs";
+import {Globals} from "../../Globals";
 
 export enum Role {
   DEVELOPER = "DEVELOPER",
@@ -24,7 +25,10 @@ export class AdminApiService {
   private baseProjectUri = this.base + "resources/projects/";
   private baseRolesUri = this.base + "resources/roles/";
 
-  constructor(private httpClient: HttpClient) { }
+  private baseReportsUri = this.base + "resources/reports/";
+  private baseReportTemplatesUri = this.base + "resources/reports/templates/";
+
+  constructor(private httpClient: HttpClient, private globals: Globals) { }
 
   login(username: string, password: string) {
     return this.httpClient.post(
@@ -32,6 +36,12 @@ export class AdminApiService {
       {"username": username, "password": password},
       {observe: 'response'}
     );
+  }
+
+  detectManager() {
+    this.ownOwnedGroups().subscribe(res => {
+      this.globals.isManagerSubject.next(res.length > 0);
+    });
   }
 
   logout() {
@@ -119,6 +129,80 @@ export class AdminApiService {
 
     return forkJoin(this.httpClient.delete(devUri), this.httpClient.delete(managerUri), (x, y) => ({x, y}))
   }
+
+  createReportTemplate(document, description: string) {
+    let formData: FormData = new FormData();
+    formData.append('file', document);
+
+    return this.httpClient.put(
+      this.baseReportTemplatesUri + description,
+      formData,
+      {
+        responseType: 'blob' as 'json'
+      })
+  }
+
+  getAllReportTemplates() {
+    return this.httpClient.get<ReportTemplateDto[]>(this.baseReportTemplatesUri);
+  }
+
+  downloadReportTemplate(templateId: number) {
+    this.httpClient.get(
+      this.baseReportTemplatesUri + templateId,
+      {
+        responseType: 'blob' as 'json'
+      }
+    ).subscribe(
+      (response: any) => {
+        let dataType = response.type;
+        let binaryData = [];
+        binaryData.push(response);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        downloadLink.setAttribute('download', "template");
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+  }
+
+  deleteReportTemplate(templateId: number) {
+    return this.httpClient.delete(this.baseReportTemplatesUri + templateId);
+  }
+
+  createUserBasedReport(userIds: number[], report: CreateReportDto) {
+    this.httpClient.put<ReportDto>(this.baseReportsUri + `users/${userIds}`, report);
+  }
+
+  createProjectBasedReport(userIds: number[], report: CreateReportDto) {
+    this.httpClient.put<ReportDto>(this.baseReportsUri + `projects/${userIds}`, report);
+  }
+
+  downloadReport(reportId: number) {
+    this.httpClient.get(
+      this.baseReportTemplatesUri + reportId,
+      {
+        responseType: 'blob' as 'json'
+      }
+    ).subscribe(
+      (response: any) => {
+        let dataType = response.type;
+        let binaryData = [];
+        binaryData.push(response);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        downloadLink.setAttribute('download', "report");
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      });
+  }
+
+  getAllMineReports() {
+    return this.httpClient.get<ReportDto[]>(this.baseReportsUri);
+  }
+
+  deleteReport(reportId: number) {
+    return this.httpClient.delete(this.baseReportsUri + reportId);
+  }
 }
 
 export class GroupDto {
@@ -172,3 +256,23 @@ export class RoleDetailsDto {
   to: Date;
   rate: string;
 }
+
+export interface ReportDto {
+  id: number;
+  job: string;
+  createdat: Date;
+  from: Date;
+  to: Date;
+}
+
+export interface ReportTemplateDto {
+  id: number;
+  description: string;
+}
+
+export interface CreateReportDto {
+  templateid: number;
+  from: string;
+  to: string;
+}
+

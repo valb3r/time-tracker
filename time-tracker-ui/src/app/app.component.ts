@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {ErrorStateMatcher} from "@angular/material/core";
 import {FormControl, FormGroupDirective, NgForm} from "@angular/forms";
+import {NavigationStart, Router} from "@angular/router";
+import {AdminApiService} from "./service/admin-api/admin-api-service";
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,16 @@ import {FormControl, FormGroupDirective, NgForm} from "@angular/forms";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  constructor(private router: Router, private api: AdminApiService) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (!this.router.navigated) {
+          this.api.detectManager();
+        }
+      }
+    });
+  }
 }
 
 export class FieldErrorStateMatcher implements ErrorStateMatcher {

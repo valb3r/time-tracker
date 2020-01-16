@@ -1,1 +1,17 @@
-<p>reports works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>My reports</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let report of reports">
+        <mat-icon matListIcon>folder</mat-icon>
+        <h3 matLine> {{report.job}} </h3>
+        <p matLine>
+          <span> {{report.createdat}} </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

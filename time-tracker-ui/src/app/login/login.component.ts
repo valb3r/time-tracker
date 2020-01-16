@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
 
   fieldMatcher = new FieldErrorStateMatcher();
 
-  constructor(private api: AdminApiService, private router: Router, private fb: FormBuilder,
-              private globals: Globals) { }
+  constructor(private api: AdminApiService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit() {
   }
@@ -44,9 +43,7 @@ export class LoginComponent implements OnInit {
     this.api.login(this.userNameControl.value, this.passwordControl.value)
       .subscribe(
         success => {
-          this.api.ownOwnedGroups().subscribe(res => {
-            this.globals.isManagerSubject.next(res.length > 0);
-          });
+          this.api.detectManager();
           this.router.navigate(['/main-screen/my-timecards']);
         },
         error => {

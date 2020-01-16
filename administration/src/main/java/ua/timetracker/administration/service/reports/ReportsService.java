@@ -2,6 +2,7 @@ package ua.timetracker.administration.service.reports;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.report.Report;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
+@Service
 @RequiredArgsConstructor
 public class ReportsService {
 

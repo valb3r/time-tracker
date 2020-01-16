@@ -1,8 +1,8 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
-import {Observable} from "rxjs";
-import {map, startWith} from "rxjs/operators";
 import {Globals} from "../Globals";
+import {NavigationStart, Router} from "@angular/router";
+import {AdminApiService} from "../service/admin-api/admin-api-service";
 
 @Component({
   selector: 'main-screen',
@@ -17,7 +17,7 @@ export class MainScreenComponent implements OnInit {
     new Nav("My profile", "my-profile", false),
     new Nav("My timecards", "my-timecards", false),
     new Nav("Management", "management", true),
-    new Nav("Reporting", "reporting", true),
+    new Nav("Reporting", "reports", true),
     new Nav("Change password", "change-password", false),
     new Nav("Logout", "logout", false)
   ];
@@ -26,7 +26,8 @@ export class MainScreenComponent implements OnInit {
 
   private _mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private globals: Globals) {
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
+              private globals: Globals, private api: AdminApiService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener("change", this._mobileQueryListener);
@@ -36,7 +37,7 @@ export class MainScreenComponent implements OnInit {
     this.globals.isManager.subscribe(res =>
       this.filteredNav = res ? this.fillerNav : this.fillerNav.filter(res => !res.managerRoleRequired)
     );
-  }
+  };
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener("change", this._mobileQueryListener);

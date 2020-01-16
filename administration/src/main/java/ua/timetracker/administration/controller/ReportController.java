@@ -70,7 +70,7 @@ public class ReportController {
     @GetMapping
     @Transactional(REACTIVE_TX_MANAGER)
     public Flux<ReportDto> ownedReports(@Parameter(hidden = true) Authentication user) {
-        return reports.findAllByOwnerId(id(user)).map(ReportDto.MAP::map);
+        return reports.findAllByOwnerIdOrderByCreatedAtDesc(id(user)).map(ReportDto.MAP::map);
     }
 
     @GetMapping("/{id}")

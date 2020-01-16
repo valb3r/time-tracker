@@ -48,6 +48,8 @@ import { CreateNewUserDialogComponent } from './management/dialogs/create-new-us
 import { EditUserDialogComponent } from './management/dialogs/edit-user/edit-user-dialog.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {Globals} from "./Globals";
+import { NewUsersReportComponent } from './reports/dialogs/new-users-report/new-users-report.component';
+import { NewProjectsReportComponent } from './reports/dialogs/new-projects-report/new-projects-report.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -83,7 +85,9 @@ export const AppDateFormats = {
     AddUserOrGroupToProjectDialogComponent,
     AddUserOrGroupToGroupDialogComponent,
     CreateNewUserDialogComponent,
-    EditUserDialogComponent
+    EditUserDialogComponent,
+    NewUsersReportComponent,
+    NewProjectsReportComponent
   ],
   imports: [
     BrowserModule,

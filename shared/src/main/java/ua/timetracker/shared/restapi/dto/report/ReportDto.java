@@ -2,6 +2,7 @@ package ua.timetracker.shared.restapi.dto.report;
 
 import lombok.Data;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import ua.timetracker.shared.persistence.entity.report.Report;
 import ua.timetracker.shared.persistence.entity.report.ReportStatus;
@@ -28,10 +29,14 @@ public class ReportDto {
     private LocalDateTime to;
     private Set<Long> targets;
 
+    private LocalDateTime createdat;
+
     private ReportStatus status;
 
     @Mapper
     public interface FromEntity {
+
+        @Mapping(source = "createdAt", target = "createdat")
         ReportDto map(Report report);
     }
 }

@@ -1,0 +1,20 @@
+<mat-card-header>
+  <mat-card-title>Create new group</mat-card-title>
+</mat-card-header>
+
+<mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="New group name" [formControl]="projectNameControl" [errorStateMatcher]="fieldMatcher">
+    <mat-error *ngIf="projectNameControl.hasError('required')">
+      Group name is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="projectNameControl.hasError('minlength') && !projectNameControl.hasError('required')">
+      At least 3 characters
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-card-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onAddClick()" color="primary">Save</button>
+</mat-card-actions>

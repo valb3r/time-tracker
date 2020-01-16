@@ -40,7 +40,7 @@ public class JobScheduler {
     private final ReportByUserJob byUserJob;
 
     @SneakyThrows
-    @Scheduled(fixedRateString = "${jobs.schedule.runner}")
+    @Scheduled(cron = "${jobs.schedule.runner}")
     @Transactional
     public void scheduleJob() {
 
@@ -51,6 +51,7 @@ public class JobScheduler {
 
         reports.findAllByStatus(ReportStatus.SCHEDULED, availableExecs)
             .forEach(it -> {
+                log.info("Picking {} for execution", it.getId());
                 it.setStatus(ReportStatus.PROCESSING);
                 reports.save(it);
                 jobExecutor.execute(() -> runJob(it));
@@ -58,6 +59,8 @@ public class JobScheduler {
     }
 
     private void runJob(Report report) {
+        String oldName = Thread.currentThread().getName();
+        Thread.currentThread().setName(report.getJob() + "-" + report.getId());
         try {
             val jobName = report.getJob() + "-" + report.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME);
             val params = new JobParametersBuilder().addLong(REPORT_ID, report.getId()).toJobParameters();
@@ -78,6 +81,8 @@ public class JobScheduler {
         } catch (Exception ex) {
             log.error("Failed for {}:{}", report.getId(), report.getJob(), ex);
             throw new RuntimeException(ex);
+        } finally {
+            Thread.currentThread().setName(oldName);
         }
     }
 
