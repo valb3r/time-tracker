@@ -40,6 +40,10 @@ public class Report {
     private LocalDateTime to;
     private Set<Long> targets;
 
+    private byte[] result;
+
+    private ReportStatus status = ReportStatus.SCHEDULED;
+
     @Relationship(type = OWNS, direction = INCOMING)
     private User owner;
 

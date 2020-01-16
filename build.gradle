@@ -5,7 +5,7 @@ buildscript {
                 oauth2              : "2.4.0.RELEASE",
                 dependencyManagement: "1.0.8.RELEASE",
                 reactor             : "3.3.1.RELEASE",
-                springdoc           : "1.2.18",
+                springdoc           : "1.2.25",
                 jackson             : "2.10.1",
                 swagger             : "2.1.0",
                 guava               : "28.1-jre",
