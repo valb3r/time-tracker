@@ -6,7 +6,7 @@ stages:
 before_script:
   - chmod +x gradlew
   - mkdir -p $HOME/.docker/
-  - echo '{"url":'$CI_REGISTRY', "username":'$CI_USER', "password":'$CI_JOB_TOKEN'}' > $HOME/.docker/config.json
+  - echo '{"url":"'$CI_REGISTRY'", "username":"'$CI_USER'", "password":"'$CI_JOB_TOKEN'"}' > $HOME/.docker/config.json
 
 build:
   stage: build
