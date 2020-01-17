@@ -1,4 +1,4 @@
-image: timbru31/java-node:8-jdk
+image: "adorsys/ci-build:201907"
 
 variables:
   DOCKER_REGISTRY: registry.gitlab.com
