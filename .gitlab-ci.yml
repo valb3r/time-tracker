@@ -8,7 +8,7 @@ before_script:
 
 build:
   stage: build
-  script: ./gradlew clean buildImage
+  script: ./gradlew clean -Puser=gitlab-ci-token -Ppassword=$CI_JOB_TOKEN -Purl=$CI_REGISTRY buildImage
   artifacts:
     paths:
       - administration/build/libs/administration-0.1-SNAPSHOT.jar
