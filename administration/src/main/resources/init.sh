@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export COOKIE="X-Authorization=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNTc5MTI1ODMzLCJpYXQiOjE1NzkxMjIyMzN9.daD2H9f-9L7YrmyzVMDNqKoTCPsRF4U53VRruyd7ey-wX3PzNfsRX1uKGR2N4j5id_wDy9yb93QkqrcHMT7SX7oWXykP0VcdvRyCDsNTVrHTP40FEOkqneiU1VL2jsjNaeh87BIxv7PAaamVmMlku-Ixma3KaL8Q8x3tuBBJmWRNpqgKrMPt9W9SPmIOYLCoGznHBR7bwYmIcIHUzI9iDB84fw-UHfRGYW1fBQQwf7GS7q1Ir6UJ6ZzHyuMFBELJSvmn-bayjUsT6hgz2sDzgUOP-QTVSBqrHED-YtvLfgdX_ppllxIURizmEyQnP6gIquejaDX6VzwwMxI4zHKAVA"
+export COOKIE="X-Authorization="`curl -X POST -i "http://localhost:20081/v1/login" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"username\":\"admin\", \"password\":\"admin\"}" | grep -e "X-Authorization=" | cut -d"=" -f2 | cut -d";" -f1`
 
 curl -X PUT --cookie "$COOKIE" "http://localhost:20081/v1/resources/groups/1/children" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Golden dimension\"}"
 curl -X PUT --cookie "$COOKIE" "http://localhost:20081/v1/resources/groups/3/children" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Managers\"}"
