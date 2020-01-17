@@ -9,6 +9,11 @@ apply from: "$rootProject.projectDir/shared.gradle"
 
 apply plugin: 'com.bmuschko.docker-remote-api'
 
+node {
+  download = true
+  version='10.11.0'
+}
+
 task syncNpm(type: Copy) {
   dependsOn npm_run_build
   from "dist", "nginx.conf"
