@@ -1,18 +1,35 @@
 image: timbru31/java-node:8-jdk
 
+variables:
+  DOCKER_REGISTRY: registry.gitlab.com
+  DOCKER_REGISTRY_ROOT: registry.gitlab.com/golden-dimension/timedone/gd-timetracker
+
 stages:
   - build
+  - deploy
 
 before_script:
   - chmod +x gradlew
-  - mkdir -p $HOME/.docker/
-  - echo '{"url":"'$CI_REGISTRY'", "username":"'$CI_USER'", "password":"'$CI_JOB_TOKEN'"}' > $HOME/.docker/config.json
 
 build:
   stage: build
-  script: ./gradlew clean buildImage
+  script: ./gradlew clean syncNpm syncJar createDockerfile
   artifacts:
     paths:
       - administration/build/libs/administration-0.1-SNAPSHOT.jar
       - time-tracking-server/build/libs/time-tracking-server-0.1-SNAPSHOT.jar
       - worker/build/libs/worker-0.1-SNAPSHOT.jar
+
+deploy:
+  stage: deploy
+  script:
+    - docker build -t "${DOCKER_REGISTRY_ROOT}/ua-timetracker/worker:${CI_COMMIT_REF_SLUG}" worker/build/docker
+    - docker build -t "${DOCKER_REGISTRY_ROOT}/ua-timetracker/time-tracker:${CI_COMMIT_REF_SLUG}" time-tracking-server/build/docker
+    - docker build -t "${DOCKER_REGISTRY_ROOT}/ua-timetracker/time-tracker-ui:${CI_COMMIT_REF_SLUG}" time-tracker-ui/build/docker
+    - docker build -t "${DOCKER_REGISTRY_ROOT}/ua-timetracker/administration:${CI_COMMIT_REF_SLUG}" administration/build/docker
+    - docker login -u $CI_USER -p $CI_JOB_TOKEN
+    - docker push "${DOCKER_REGISTRY_ROOT}/ua-timetracker/worker:${CI_COMMIT_REF_SLUG}"
+    - docker push "${DOCKER_REGISTRY_ROOT}/ua-timetracker/time-tracker:${CI_COMMIT_REF_SLUG}"
+    - docker push "${DOCKER_REGISTRY_ROOT}/ua-timetracker/time-tracker-ui:${CI_COMMIT_REF_SLUG}"
+    - docker push "${DOCKER_REGISTRY_ROOT}/ua-timetracker/administration:${CI_COMMIT_REF_SLUG}"
+    - docker logout
