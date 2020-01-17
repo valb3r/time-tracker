@@ -5,10 +5,11 @@ stages:
 
 before_script:
   - chmod +x gradlew
+  - echo '{"url":'$CI_REGISTRY', "username":'$CI_USER', "password":'$CI_JOB_TOKEN'}' > $HOME/.docker/config.json
 
 build:
   stage: build
-  script: ./gradlew clean -Puser=$CI_USER -Ppassword=$CI_JOB_TOKEN -Purl=$CI_REGISTRY buildImage
+  script: buildImage
   artifacts:
     paths:
       - administration/build/libs/administration-0.1-SNAPSHOT.jar
