@@ -131,6 +131,14 @@ export class AdminApiService {
     return this.httpClient.delete(this.baseProjectUri + projectId);
   }
 
+  getRoleDetailsWithType(roleId: number) {
+    return this.httpClient.get<RoleDetailsDto>(this.baseRolesUri + roleId);
+  }
+
+  updateUsersRoleInProject(roleId: number, details: RoleDetailsDto) {
+    return this.httpClient.post<ProjectDto>(this.baseRolesUri + roleId, details);
+  }
+
   removeUserOrGroupFromProject(userOrGroupId: number, projectId: number) {
     let devUri = this.base + `resources/roles/DEVELOPER/actors/${userOrGroupId}/in/${projectId}`;
     let managerUri = this.base + `resources/roles/MANAGER/actors/${userOrGroupId}/in/${projectId}`;
@@ -253,6 +261,8 @@ export class GroupDtoWithPath {
 }
 
 export class ProjectActorDto {
+  roleid?: number;
+  roletype?: string;
   user: UserDto;
   source: GroupDto;
 }
@@ -269,6 +279,7 @@ export class RoleDetailsDto {
   from: Date;
   to: Date;
   rate: string;
+  type?: string;
 }
 
 export interface ReportDto {

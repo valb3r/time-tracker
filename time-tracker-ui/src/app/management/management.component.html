@@ -61,9 +61,13 @@
            <mat-icon>delete</mat-icon>
             <span>Remove user completely</span>
           </button>
+          <button mat-menu-item *ngIf="node.kind === kind.USER && node.isSurrogate" (click)="editUserRoleOnProject(node)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit user role (direct)</span>
+          </button>
           <button mat-menu-item *ngIf="node.kind === kind.USER && node.isSurrogate" (click)="removeUserFromProject(node)">
-           <mat-icon>delete</mat-icon>
-            <span>Remove user from project</span>
+            <mat-icon>delete</mat-icon>
+            <span>Remove user from project (direct)</span>
           </button>
 
           <button mat-menu-item *ngIf="node.kind === kind.INHERITED_USER" (click)="removeInheritedFromProject(node)">

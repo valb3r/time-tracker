@@ -7,11 +7,12 @@ import {SelectionChange} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
 import {AddOrEditGroupDialogComponent} from "./dialogs/add-or-edit-group-dialog/add-or-edit-group-dialog.component";
 import {AddOrEditProjectDialogComponent} from "./dialogs/add-or-edit-project-dialog/add-or-edit-project-dialog.component";
-import {GroupNode, GroupNodesWithParentName, Kind} from "../common-types/common-types";
+import {GroupNode, GroupNodesWithParentName, Kind, ProjectUserRelation} from "../common-types/common-types";
 import {AddUserOrGroupToGroupDialogComponent} from "./dialogs/add-user-or-group-to-group-dialog/add-user-or-group-to-group-dialog.component";
 import {EditUserDialogComponent} from "./dialogs/edit-user/edit-user-dialog.component";
 import {CreateNewUserDialogComponent} from "./dialogs/create-new-user/create-new-user-dialog.component";
 import {AddUserOrGroupToProjectDialogComponent} from "./dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
+import {EditProjectRoleComponent} from "./dialogs/edit-project-role/edit-project-role.component";
 
 @Injectable()
 export class GroupDatabase {
@@ -220,6 +221,20 @@ export class ManagementComponent implements OnInit {
     });
   }
 
+  editUserRoleOnProject(target: GroupNode) {
+    this.api.getRoleDetailsWithType(target.roleId).subscribe(details => {
+      const dialogRef = this.dialog.open(EditProjectRoleComponent, {
+        data: new ProjectUserRelation(details.type, details, target.name, target.parent)
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.api.updateUsersRoleInProject(target.roleId, result).subscribe();
+        }
+      });
+    });
+  }
+
   removeUserFromProject(target: GroupNode) {
     this.api.removeUserOrGroupFromProject(target.id, target.parent.id).subscribe(res => {
       this.fetchDataFromServer();
@@ -331,7 +346,9 @@ export class ManagementComponent implements OnInit {
                 Kind.USER,
                 false,
                 true,
-                project
+                project,
+                null,
+                actor.roleid
               )
             }
           }

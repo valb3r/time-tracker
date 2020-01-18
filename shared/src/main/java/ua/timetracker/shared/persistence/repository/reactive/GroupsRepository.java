@@ -17,6 +17,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.ProjectRol
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.HAS_CHILD;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.IN_GROUP;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNS;
+import static ua.timetracker.shared.persistence.repository.reactive.QueryConst.DATE_VALID_FILTER_ON_DEV_OR_MGR_ROLE;
 
 @Repository
 public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
@@ -44,7 +45,9 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
     @Query(
         "MATCH (m:User)-[:" + IN_GROUP + "]->(g:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
         "UNION MATCH (m:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) " +
-        "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) RETURN id(r)"
+        "UNION MATCH (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) " +
+            DATE_VALID_FILTER_ON_DEV_OR_MGR_ROLE +
+            "RETURN id(r)"
     )
     Flux<Long> ownedGroupIds(@Param("ownerId") long owningUserOrGroupId);
 
@@ -57,7 +60,8 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
         "UNION MATCH p = (m:Group)-[:" + HAS_CHILD + "*]->(r:Group) WHERE id(m) = $ownerId " +
         "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]] " +
         "UNION MATCH p = (m)-[role:" + MANAGER_ROLE + "*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) " +
-        "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]]"
+            DATE_VALID_FILTER_ON_DEV_OR_MGR_ROLE +
+            "RETURN [rel IN relationships(p) | [id(startNode(rel)), id(endNode(rel))]]"
     )
     Flux<ListValue> ownedGroupWithPaths(@Param("ownerId") long owningUserOrGroupId);
 

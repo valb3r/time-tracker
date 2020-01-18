@@ -16,7 +16,9 @@ import ua.timetracker.administration.service.securityaspect.ManagedResourceId;
 import ua.timetracker.administration.service.securityaspect.OnlyResourceManagers;
 import ua.timetracker.administration.service.users.RoleManager;
 import ua.timetracker.shared.persistence.entity.realationships.ProjectRole;
+import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
 import ua.timetracker.shared.restapi.dto.project.ProjectActorDto;
+import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 import ua.timetracker.shared.restapi.dto.role.RoleDetailsDto;
 
 import javax.validation.Valid;
@@ -32,6 +34,7 @@ import static ua.timetracker.shared.restapi.Paths.V1_ROLES;
 @RequiredArgsConstructor
 public class RoleController {
 
+    private final ProjectsRepository projects;
     private final RoleManager manager;
 
     @OnlyResourceManagers
@@ -44,6 +47,29 @@ public class RoleController {
         @Valid @RequestBody RoleDetailsDto details
     ) {
         return manager.addRoles(role, userOrGroupIds, projectOrGroupIds, details);
+    }
+
+   // access validation handled inside 'accessValidation'
+    @PostMapping(path = "/{role_id}", consumes = APPLICATION_JSON_VALUE)
+    public Mono<ProjectDto> updateUserRolesInProject(
+        @Parameter(hidden = true) Authentication user,
+        @PathVariable("role_id") long roleId,
+        @Valid @RequestBody RoleDetailsDto details
+    ) {
+        return projects.findByRoleId(roleId)
+            .map(project -> accessValidation(user, project.getId()))
+            .flatMap(it -> manager.updateRole(roleId, details));
+    }
+
+    // access validation handled inside 'accessValidation'
+    @GetMapping(path = "/{role_id}")
+    public Mono<RoleDetailsDto> updateUserRolesInProject(
+        @Parameter(hidden = true) Authentication user,
+        @PathVariable("role_id") long roleId
+    ) {
+        return projects.findByRoleId(roleId)
+            .map(project -> accessValidation(user, project.getId()))
+            .flatMap(it -> manager.roleDetails(roleId));
     }
 
     @OnlyResourceManagers
@@ -64,5 +90,11 @@ public class RoleController {
         @ManagedResourceId @PathVariable("id") long projectId
     ) {
         return manager.projectActors(projectId);
+    }
+
+    // requires 'public' due to aspect matcher
+    @OnlyResourceManagers
+    public Mono<Boolean> accessValidation(Authentication user, @ManagedResourceId long projectId) {
+        return Mono.just(true);
     }
 }

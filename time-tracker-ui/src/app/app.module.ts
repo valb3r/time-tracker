@@ -52,6 +52,7 @@ import { NewUsersReportComponent } from './reports/dialogs/new-users-report/new-
 import { NewProjectsReportComponent } from './reports/dialogs/new-projects-report/new-projects-report.component';
 import {MatChipsModule} from "@angular/material/chips";
 import { TemplateManagementDialogComponent } from './reports/dialogs/template-management-dialog/template-management-dialog.component';
+import { EditProjectRoleComponent } from './management/dialogs/edit-project-role/edit-project-role.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -90,7 +91,8 @@ export const AppDateFormats = {
     EditUserDialogComponent,
     NewUsersReportComponent,
     NewProjectsReportComponent,
-    TemplateManagementDialogComponent
+    TemplateManagementDialogComponent,
+    EditProjectRoleComponent
   ],
   imports: [
     BrowserModule,
@@ -133,7 +135,8 @@ export const AppDateFormats = {
     AddUserOrGroupToProjectDialogComponent,
     NewProjectsReportComponent,
     NewUsersReportComponent,
-    TemplateManagementDialogComponent
+    TemplateManagementDialogComponent,
+    EditProjectRoleComponent
   ],
   providers: [
     Globals,

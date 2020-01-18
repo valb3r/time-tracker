@@ -11,6 +11,7 @@ import ua.timetracker.shared.restapi.dto.user.UserDto;
 @AllArgsConstructor
 public class ProjectActorDto {
 
+    private Long roleid;
     private UserDto user;
     private GroupDto source;
 }
