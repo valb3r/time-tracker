@@ -1,0 +1,15 @@
+@startuml
+actor user
+database "Neo4j\ngraph database" as neo4j
+component "<b>administration</b>\nAuthenticates, manages users,roles,reports" as admin
+component "<b>time-tracker-ui</b>\n Application UI" as ui
+component "<b>time-tracking-server</b>\n Receieves time logs from users" as tracker
+component "<b>worker</b>\n Spring-batch worker to generate\nreports and perform offline tasks\nthat runs directly on neo4j" as worker
+
+user <--> ui
+ui <--> admin
+ui <--> tracker
+admin <--> neo4j
+tracker <--> neo4j
+neo4j <--> worker
+@enduml
