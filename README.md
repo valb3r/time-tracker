@@ -8,7 +8,7 @@ docker-compose up
 # OR 'sudo -E docker-compose up' if you need sudo to run docker
 ```
 
-This spin up everything needed. UI will be at localhost:6500
+Commands above spin up everything needed. UI will be at localhost:6500
 
-To create stub data - run
-administration/src/main/resources/init.sh
+To create stub data - run `administration/src/main/resources/init.sh`.
+Test users all have same password as their login. I.e. `admin/admin`
