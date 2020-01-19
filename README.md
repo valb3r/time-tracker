@@ -7,6 +7,23 @@
 1. Gradle as build system.
 1. Dockerized deployment via docker-compose.
 
+# UI / Application look and feel
+
+## User management / Time logging
+
+![User management](manage-and-record.gif)
+
+## Reporting (using JXLS templates for report template)
+
+![Reporting](report.gif)
+
+
+# Features:
+
+1. Complex user-group relations management.
+1. Time card entry.
+1. Report generation in xlsx format.
+1. Reactive endpoints.
 
 # Architecture
 
