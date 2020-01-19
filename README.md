@@ -1,6 +1,17 @@
+# Tech stack:
+
+1. Spring Boot 2 with reactive WebFlux REST endpoints.
+1. Neo4j database with SDN-RX (endpoints) and OGM (reporting) access layers.
+1. Spring Batch with metadata persistence on Neo4j
+1. Angular / Angular material/flex for UI
+1. Gradle as build system.
+1. Dockerized deployment via docker-compose.
+
+
 # Architecture
 
 ![Architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/valb3r/time-tracker/master/architecture.puml&fmt=svg&vvv=2&sanitize=true)
+
 
 # Build and run
 
@@ -14,6 +25,7 @@ docker-compose up
 ```
 
 Commands above spin up everything needed. UI will be at localhost:6500
+
 
 # Stub data
 
