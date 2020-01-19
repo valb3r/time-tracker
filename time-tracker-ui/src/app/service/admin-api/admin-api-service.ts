@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {forkJoin, Observable} from "rxjs";
-import {Globals} from "../../Globals";
+import {Globals} from "../../globals";
 
 export enum Role {
   DEVELOPER = "DEVELOPER",

@@ -47,7 +47,7 @@ import { AddUserOrGroupToGroupDialogComponent } from './management/dialogs/add-u
 import { CreateNewUserDialogComponent } from './management/dialogs/create-new-user/create-new-user-dialog.component';
 import { EditUserDialogComponent } from './management/dialogs/edit-user/edit-user-dialog.component';
 import {MatGridListModule} from "@angular/material/grid-list";
-import {Globals} from "./Globals";
+import {Globals} from "./globals";
 import { NewUsersReportComponent } from './reports/dialogs/new-users-report/new-users-report.component';
 import { NewProjectsReportComponent } from './reports/dialogs/new-projects-report/new-projects-report.component';
 import {MatChipsModule} from "@angular/material/chips";

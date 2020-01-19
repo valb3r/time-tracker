@@ -12,6 +12,7 @@ import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-f
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
 import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
+import {MediaMatcher} from "@angular/cdk/layout";
 
 const colors: any = {
   blue: {
@@ -29,22 +30,17 @@ const colors: any = {
 })
 export class TimeCardCalendarComponent implements OnInit {
 
+  mobileQuery: MediaQueryList;
+
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   excludeDays: number[] = [0, 6];
-
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
 
   actions: CalendarEventAction[] = [
     {
       label: '<i class="material-icons">edit</i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-
         const dialogRef = this.dialog.open(TimeCardEditComponent, {
           data: event.meta.src
         });
@@ -64,7 +60,6 @@ export class TimeCardCalendarComponent implements OnInit {
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
         this.api.deleteTimeCard(event.meta.src.id)
           .subscribe(res => {
             this.fetchTimeCards();
@@ -80,7 +75,9 @@ export class TimeCardCalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private dialog: MatDialog, private api: TimeCardApiService) {}
+  constructor(private media: MediaMatcher, private dialog: MatDialog, private api: TimeCardApiService) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -128,11 +125,6 @@ export class TimeCardCalendarComponent implements OnInit {
       }
       return iEvent;
     });
-    this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
   }
 
   viewDateChanged() {
@@ -168,7 +160,7 @@ export class TimeCardCalendarComponent implements OnInit {
               hoursValue: card.durationminutes / 60.0,
               src: card
             },
-            draggable: true
+            draggable: !this.mobileQuery.matches
           };
 
           this.events.push(event);

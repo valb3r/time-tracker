@@ -1,8 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MediaMatcher} from "@angular/cdk/layout";
-import {Globals} from "../Globals";
-import {NavigationStart, Router} from "@angular/router";
-import {AdminApiService} from "../service/admin-api/admin-api-service";
+import {Globals} from "../globals";
 
 @Component({
   selector: 'main-screen',
@@ -27,7 +25,7 @@ export class MainScreenComponent implements OnInit {
   private _mobileQueryListener: () => void;
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-              private globals: Globals, private api: AdminApiService) {
+              private globals: Globals) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener("change", this._mobileQueryListener);
