@@ -7,6 +7,22 @@
 1. Gradle as build system.
 1. Dockerized deployment via docker-compose.
 
+# Why graph database?
+
+Group and users' owned resources are clear: 
+
+![Ownership diagram](role_group_arch.png)
+
+Also, code that fetches those resources is simple too, exactly one query to read all owned groups:
+
+```
+MATCH (m:User)-[:IN_GROUP]->(g:Group)-[:HAS_CHILD*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) 
+UNION MATCH (m:Group)-[:HAS_CHILD*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) 
+UNION MATCH (m)-[role:MANAGER*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) 
+AND NONE(dated in role WHERE (type(dated) IN ['MANAGER', 'DEVELOPER']) AND (localdatetime() <= dated.from OR localdatetime() >= dated.to))
+RETURN id(r)
+```
+
 # UI / Application look and feel
 
 ## User management / Time logging
@@ -16,6 +32,11 @@
 ## Reporting (using JXLS templates for report template)
 
 ![Reporting](report.gif)
+
+
+**Report templates can be found here:**
+1. [By developer](worker/src/main/resources/by-developer.xlsx)
+1. [By project](worker/src/main/resources/by-developer.xlsx)
 
 
 # Features:
