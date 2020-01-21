@@ -23,15 +23,10 @@ AND NONE(dated in role WHERE (type(dated) IN ['MANAGER', 'DEVELOPER']) AND (loca
 RETURN id(r)
 ```
 
-# UI / Application look and feel
+# UI / Application look
 
-## User management / Time logging
-
-![User management](manage-and-record.gif)
-
-## Reporting (using JXLS templates for report template)
-
-![Reporting](report.gif)
+- [User/group management UI look](manage-and-record.gif)
+- [Reporting UI look](report.gif)
 
 
 **Report templates can be found here:**
