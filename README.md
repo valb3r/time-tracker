@@ -32,17 +32,17 @@ RETURN id(r)
 - [Reporting UI look](report.gif)
 
 
-**Report templates can be found here:**
-1. [By developer](worker/src/main/resources/by-developer.xlsx)
-1. [By project](worker/src/main/resources/by-developer.xlsx)
-
-
 # Features:
 
 1. Complex user-group relations management.
 1. Time card entry.
-1. Report generation in xlsx format.
+1. Template-based report generation in xlsx format (using [jxls templates](http://jxls.sourceforge.net/)).
 1. Reactive endpoints.
+
+
+**Report templates can be found here:**
+1. [By developer](worker/src/main/resources/by-developer.xlsx)
+1. [By project](worker/src/main/resources/by-developer.xlsx)
 
 # Architecture
 
