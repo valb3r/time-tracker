@@ -19,7 +19,10 @@ Also, code that fetches those resources is simple too, exactly one query to read
 MATCH (m:User)-[:IN_GROUP]->(g:Group)-[:HAS_CHILD*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) 
 UNION MATCH (m:Group)-[:HAS_CHILD*]->(r:Group) WHERE id(m) = $ownerId RETURN id(r) 
 UNION MATCH (m)-[role:MANAGER*]->(r:Group) WHERE id(m) = $ownerId AND (m:Group OR m:User) 
-AND NONE(dated in role WHERE (type(dated) IN ['MANAGER', 'DEVELOPER']) AND (localdatetime() <= dated.from OR localdatetime() >= dated.to))
+    AND NONE(
+        dated in role WHERE (type(dated) IN ['MANAGER', 'DEVELOPER']) 
+        AND (localdatetime() <= dated.from OR localdatetime() >= dated.to)
+    )
 RETURN id(r)
 ```
 
