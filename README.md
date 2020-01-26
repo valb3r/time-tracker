@@ -1,6 +1,6 @@
 # Tech stack:
 
-1. Spring Boot 2 with reactive WebFlux REST endpoints.
+1. Spring Boot 2 with reactive WebFlux REST endpoints and security.
 1. Neo4j database with SDN-RX (endpoints) and OGM (reporting) access layers.
 1. Spring Batch with metadata persistence on Neo4j
 1. Angular / Angular material/flex for UI
