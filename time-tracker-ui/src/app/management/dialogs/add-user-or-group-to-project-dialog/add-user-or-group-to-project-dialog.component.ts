@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Role} from "../../../service/admin-api/admin-api-service";
+import {Role, RoleDetailsDto} from "../../../service/admin-api/admin-api-service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Observable} from "rxjs";
@@ -76,10 +76,13 @@ export class AddUserOrGroupToProjectDialogComponent implements OnInit {
       {
         id: this.usersAndGroups.value.id,
         role: this.roleControl.value,
-        rate: this.hourlyRateControl.value,
-        from: this.fromDate.value,
-        to: this.toDate.value
-      });
+        details: {
+          rate: this.hourlyRateControl.value,
+          from: this.fromDate.value,
+          to: this.toDate.value
+        } as RoleDetailsDto
+      } as AddUserOrGroupDetails
+    );
   }
 
   onCancelClick() {
@@ -144,8 +147,8 @@ export interface SelectableDto {
   name: string;
 }
 
-export interface AddUserOrProjectToGroupDto {
-
+export interface AddUserOrGroupDetails {
+  id: number;
   role: Role;
-  userOrGroupIdsToAdd: number[];
+  details: RoleDetailsDto;
 }
