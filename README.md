@@ -34,8 +34,9 @@ RETURN id(r)
 
 # Features:
 
-1. Complex user-group relations management.
-1. Time card entry.
+1. Complex user-group relations management including date based role validity 
+(i.e. developer in project from 2019-01-01 to 2020-01-01).
+1. Simple to use time card entry and modification.
 1. Template-based report generation in xlsx format (using [jxls templates](http://jxls.sourceforge.net/)).
 1. Reactive endpoints.
 
