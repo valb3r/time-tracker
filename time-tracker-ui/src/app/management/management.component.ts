@@ -1,7 +1,16 @@
 import {NestedTreeControl, TreeControl} from '@angular/cdk/tree';
 import {Component, Injectable, OnInit} from '@angular/core';
 import {MatTreeNestedDataSource} from '@angular/material/tree';
-import {AdminApiService, GroupDto, GroupDtoWithPath, ProjectDto, UserDto} from "../service/admin-api/admin-api-service";
+import {
+  AddNewOrEditUserDto,
+  AdminApiService,
+  GroupDto,
+  GroupDtoWithPath,
+  ProjectCreateOrUpdateDto,
+  ProjectDto,
+  RoleDetailsDto,
+  UserDto
+} from "../service/admin-api/admin-api-service";
 import {BehaviorSubject, Observable} from "rxjs";
 import {SelectionChange} from "@angular/cdk/collections";
 import {MatDialog} from "@angular/material/dialog";
@@ -11,8 +20,12 @@ import {GroupNode, GroupNodesWithParentName, Kind, ProjectUserRelation} from "..
 import {AddUserOrGroupToGroupDialogComponent} from "./dialogs/add-user-or-group-to-group-dialog/add-user-or-group-to-group-dialog.component";
 import {EditUserDialogComponent} from "./dialogs/edit-user/edit-user-dialog.component";
 import {CreateNewUserDialogComponent} from "./dialogs/create-new-user/create-new-user-dialog.component";
-import {AddUserOrGroupToProjectDialogComponent} from "./dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
+import {
+  AddUserOrGroupDetails,
+  AddUserOrGroupToProjectDialogComponent
+} from "./dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
 import {EditProjectRoleComponent} from "./dialogs/edit-project-role/edit-project-role.component";
+import {filter, flatMap} from "rxjs/operators";
 
 @Injectable()
 export class GroupDatabase {
@@ -71,7 +84,7 @@ export class ManagementComponent implements OnInit {
       this.dataSource.data = data;
     });
 
-    this.fetchDataFromServer();
+    this.api.ownOwnedGroups().subscribe(res => this.updateOwnedGroups(res));
   }
 
   buildGroupTree(groups: GroupDtoWithPath[]): GroupNode[] {
@@ -125,13 +138,11 @@ export class ManagementComponent implements OnInit {
       data: {name: ""}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.addGroup(parent.id, result).subscribe(res => {
-          this.fetchDataFromServer();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap((result: GroupDto) => this.api.addGroup(parent.id, result)),
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   editGroup(target: GroupNode) {
@@ -140,21 +151,20 @@ export class ManagementComponent implements OnInit {
         data: res
       });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.api.updateGroup(target.id, result).subscribe(res => {
-            this.fetchDataFromServer();
-          });
-        }
-      });
+      dialogRef.afterClosed().pipe(
+        filter(result => result !== undefined),
+        flatMap((result: GroupDto) => this.api.updateGroup(target.id, result)),
+        flatMap(() => this.api.ownOwnedGroups())
+      ).subscribe(res => this.updateOwnedGroups(res));
     });
   }
 
 
   removeGroup(target: GroupNode) {
-    this.api.removeGroup(target.id).subscribe(res => {
-      this.fetchDataFromServer();
-    });
+    this.api.removeGroup(target.id)
+      .pipe(
+        flatMap(() => this.api.ownOwnedGroups())
+      ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   createNewUser(parent: GroupNode) {
@@ -162,13 +172,11 @@ export class ManagementComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.addUser(parent.id, result).subscribe(res => {
-          this.fetchDataFromServer();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap((result: AddNewOrEditUserDto) => this.api.addUser(parent.id, result)),
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   editUser(target: GroupNode) {
@@ -177,20 +185,18 @@ export class ManagementComponent implements OnInit {
         data: res
       });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.api.updateUser(target.id, result).subscribe(res => {
-            this.fetchDataFromServer();
-          });
-        }
-      });
+      dialogRef.afterClosed().pipe(
+        filter(result => result !== undefined),
+        flatMap((result: AddNewOrEditUserDto) => this.api.updateUser(target.id, result)),
+        flatMap(() => this.api.ownOwnedGroups())
+      ).subscribe(res => this.updateOwnedGroups(res));
     });
   }
 
   removeUserCompletely(target: GroupNode) {
-    this.api.removeUserCompletely(target.id).subscribe(res => {
-      this.fetchDataFromServer();
-    });
+    this.api.removeUserCompletely(target.id).pipe(
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   addExistingUserOrGroupToGroup(parent: GroupNode) {
@@ -198,13 +204,11 @@ export class ManagementComponent implements OnInit {
       data: new GroupNodesWithParentName(parent, this.dataSource.data)
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.addUsersOrGroupsToGroup(parent.id, result.id).subscribe(res => {
-          this.fetchDataFromServer();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap(result => this.api.addUsersOrGroupsToGroup(parent.id, result.id)),
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   addExistingUserOrGroupToProject(parent: GroupNode) {
@@ -212,39 +216,38 @@ export class ManagementComponent implements OnInit {
       data: new GroupNodesWithParentName(parent, this.dataSource.data)
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.addUsersOrGroupsToProject(result.role, result.id, parent.id, result).subscribe(res => {
-          this.fetchDataFromServer();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap((result: AddUserOrGroupDetails) => this.api.addUsersOrGroupsToProject(result.role, [result.id], parent.id, result.details)),
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   editUserRoleOnProject(target: GroupNode) {
-    this.api.getRoleDetailsWithType(target.roleId).subscribe(details => {
-      const dialogRef = this.dialog.open(EditProjectRoleComponent, {
-        data: new ProjectUserRelation(details.type, details, target.name, target.parent)
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.api.updateUsersRoleInProject(target.roleId, result).subscribe();
-        }
-      });
-    });
+    // no graph update for this
+    this.api.getRoleDetailsWithType(target.roleId)
+      .pipe(
+        flatMap(details => {
+          const dialogRef = this.dialog.open(EditProjectRoleComponent, {
+            data: new ProjectUserRelation(details.type, details, target.name, target.parent)
+          });
+          return dialogRef.afterClosed()
+        }),
+        filter(result => result !== undefined),
+        flatMap(result => this.api.updateUsersRoleInProject(target.roleId, result as RoleDetailsDto)),
+      ).subscribe();
   }
 
   removeUserFromProject(target: GroupNode) {
-    this.api.removeUserOrGroupFromProject(target.id, target.parent.id).subscribe(res => {
-      this.fetchDataFromServer();
-    });
+    this.api.removeUserOrGroupFromProject(target.id, target.parent.id).pipe(
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   removeInheritedFromProject(target: GroupNode) {
-    this.api.removeUserOrGroupFromProject(target.sourceId, target.parent.id).subscribe(res => {
-      this.fetchDataFromServer();
-    });
+    this.api.removeUserOrGroupFromProject(target.sourceId, target.parent.id).pipe(
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   addProject(parent: GroupNode) {
@@ -252,13 +255,11 @@ export class ManagementComponent implements OnInit {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.addProject(parent.id, result).subscribe(res => {
-          this.fetchDataFromServer();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap((result: ProjectCreateOrUpdateDto) => this.api.addProject(parent.id, result)),
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
   editProject(target: GroupNode) {
@@ -267,28 +268,24 @@ export class ManagementComponent implements OnInit {
         data: res
       });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.api.updateProject(target.id, result).subscribe(res => {
-            this.fetchDataFromServer();
-          });
-        }
-      });
+      dialogRef.afterClosed().pipe(
+        filter(result => result !== undefined),
+        flatMap((result: ProjectCreateOrUpdateDto) => this.api.updateProject(target.id, result)),
+        flatMap(() => this.api.ownOwnedGroups())
+      ).subscribe(res => this.updateOwnedGroups(res));
     });
   }
 
   removeProject(target: GroupNode) {
-    this.api.removeProject(target.id).subscribe(res => {
-      this.fetchDataFromServer();
-    });
+    this.api.removeProject(target.id).pipe(
+      flatMap(() => this.api.ownOwnedGroups())
+    ).subscribe(res => this.updateOwnedGroups(res));
   }
 
-  private fetchDataFromServer() {
-    this.api.ownOwnedGroups().subscribe(res => {
-      const data = this.buildGroupTree(res);
-      this.database.dataChange.next(data);
-      this.database.keepExpandedNodesState(data);
-    });
+  private updateOwnedGroups(res: GroupDtoWithPath[]) {
+    const data = this.buildGroupTree(res);
+    this.database.dataChange.next(data);
+    this.database.keepExpandedNodesState(data);
   }
 
   private buildInternalGroups(path: string, node: GroupDto): GroupNode[] {

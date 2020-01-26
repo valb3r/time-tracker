@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AdminApiService, ProjectDto, ReportTemplateDto} from "../../../service/admin-api/admin-api-service";
 import {Observable} from "rxjs";
-import {map, startWith} from "rxjs/operators";
+import {flatMap, map, startWith} from "rxjs/operators";
 import {FormControl, Validators} from "@angular/forms";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
@@ -85,11 +85,13 @@ export class NewProjectsReportComponent implements OnInit {
   onManageTemplatesClick() {
     const dialogRef = this.dialog.open(TemplateManagementDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.api.getAllReportTemplates().subscribe(res => {
+    dialogRef.afterClosed()
+      .pipe(
+        flatMap(() => this.api.getAllReportTemplates())
+      )
+      .subscribe(res => {
         this.templates = res;
       });
-    });
   }
 
   onSaveClick() {

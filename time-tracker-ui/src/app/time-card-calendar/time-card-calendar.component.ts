@@ -11,8 +11,9 @@ import {Subject} from "rxjs";
 import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
-import {TimeCardApiService} from "../service/timecard-api/time-card-api.service";
+import {TimeCardApiService, TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
+import {filter, flatMap} from "rxjs/operators";
 
 const colors: any = {
   blue: {
@@ -45,14 +46,11 @@ export class TimeCardCalendarComponent implements OnInit {
           data: event.meta.src
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-          if (result !== undefined) {
-            this.api.updateTimeCard(event.meta.src.id, result)
-              .subscribe(res => {
-                this.fetchTimeCards();
-              });
-          }
-        });
+        dialogRef.afterClosed().pipe(
+          filter(result => result !== undefined),
+          flatMap((result: TimeLogUpload) => this.api.updateTimeCard(event.meta.src.id, result)),
+          flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+        ).subscribe(res => this.updateTimeCards(res));
       }
     },
     {
@@ -61,10 +59,9 @@ export class TimeCardCalendarComponent implements OnInit {
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
         this.api.deleteTimeCard(event.meta.src.id)
-          .subscribe(res => {
-            this.fetchTimeCards();
-          });
-
+          .pipe(
+            flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+          ).subscribe(res => this.updateTimeCards(res))
       }
     }
   ];
@@ -81,14 +78,8 @@ export class TimeCardCalendarComponent implements OnInit {
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
+      this.activeDayIsOpen = !((isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0);
       this.viewDate = date;
     }
 
@@ -96,13 +87,11 @@ export class TimeCardCalendarComponent implements OnInit {
       data: {timestamp: this.viewDate}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.api.uploadTimeCard(result).subscribe(res => {
-          this.fetchTimeCards();
-        });
-      }
-    });
+    dialogRef.afterClosed().pipe(
+      filter(result => result !== undefined),
+      flatMap((result: TimeLogUpload) => this.api.uploadTimeCard(result)),
+      flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+    ).subscribe(res => this.updateTimeCards(res));
   }
 
   eventTimesChanged({
@@ -114,9 +103,9 @@ export class TimeCardCalendarComponent implements OnInit {
       if (iEvent === event) {
         event.meta.src.timestamp = newStart;
         this.api.updateTimeCard(event.meta.src.id, event.meta.src)
-          .subscribe(res => {
-            this.fetchTimeCards();
-          });
+          .pipe(
+            flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+          ).subscribe(res => this.updateTimeCards(res));
         return {
           ...event,
           start: newStart,
@@ -129,7 +118,8 @@ export class TimeCardCalendarComponent implements OnInit {
 
   viewDateChanged() {
     this.activeDayIsOpen = false;
-    this.fetchTimeCards();
+    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+      .subscribe(res => this.updateTimeCards(res));
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
@@ -141,32 +131,30 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchTimeCards();
+    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+      .subscribe(res => this.updateTimeCards(res));
   }
 
-  private fetchTimeCards() {
-    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
-      .subscribe(res => {
-        this.events = [];
-        res.forEach(card => {
-          let event = {
-            start: parseISO(card.timestamp),
-            end: parseISO(card.timestamp),
-            title: card.description,
-            color: colors.blue,
-            actions: this.actions,
-            allDay: true,
-            meta: {
-              hoursValue: card.durationminutes / 60.0,
-              src: card
-            },
-            draggable: !this.mobileQuery.matches
-          };
+  private updateTimeCards(updates: TimeLogUpload[]) {
+    this.events = [];
+    updates.forEach(card => {
+      let event = {
+        start: parseISO(card.timestamp),
+        end: parseISO(card.timestamp),
+        title: card.description,
+        color: colors.blue,
+        actions: this.actions,
+        allDay: true,
+        meta: {
+          hoursValue: card.durationminutes / 60.0,
+          src: card
+        },
+        draggable: !this.mobileQuery.matches
+      };
 
-          this.events.push(event);
-        });
-        this.refresh.next();
-      })
+      this.events.push(event);
+    });
+    this.refresh.next();
   }
 }
 
