@@ -12,7 +12,7 @@ import {Observable} from "rxjs";
 import {endOfMonth, startOfMonth} from "date-fns";
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {map, startWith} from "rxjs/operators";
+import {flatMap, map, startWith} from "rxjs/operators";
 import {TemplateManagementDialogComponent} from "../template-management-dialog/template-management-dialog.component";
 
 @Component({
@@ -91,11 +91,10 @@ export class NewUsersReportComponent implements OnInit {
   onManageTemplatesClick() {
     const dialogRef = this.dialog.open(TemplateManagementDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.api.getAllReportTemplates().subscribe(res => {
-        this.templates = res;
-      });
-    });
+    dialogRef.afterClosed()
+      .pipe(
+        flatMap(() => this.api.getAllReportTemplates())
+      ).subscribe(res => this.templates = res);
   }
 
   onSaveClick() {
