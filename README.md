@@ -1,3 +1,11 @@
+# About the project
+
+Typically, authorization applications include some form of group and user relationships. In particular, lots of
+organizations do use ActiveDirectory to protect resources like code repositories, virtual machines, etc.
+Such resource management, in essence, is backed by user-group-resource relationship. The aim of this project,
+is to demonstrate simplicity and cleanliness of corporate authorization solution if it would be implemented using
+graphs and Neo4j in particular. 
+
 # Tech stack:
 
 1. Spring Boot 2 with reactive WebFlux REST endpoints and security.
