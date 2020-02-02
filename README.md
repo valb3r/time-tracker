@@ -1,9 +1,7 @@
 # About the project
 
-Typically, authorization applications include some form of group and user relationships. In particular, lots of
-organizations do use ActiveDirectory to protect resources like code repositories, virtual machines, etc.
-Such resource management, in essence, is backed by user-group-resource relationship. The aim of this project,
-is to demonstrate simplicity and cleanliness of corporate authorization solution if it would be implemented using
+Typically, authorization applications include some form of group and user relationships. In particular, lots of organizations do use ActiveDirectory to protect resources like code repositories, virtual machines, etc.
+Such resource management, in essence, is backed by a user-group-resource relationship. This project aims to demonstrate the simplicity and cleanliness of the corporate authorization solution if it would be implemented using
 graphs and Neo4j in particular. 
 
 # Tech stack:
