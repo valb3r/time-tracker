@@ -31,16 +31,20 @@ repositories {
     maven {
         url "https://repo.spring.io/libs-snapshot"
     }
+    maven {
+        // TODO change to jcenter when published
+        url  "https://dl.bintray.com/valb3r/maven"
+    }
 }
 
 dependencies {
     compile project(":shared")
-    compile project(":neo4j-adapter")
 
     compile 'org.springframework.boot:spring-boot-starter-batch'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
     compile "org.neo4j:neo4j-ogm-bolt-native-types:${versions.boltNativeTypes}"
+    implementation "com.github.valb3r.springbatch.adapters:neo4j-adapter:${versions.springBatchAdapter}"
 
     compile "org.jxls:jxls:${versions.jxls}"
     compile "org.jxls:jxls-poi:${versions.jxlsPoi}"
