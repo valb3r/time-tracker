@@ -1,0 +1,53 @@
+group 'com.github.valb3r.springbatch.adapters'
+version '0.1-SNAPSHOT'
+description = 'Neo4j-OGM Spring Batch adapter'
+
+buildscript {
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${versions.springBoot}"
+        classpath "io.spring.gradle:dependency-management-plugin:${versions.springDependencyManagement}"
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.spring.io/libs-snapshot"
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-batch'
+    compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
+    compile "org.neo4j:neo4j-ogm-bolt-native-types:${versions.boltNativeTypes}"
+
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+    compile "org.mapstruct:mapstruct:${versions.mapstruct}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
+    compile "org.slf4j:slf4j-api:${versions.slf4j}"
+
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    version = project.version
+    enabled = true
+}
+

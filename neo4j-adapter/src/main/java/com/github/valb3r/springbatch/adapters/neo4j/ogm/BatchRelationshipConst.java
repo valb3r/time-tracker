@@ -1,4 +1,4 @@
-package ua.timetracker.reportgenerator.persistence;
+package com.github.valb3r.springbatch.adapters.neo4j.ogm;
 
 import lombok.experimental.UtilityClass;
 

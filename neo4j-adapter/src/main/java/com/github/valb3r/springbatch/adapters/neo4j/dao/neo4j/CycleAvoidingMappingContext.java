@@ -1,4 +1,4 @@
-package ua.timetracker.reportgenerator.config.neo4jbatch.dao;
+package com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j;
 
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;

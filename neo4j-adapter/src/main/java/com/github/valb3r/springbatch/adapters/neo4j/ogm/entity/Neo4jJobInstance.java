@@ -1,4 +1,4 @@
-package ua.timetracker.reportgenerator.persistence.entity;
+package com.github.valb3r.springbatch.adapters.neo4j.ogm.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,21 +7,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.converters.ParameterMapConverter;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.data.annotation.CreatedDate;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ParameterMapConverter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
 @Setter
-@Node
+@NodeEntity
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor

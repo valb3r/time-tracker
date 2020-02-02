@@ -1,4 +1,4 @@
-package ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters;
+package com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;

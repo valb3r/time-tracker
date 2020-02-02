@@ -8,8 +8,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class JobExecutorConfig {
 
-    public static final String JOB_EXEC_POOL = "JOB_EXEC_POOL";
-
     @Bean
     public ThreadPoolTaskExecutor taskExecutor(@Value("${jobs.pool}") int poolSize) {
         ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();

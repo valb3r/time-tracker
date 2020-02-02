@@ -1,5 +1,9 @@
-package ua.timetracker.reportgenerator.config.neo4jbatch;
+package com.github.valb3r.springbatch.adapters.neo4j.config;
 
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.Neo4jExecutionContextDao;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.Neo4jJobExecutionDao;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.Neo4jJobInstanceDao;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.Neo4jStepExecutionDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -9,14 +13,27 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.SimpleJobRepository;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.Neo4jExecutionContextDao;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.Neo4jJobExecutionDao;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.Neo4jJobInstanceDao;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.Neo4jStepExecutionDao;
 
-@Component
+@Configuration
+@EntityScan(basePackages = {
+    "com.github.valb3r.springbatch.adapters.neo4j.ogm.entity"
+})
+@ComponentScan(
+    basePackages = {
+        "com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j",
+        "com.github.valb3r.springbatch.adapters.neo4j.ogm"
+    }
+)
+@EnableNeo4jRepositories(
+    basePackages = {
+        "com.github.valb3r.springbatch.adapters.neo4j.ogm.repository"
+    }
+)
 @RequiredArgsConstructor
 public class Neo4jBatchConfigurer implements BatchConfigurer {
 

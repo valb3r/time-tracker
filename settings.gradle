@@ -5,9 +5,11 @@ include 'time-tracking-server'
 include 'worker'
 include 'administration'
 include 'time-tracker-ui'
+include 'neo4j-adapter'
 
 project(":shared").projectDir = file("shared")
 project(":time-tracking-server").projectDir = file("time-tracking-server")
 project(":worker").projectDir = file("worker")
 project(":administration").projectDir = file("administration")
 project(":time-tracker-ui").projectDir = file("time-tracker-ui")
+project(":neo4j-adapter").projectDir = file("neo4j-adapter")

@@ -1,10 +1,10 @@
-package ua.timetracker.reportgenerator.persistence.repository;
+package com.github.valb3r.springbatch.adapters.neo4j.ogm.repository;
 
+import com.github.valb3r.springbatch.adapters.neo4j.ogm.entity.Neo4jJobExecution;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ua.timetracker.reportgenerator.persistence.entity.Neo4jJobExecution;
 
 import java.util.List;
 import java.util.Optional;

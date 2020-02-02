@@ -1,5 +1,9 @@
-package ua.timetracker.reportgenerator.persistence.entity;
+package com.github.valb3r.springbatch.adapters.neo4j.ogm.entity;
 
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.CycleAvoidingMappingContext;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.converters.ExecutionContextConverter;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.converters.ExitStatusConverter;
+import com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j.converters.ParametersConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,33 +14,29 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
-import org.neo4j.springframework.data.core.schema.GeneratedValue;
-import org.neo4j.springframework.data.core.schema.Id;
-import org.neo4j.springframework.data.core.schema.Node;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.item.ExecutionContext;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.CycleAvoidingMappingContext;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExecutionContextConverter;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ExitStatusConverter;
-import ua.timetracker.reportgenerator.config.neo4jbatch.dao.converters.ParametersConverter;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.valb3r.springbatch.adapters.neo4j.ogm.BatchRelationshipConst.PARENT;
 import static org.neo4j.ogm.annotation.Relationship.INCOMING;
-import static ua.timetracker.reportgenerator.persistence.BatchRelationshipConst.PARENT;
 
 @Getter
 @Setter
-@Node
+@NodeEntity
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor

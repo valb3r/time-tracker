@@ -1,15 +1,15 @@
-package ua.timetracker.reportgenerator.config.neo4jbatch.dao;
+package com.github.valb3r.springbatch.adapters.neo4j.dao.neo4j;
 
+import com.github.valb3r.springbatch.adapters.neo4j.ogm.repository.Neo4jStepExecutionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import com.github.valb3r.springbatch.adapters.neo4j.ogm.entity.Neo4jStepExecution;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.dao.StepExecutionDao;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ua.timetracker.reportgenerator.persistence.entity.Neo4jStepExecution;
-import ua.timetracker.reportgenerator.persistence.repository.Neo4jStepExecutionRepository;
 
 import java.util.Collection;
 import java.util.List;

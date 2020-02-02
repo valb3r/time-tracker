@@ -35,6 +35,7 @@ repositories {
 
 dependencies {
     compile project(":shared")
+    compile project(":neo4j-adapter")
 
     compile 'org.springframework.boot:spring-boot-starter-batch'
     compile 'org.springframework.boot:spring-boot-starter-web'

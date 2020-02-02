@@ -1,5 +1,6 @@
 package ua.timetracker.reportgenerator;
 
+import com.github.valb3r.springbatch.adapters.neo4j.EnableSpringBatchNeo4jAdapter;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,9 +12,9 @@ import org.springframework.data.neo4j.annotation.EnableNeo4jAuditing;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableSpringBatchNeo4jAdapter
 @EntityScan(basePackages = {
         "ua.timetracker.shared.persistence.entity",
-        "ua.timetracker.reportgenerator.persistence.entity",
         "ua.timetracker.reportgenerator.persistence.repository.imperative.dto"
 })
 @EnableScheduling
