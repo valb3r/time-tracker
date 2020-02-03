@@ -27,13 +27,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
     maven {
         url "https://repo.spring.io/libs-snapshot"
-    }
-    maven {
-        // TODO change to jcenter when published
-        url  "https://dl.bintray.com/valb3r/maven"
     }
 }
 
