@@ -69,6 +69,23 @@ docker-compose up
 
 Commands above spin up everything needed. UI will be at localhost:6500
 
+# Run from IDE
+
+1. Start the database using 
+`docker run --rm -d --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data -e NEO4J_AUTH=neo4j/docker neo4j/neo4j-experimental:4.0.0-rc01`
+
+1. Start [administration module](administration/src/main/java/ua/timetracker/administration/AdministrationServer.java)
+1. Start [time-tracking-server](time-tracking-server/src/main/java/ua/timetracker/timetrackingserver/TimeTrackingServer.java)
+1. Start [worker](worker/src/main/java/ua/timetracker/reportgenerator/Worker.java) (only needed if you want reports)
+1. Install and run UI:
+    1. Install dependencies
+        - cd [time-tracker-ui](time-tracker-ui)
+        - npm install
+    1. Install angular-cli: `npm install -g @angular/cli`
+    1. Run UI: `ng serve --port 6500 --proxy-config proxy.conf.json`
+1. Open http://localhost:6500 - there you can play with user `admin/admin`
+     
+
 
 # Stub data
 
