@@ -13,6 +13,12 @@ graphs and Neo4j in particular.
 1. Gradle as build system.
 1. Dockerized deployment via docker-compose.
 
+# Demo users
+
+Admin user at https://demo.timetracker.tk has `admin/admin` credentials. You can see an organization tree with this user. 
+Typically, all other users have a password that is equal to the  username - you can try `petya/petya` for
+example.
+
 # Why graph database?
 
 Group and users' owned resources are clear: 
