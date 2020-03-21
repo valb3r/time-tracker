@@ -11,7 +11,7 @@ apply plugin: 'com.bmuschko.docker-remote-api'
 
 node {
   download = true
-  version='10.11.0'
+  version = '10.13.0'
 }
 
 task syncNpm(type: Copy) {

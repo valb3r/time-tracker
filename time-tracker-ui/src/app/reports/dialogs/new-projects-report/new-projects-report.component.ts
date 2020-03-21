@@ -31,8 +31,8 @@ export class NewProjectsReportComponent implements OnInit {
   filteredTemplates: Observable<ReportTemplateDto[]>;
 
 
-  @ViewChild('projectInput', {static: false}) projectInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoProject', {static: false}) matAutocomplete: MatAutocomplete;
+  @ViewChild('projectInput') projectInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoProject') matAutocomplete: MatAutocomplete;
 
   constructor(private api: AdminApiService, private dialog: MatDialog, public dialogRef: MatDialogRef<NewProjectsReportComponent>) { }
 

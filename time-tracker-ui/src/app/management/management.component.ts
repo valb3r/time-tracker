@@ -27,7 +27,6 @@ import {
 import {EditProjectRoleComponent} from "./dialogs/edit-project-role/edit-project-role.component";
 import {filter, flatMap} from "rxjs/operators";
 
-@Injectable()
 export class GroupDatabase {
   private expandedMemoize = new Set<string>();
   dataChange = new BehaviorSubject<GroupNode[]>([]);
