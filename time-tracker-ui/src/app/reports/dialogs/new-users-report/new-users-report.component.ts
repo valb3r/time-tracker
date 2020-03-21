@@ -37,8 +37,8 @@ export class NewUsersReportComponent implements OnInit {
   filteredTemplates: Observable<ReportTemplateDto[]>;
 
 
-  @ViewChild('usersInput', {static: false}) usersInput: ElementRef<HTMLInputElement>;
-  @ViewChild('autoUsers', {static: false}) matAutocomplete: MatAutocomplete;
+  @ViewChild('usersInput') usersInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoUsers') matAutocomplete: MatAutocomplete;
 
   constructor(private api: AdminApiService, private dialog: MatDialog, public dialogRef: MatDialogRef<NewUsersReportComponent>) { }
 
