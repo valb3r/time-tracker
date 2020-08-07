@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~9.0.7",
     "@angular/router": "~9.0.7",
     "angular-calendar": "^0.28.5",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "date-fns": "^2.11.0",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",
