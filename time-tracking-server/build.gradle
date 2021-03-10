@@ -82,7 +82,7 @@ task createDockerfile(type: Dockerfile) {
     copyFile(jar.archiveFileName.get(), cmd)
     entryPoint('java')
     defaultCommand('-jar', cmd)
-    exposePort(20081)
+    exposePort(20080)
 }
 
 
