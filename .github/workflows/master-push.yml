@@ -70,7 +70,7 @@ jobs:
           username: ${{ secrets.DEMO_USERNAME }}
           key: ${{ secrets.DEMO_CI_CD_PRIVATE_KEY }}
           script: |
-            docker load -i apps/timetracker/*.img
+            ls -1 apps/timetracker/*.img | xargs --no-run-if-empty -L 1 docker load -i
             echo "export TIMETRACKER_LATEST=${{ steps.vars.outputs.sha_short }}" > ./time-tracker-version.sh
             . ./all-env.sh
             docker-compose down
