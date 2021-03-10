@@ -80,7 +80,7 @@ task syncJar(type: Copy) {
 
 task createDockerfile(type: Dockerfile) {
     def cmd = "/app/worker-${commitSha()}.jar";
-    from 'openjdk:8-jre-alpine'
+    from 'openjdk:11.0.8-jre-slim'
     label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
     copyFile(jar.archiveFileName.get(), cmd)
     entryPoint('java')
