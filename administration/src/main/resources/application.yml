@@ -38,3 +38,7 @@ oauth2:
     # You should override these!
     priv: classpath:example.pem
     pub: classpath:example.pub
+
+cors:
+  origins:
+    - http://localhost:6500

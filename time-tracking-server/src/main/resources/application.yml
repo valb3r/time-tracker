@@ -19,3 +19,7 @@ oauth2:
   keys:
     # You should override these! (same as in administration module)
     pub: classpath:example.pub
+
+cors:
+  origins:
+    - http://localhost:6500
