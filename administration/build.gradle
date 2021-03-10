@@ -88,3 +88,7 @@ task buildImage(type: DockerBuildImage) {
     inputDir.set(project.file(dockerBuildDir))
     images.add("ua-timetracker/administration:${commitSha()}")
 }
+
+task printCommitSha() {
+    println("COMMIT:${commitSha()}")
+}

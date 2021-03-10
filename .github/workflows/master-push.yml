@@ -33,7 +33,7 @@ jobs:
 
       - name: Set short git commit SHA
         id: vars
-        run: echo "::set-output name=sha_short::$(./gradlew printCommitSha | grep COMMIT | cut -d":" -f2)"
+        run: echo "::set-output name=sha_short::$(./gradlew :administration:printCommitSha | grep COMMIT | cut -d":" -f2)"
 
       - uses: actions/cache@v2
         name: Cache NPM dependencies
