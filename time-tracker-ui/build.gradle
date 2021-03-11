@@ -16,8 +16,10 @@ node {
 
 task syncNpm(type: Copy) {
   dependsOn npm_run_build
-  from "dist", "nginx.conf"
+  from "nginx.conf"
   into dockerBuildDir
+  from "dist"
+  into "$dockerBuildDir/dist"
 }
 
 task createDockerfile(type: Dockerfile) {
@@ -25,7 +27,7 @@ task createDockerfile(type: Dockerfile) {
   label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
   workingDir("/app")
   copyFile("dist/nginx.conf", "/etc/nginx/nginx.conf.template")
-  copyFile("dist/admin-ui", "/app/dist")
+  copyFile("dist/time-tracker-ui", "/app/dist")
   runCommand("echo 'export DOLLAR=\'\$\''; > run.sh")
   runCommand("echo 'envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf' >> run.sh")
   runCommand("echo 'nginx -g \"daemon off;\"' >> run.sh && chmod +x run.sh")
