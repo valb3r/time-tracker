@@ -23,9 +23,14 @@ task syncNpm(type: Copy) {
 task createDockerfile(type: Dockerfile) {
   from 'nginx:1.17.7-alpine'
   label(['maintainer': 'Valentyn Berezin vbe@adorsys.com.ua"'])
-  copyFile("nginx.conf", "/etc/nginx/nginx.conf")
-  copyFile("time-tracker-ui", "/app/dist")
-  defaultCommand("nginx", "-g", "daemon off;")
+  workingDir("/app")
+  copyFile("dist/nginx.conf", "/etc/nginx/nginx.conf.template")
+  copyFile("dist/admin-ui", "/app/dist")
+  runCommand("echo 'export DOLLAR=\'\$\''; > run.sh")
+  runCommand("echo 'envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf' >> run.sh")
+  runCommand("echo 'nginx -g \"daemon off;\"' >> run.sh && chmod +x run.sh")
+  entryPoint('sh')
+  defaultCommand('./run.sh')
   exposePort(80)
 }
 
