@@ -21,12 +21,15 @@ configurations {
 }
 
 dependencies {
+    compile project(":desktop-tracker-api")
+
     compileOnly "org.projectlombok:lombok:${versions.lombok}"
     annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
 
     implementation "com.google.guava:guava:${versions.guava}"
     implementation "org.slf4j:slf4j-api:${versions.slf4j}"
     implementation "org.slf4j:slf4j-simple:${versions.slf4j}"
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.formdev:flatlaf:1.1.1'
     antTask 'com.jetbrains.intellij.java:java-compiler-ant-tasks:203.7148.30'
 

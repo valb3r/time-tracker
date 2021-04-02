@@ -1,0 +1,221 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://demo.timetracker.tk
+    description: Generated server url
+paths:
+  /v1/resources/timelogs/projects:
+    get:
+      tags:
+        - time-log-controller
+      operationId: availableProjects
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDto'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDto'
+  /v1/resources/timelogs:
+    get:
+      tags:
+        - time-log-controller
+      operationId: uploadedTimeCards
+      parameters:
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeLogDto'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeLogDto'
+    put:
+      tags:
+        - time-log-controller
+      operationId: uploadTimelog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeLogCreateOrUpdate'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TimeLogDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeLogDto'
+  /v1/resources/timelogs/{id}:
+    post:
+      tags:
+        - time-log-controller
+      operationId: updateTimeLog
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeLogCreateOrUpdate'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TimeLogDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeLogDto'
+    delete:
+      tags:
+        - time-log-controller
+      operationId: deleteTimeLog
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+components:
+  schemas:
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        activities:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    TimeLogDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectid:
+          type: integer
+          format: int64
+        tags:
+          type: array
+          items:
+            type: string
+        duration:
+          type: object
+          properties:
+            seconds:
+              type: integer
+              format: int64
+            zero:
+              type: boolean
+            units:
+              type: array
+              items:
+                type: object
+                properties:
+                  date_based:
+                    type: boolean
+                  time_based:
+                    type: boolean
+                  duration_estimated:
+                    type: boolean
+            negative:
+              type: boolean
+            nano:
+              type: integer
+              format: int32
+        durationminutes:
+          type: integer
+          format: int64
+        description:
+          type: string
+        location:
+          type: string
+        projects:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDto'
+        timestamp:
+          type: string
+          format: date-time
+    TimeLogCreateOrUpdate:
+      required:
+        - description
+        - duration
+        - location
+        - tags
+        - timestamp
+      type: object
+      properties:
+        projectid:
+          type: integer
+          format: int64
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        duration:
+          type: string
+          format: duration
+          example: PT1S
+        description:
+          type: string
+        location:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        project_id:
+          type: integer
+          format: int64

@@ -5,6 +5,7 @@ include 'time-tracking-server'
 include 'worker'
 include 'administration'
 include 'time-tracker-ui'
+include 'desktop-tracker-api'
 include 'desktop-tracker'
 
 project(":shared").projectDir = file("shared")
@@ -12,4 +13,5 @@ project(":time-tracking-server").projectDir = file("time-tracking-server")
 project(":worker").projectDir = file("worker")
 project(":administration").projectDir = file("administration")
 project(":time-tracker-ui").projectDir = file("time-tracker-ui")
-project(":desktop-tracker").projectDir = file("desktop-tracker")
+project(":desktop-tracker-api").projectDir = file("desktop-tracker/api")
+project(":desktop-tracker").projectDir = file("desktop-tracker/tracker")

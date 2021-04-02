@@ -1,0 +1,1048 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://demo.timetracker.tk
+    description: Generated server url
+paths:
+  /v1/resources/users/me:
+    get:
+      tags:
+        - user-controller
+      operationId: myself
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserWithoutRateDto'
+  /v1/resources/users/of_group/{parent_group_id}:
+    put:
+      tags:
+        - user-controller
+      operationId: createUser
+      parameters:
+        - name: parent_group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+  /v1/resources/users/{id}:
+    get:
+      tags:
+        - user-controller
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+    post:
+      tags:
+        - user-controller
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+    delete:
+      tags:
+        - user-controller
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+  /v1/resources/users/self-update/{id}:
+    post:
+      tags:
+        - user-controller
+      operationId: updateUser_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleUserUpdateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+  /v1/resources/users/update-password:
+    post:
+      tags:
+        - user-controller
+      operationId: updatePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordUpdateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDto'
+  /v1/login:
+    post:
+      tags:
+        - login-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MonoResponseEntity'
+    delete:
+      tags:
+        - login-controller
+      operationId: logout
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MonoResponseEntity'
+  /v1/resources/reports/templates/{description}:
+    put:
+      tags:
+        - report-templates-controller
+      operationId: createTemplate
+      parameters:
+        - name: description
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReportTemplateDto'
+  /v1/resources/reports/templates:
+    get:
+      tags:
+        - report-templates-controller
+      operationId: availableTemplates
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateDto'
+  /v1/resources/reports/templates/{id}:
+    get:
+      tags:
+        - report-templates-controller
+      operationId: downloadTemplate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+    delete:
+      tags:
+        - report-templates-controller
+      operationId: deleteTemplate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+  /v1/resources/groups/{parent_group_id}/children:
+    put:
+      tags:
+        - group-controller
+      operationId: createGroup
+      parameters:
+        - name: parent_group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreateOrUpdateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+  /v1/resources/groups/{id}:
+    get:
+      tags:
+        - group-controller
+      operationId: groupById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+    post:
+      tags:
+        - group-controller
+      operationId: updateGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreateOrUpdateDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+    delete:
+      tags:
+        - group-controller
+      operationId: deleteGroup
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+  /v1/resources/groups/{owner_group_ids}/children/users-and-groups/{children_ids}:
+    post:
+      tags:
+        - group-controller
+      operationId: addUserOrGroup
+      parameters:
+        - name: owner_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: children_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+    delete:
+      tags:
+        - group-controller
+      operationId: removeUserOrGroup
+      parameters:
+        - name: owner_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: children_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /v1/resources/groups/{owner_group_ids}/children/projects/{children_ids}:
+    post:
+      tags:
+        - group-controller
+      operationId: addProject
+      parameters:
+        - name: owner_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: children_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+    delete:
+      tags:
+        - group-controller
+      operationId: removeProject
+      parameters:
+        - name: owner_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: children_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /v1/resources/owned-resources:
+    get:
+      tags:
+        - owned-resources-controller
+      operationId: selfOwnedResources
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PathEntryGroupDto'
+  /v1/resources/owned-resources/{owning_group_or_user_id}:
+    get:
+      tags:
+        - owned-resources-controller
+      operationId: ownedGroups
+      parameters:
+        - name: owning_group_or_user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+  /v1/resources/reports/projects/{project_ids}:
+    put:
+      tags:
+        - report-controller
+      operationId: createReportForProjects
+      parameters:
+        - name: project_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewReportDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReportDto'
+  /v1/resources/reports/users/{user_ids}:
+    put:
+      tags:
+        - report-controller
+      operationId: createReportForUsers
+      parameters:
+        - name: user_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewReportDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ReportDto'
+  /v1/resources/reports:
+    get:
+      tags:
+        - report-controller
+      operationId: ownedReports
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportDto'
+  /v1/resources/reports/{id}:
+    get:
+      tags:
+        - report-controller
+      operationId: downloadReport
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+    delete:
+      tags:
+        - report-controller
+      operationId: deleteReport
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+  /v1/resources/roles/in/project/{id}:
+    get:
+      tags:
+        - role-controller
+      operationId: actorsOnProjects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectActorDto'
+  /v1/resources/roles/{role_id}:
+    get:
+      tags:
+        - role-controller
+      operationId: updateUserRolesInProject
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RoleDetailsDto'
+    post:
+      tags:
+        - role-controller
+      operationId: updateUserRolesInProject_1
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleDetailsDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+  /v1/resources/roles/{role}/actors/{user_or_group_ids}/in/{project_or_group_ids}:
+    post:
+      tags:
+        - role-controller
+      operationId: assignUserRoles
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - MANAGER
+              - DEVELOPER
+        - name: user_or_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: project_or_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleDetailsDto'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+    delete:
+      tags:
+        - role-controller
+      operationId: removeGroupRoles
+      parameters:
+        - name: role
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - MANAGER
+              - DEVELOPER
+        - name: user_or_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: project_or_group_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /v1/resources/projects/of_group/{parent_group_id}:
+    put:
+      tags:
+        - project-controller
+      operationId: createProject
+      parameters:
+        - name: parent_group_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateOrUpdate'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+  /v1/resources/projects/{id}:
+    get:
+      tags:
+        - project-controller
+      operationId: getProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+    post:
+      tags:
+        - project-controller
+      operationId: updateProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateOrUpdate'
+      responses:
+        "200":
+          description: default response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+    delete:
+      tags:
+        - project-controller
+      operationId: deleteProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: default response
+components:
+  schemas:
+    UserWithoutRateDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        fullname:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    UserCreateDto:
+      required:
+        - password
+        - rate
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        fullname:
+          type: string
+        password:
+          type: string
+        rate:
+          type: string
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        fullname:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        rate:
+          type: number
+    UserUpdateDto:
+      required:
+        - rate
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        fullname:
+          type: string
+        rate:
+          type: string
+    SimpleUserUpdateDto:
+      required:
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        fullname:
+          type: string
+    PasswordUpdateDto:
+      required:
+        - current
+        - newpassword
+      type: object
+      properties:
+        current:
+          type: string
+        newpassword:
+          type: string
+    MonoResponseEntity:
+      type: object
+    LoginDto:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    ReportTemplateDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+    GroupCreateOrUpdateDto:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    GroupDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        users:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDto'
+        projects:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDto'
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        activities:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    PathEntryGroupDto:
+      type: object
+      properties:
+        path:
+          type: string
+        entry:
+          $ref: '#/components/schemas/GroupDto'
+    NewReportDto:
+      required:
+        - from
+        - templateid
+        - to
+      type: object
+      properties:
+        templateid:
+          type: integer
+          format: int64
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+    ReportDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+          enum:
+            - BY_USER
+            - BY_PROJECT
+        job:
+          type: string
+        owner:
+          $ref: '#/components/schemas/UserDto'
+        created:
+          type: string
+          format: date-time
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+        targets:
+          uniqueItems: true
+          type: array
+          items:
+            type: integer
+            format: int64
+        createdat:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - SCHEDULED
+            - PROCESSING
+            - FAILED
+            - DONE
+    ProjectActorDto:
+      type: object
+      properties:
+        roleid:
+          type: integer
+          format: int64
+        user:
+          $ref: '#/components/schemas/UserDto'
+        source:
+          $ref: '#/components/schemas/GroupDto'
+    RoleDetailsDto:
+      required:
+        - from
+        - rate
+        - to
+      type: object
+      properties:
+        rate:
+          type: string
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+    ProjectCreateOrUpdate:
+      required:
+        - activities
+        - code
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        activities:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        description:
+          type: string
