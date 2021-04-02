@@ -16,7 +16,7 @@ package ua.timetracker.desktoptracker.api.admin.invoker;
 import java.util.Map;
 import java.util.List;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:37:43.523+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.193792+03:00[Europe/Kiev]")
 public class ApiException extends RuntimeException {
     private int code = 0;
     private Map<String, List<String>> responseHeaders = null;

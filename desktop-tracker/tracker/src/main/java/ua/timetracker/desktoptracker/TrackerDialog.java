@@ -148,6 +148,7 @@ public class TrackerDialog {
     }
 
     private void doLogout() {
+        tracker.stopTracking();
         authCookie = null;
         trackerTabs.setEnabledAt(0, true);
         trackerTabs.setEnabledAt(1, false);

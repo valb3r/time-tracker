@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
 /**
  * RoleDetailsDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:37:43.523+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.193792+03:00[Europe/Kiev]")
 public class RoleDetailsDto {
   public static final String SERIALIZED_NAME_RATE = "rate";
   @SerializedName(SERIALIZED_NAME_RATE)

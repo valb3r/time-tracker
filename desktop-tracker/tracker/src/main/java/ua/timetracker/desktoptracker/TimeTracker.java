@@ -69,7 +69,7 @@ public class TimeTracker {
 
     @SneakyThrows
     private void captureTimeLog(TrackingData data) {
-        File jarDir = new File(TimeTracker.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        File jarDir = new File(TimeTracker.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
         Path logDir = jarDir.toPath().resolve("timelogs");
         logDir.toFile().mkdir();
         String baseName = "" + Instant.now().toEpochMilli();

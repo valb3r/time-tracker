@@ -30,7 +30,7 @@ import ua.timetracker.desktoptracker.api.tracker.model.TimeLogDtoDurationUnits;
 /**
  * TimeLogDtoDuration
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:37:44.187+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.378203+03:00[Europe/Kiev]")
 public class TimeLogDtoDuration {
   public static final String SERIALIZED_NAME_SECONDS = "seconds";
   @SerializedName(SERIALIZED_NAME_SECONDS)
