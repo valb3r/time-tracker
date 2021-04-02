@@ -1,0 +1,37 @@
+group 'ua.timetracker.desktoptracker'
+version '0.1-SNAPSHOT'
+description = 'Desktop time tracker'
+
+apply from: "$rootProject.projectDir/shared.gradle"
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile project(":shared")
+
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+    compile "com.google.guava:guava:${versions.guava}"
+    compile "org.slf4j:slf4j-api:${versions.slf4j}"
+    compile "org.slf4j:slf4j-simple:${versions.slf4j}"
+
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+jar {
+    version = project.version
+    enabled = true
+}
+
+task printCommitSha() {
+    println("COMMIT:${commitSha()}")
+}
