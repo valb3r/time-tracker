@@ -20,14 +20,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 
 public class TimeTracker {
 
-    private static final int REPORT_EACH_N_MS = 10_000;
+    private static final int MIN_REPORT_EACH_N_MS = 10_000;
+    private static final int MAX_REPORT_EACH_N_MS = 60_000;
     private static final float JPEG_QUALITY = 0.5f;
 
     private final AtomicReference<TrackingData> trackingData = new AtomicReference<>();
@@ -55,7 +56,7 @@ public class TimeTracker {
             while (true) {
                 TrackingData data = trackingData.get();
                 if (null == data || System.currentTimeMillis() < data.getReportAt()) { // Note that System.currentTimeMillis() is not necessary monotonic
-                    LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(REPORT_EACH_N_MS));
+                    LockSupport.parkNanos(MIN_REPORT_EACH_N_MS);
                     continue;
                 }
 
@@ -99,7 +100,7 @@ public class TimeTracker {
     }
 
     private long nextSchedule() {
-        return System.currentTimeMillis() + REPORT_EACH_N_MS;
+        return System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(MIN_REPORT_EACH_N_MS, MAX_REPORT_EACH_N_MS);
     }
 
     @Getter

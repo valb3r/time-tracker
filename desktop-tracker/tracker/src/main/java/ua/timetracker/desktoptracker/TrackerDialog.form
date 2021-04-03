@@ -240,6 +240,8 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
+                  <font style="1"/>
+                  <foreground color="-65536"/>
                   <text value=""/>
                 </properties>
               </component>

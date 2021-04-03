@@ -10,6 +10,8 @@ import ua.timetracker.desktoptracker.api.admin.invoker.ApiResponse;
 import ua.timetracker.desktoptracker.api.admin.model.LoginDto;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
+import ua.timetracker.desktoptracker.verifier.MinLenVerifier;
+import ua.timetracker.desktoptracker.verifier.NotBlankVerifier;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,18 +50,23 @@ public class TrackerDialog {
         this.frame = frame;
         this.tracker = tracker;
         this.uploader = uploader;
-        setupUiHandlers();
+        setupUiAndHandlers();
     }
 
-    private void setupUiHandlers() {
-        loginButton.addActionListener(e -> doLogin().start());
+    private void setupUiAndHandlers() {
+        usernameField.setInputVerifier(new NotBlankVerifier());
+        passwordField.setInputVerifier(new NotBlankVerifier());
+        apiUploadUrl.setInputVerifier(new MinLenVerifier(5));
+        taskDescription.setInputVerifier(new MinLenVerifier(5));
+
+        loginButton.addActionListener(e -> doLogin());
 
         trackerTabs.addChangeListener(e -> {
             if (trackerTabs.getSelectedIndex() == 2) {
                 doLogout();
             }
             if (trackerTabs.getSelectedIndex() == 1) {
-                doLoadTrackingScreenData().start();
+                doLoadTrackingScreenData();
             }
         });
 
@@ -67,6 +74,12 @@ public class TrackerDialog {
             if (null == activeProject) {
                 return;
             }
+
+            if (!taskDescription.getInputVerifier().verify(taskDescription)) {
+                trackingErrorMessage.setText("Task description is too short");
+                return;
+            }
+            trackingErrorMessage.setText("");
 
             this.frame.setTitle(String.format("[%s] Tracking...", activeProject.getProject().getCode()));
             tracker.setScreenshots(captureScreenshots.isSelected());
@@ -101,10 +114,26 @@ public class TrackerDialog {
         captureScreenshots.addActionListener(e -> tracker.setScreenshots(captureScreenshots.isSelected()));
     }
 
-    private Thread doLogin() {
+    private void doLogin() {
+        if (!usernameField.getInputVerifier().verify(usernameField)) {
+            loginErrorMessage.setText("Login is empty");
+            return;
+        }
+
+        if (!passwordField.getInputVerifier().verify(passwordField)) {
+            loginErrorMessage.setText("Password is empty");
+            return;
+        }
+
+        if (!apiUploadUrl.getInputVerifier().verify(apiUploadUrl)) {
+            loginErrorMessage.setText("API URL is too short");
+            return;
+        }
+        loginErrorMessage.setText("");
+
         LoginControllerApi loginApi = new LoginControllerApi(new ApiClient().setBasePath(apiUploadUrl.getText() + "/admin-api"));
         this.loginButton.setEnabled(false);
-        return new Thread(() -> {
+        new Thread(() -> {
             try {
                 ApiResponse<?> resp = loginApi.loginWithHttpInfo(new LoginDto().username(usernameField.getText()).password(new String(passwordField.getPassword())));
                 SwingUtilities.invokeLater(() -> {
@@ -124,13 +153,13 @@ public class TrackerDialog {
             } finally {
                 this.loginButton.setEnabled(true);
             }
-        });
+        }).start();
     }
 
-    private Thread doLoadTrackingScreenData() {
+    private void doLoadTrackingScreenData() {
         this.start.setEnabled(false);
         this.stop.setEnabled(false);
-        return new Thread(() -> {
+        new Thread(() -> {
             try {
                 List<ProjectDto> projects = timeLog.availableProjects();
                 SwingUtilities.invokeLater(() -> {
@@ -144,7 +173,7 @@ public class TrackerDialog {
             } finally {
                 this.loginButton.setEnabled(true);
             }
-        });
+        }).start();
     }
 
     private void doLogout() {
