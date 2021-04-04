@@ -8,6 +8,7 @@ public class Paths {
     public static final String V1 = "/v1";
     public static final String V1_RESOURCES = "/v1/resources";
     public static final String V1_TIMELOGS = V1_RESOURCES + "/timelogs";
+    public static final String V1_MANAGED_TIMELOGS = V1_RESOURCES + "/managed/timelogs";
     public static final String V1_PROJECTS = V1_RESOURCES + "/projects";
     public static final String V1_REPORTS = V1_RESOURCES + "/reports";
     public static final String V1_REPORT_TEMPLATES = V1_RESOURCES + "/reports/templates";

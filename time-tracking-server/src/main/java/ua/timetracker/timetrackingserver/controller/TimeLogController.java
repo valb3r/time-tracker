@@ -25,6 +25,7 @@ import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 import static ua.timetracker.shared.util.UserIdUtil.id;
 
@@ -90,7 +91,7 @@ public class TimeLogController {
             .switchIfEmpty(EntityNotFoundException.mono());
     }
 
-    @PutMapping("/{id}/images/{tag}")
+    @PutMapping(path = "/{id}/images/{tag}", consumes = MULTIPART_FORM_DATA_VALUE)
     public Mono<TimeLogImageDto> uploadTimelogImage(
             @Parameter(hidden = true) Authentication user,
             @PathVariable("id") long cardId,

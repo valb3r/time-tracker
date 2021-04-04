@@ -13,8 +13,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
-import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNER;
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.LOGGED_FOR;
 
 @Getter
 @Setter
@@ -28,7 +27,7 @@ public class TimeLogImage {
     @GeneratedValue
     private Long id;
 
-    @Relationship(type = OWNER, direction = OUTGOING)
+    @Relationship(type = LOGGED_FOR)
     private TimeLog owner;
 
     private String imageUrl;
@@ -45,6 +44,10 @@ public class TimeLogImage {
     }
 
     public Path physicalFile(String basePath) {
+        return physicalFile(basePath, relPhysicalPath);
+    }
+
+    public static Path physicalFile(String basePath, String relPhysicalPath) {
         return Paths.get(basePath).resolve(relPhysicalPath);
     }
 }

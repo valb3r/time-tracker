@@ -9,7 +9,9 @@ import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.entity.projects.TimeLog;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import static ua.timetracker.shared.persistence.entity.realationships.Relationships.LOGGED_FOR;
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.OWNER;
 
 @Repository
@@ -22,6 +24,15 @@ public interface TimeLogsRepository extends ReactiveCrudRepository<TimeLog, Long
         @Param("userId") long userId,
         @Param("from") LocalDateTime from,
         @Param("to") LocalDateTime to
+    );
+
+    @Query(
+            "MATCH (o:User)<-[to:" + OWNER + "]-(t:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) WHERE id(p) IN $projectIds AND t.timestamp >= $from AND t.timestamp <= $to RETURN o,to,t ORDER BY t.timestamp DESC"
+    )
+    Flux<TimeLog> listUploadedCards(
+            @Param("projectIds") Set<Long> projectIds,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
     );
 
     // Note that it is lazy, so TimeLog will not be completely initialized

@@ -27,6 +27,8 @@ public class TimeLogDto {
     private String location;
     private Set<ProjectDto> projects;
     private LocalDateTime timestamp;
+    private Long userid;
+    private String username;
 
     @Mapper
     public interface FromEntity {
@@ -35,6 +37,10 @@ public class TimeLogDto {
         default TimeLogDto map(TimeLog source) {
             TimeLogDto target = new TimeLogDto();
             target.setDurationminutes(source.getDuration().toMinutes());
+            if (null != source.getUser()) {
+                target.setUserid(source.getUser().getId());
+                target.setUsername(source.getUser().getUsername());
+            }
 
             return map(source, target);
         }
