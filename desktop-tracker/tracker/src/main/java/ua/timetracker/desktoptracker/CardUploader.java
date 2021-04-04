@@ -90,7 +90,7 @@ public class CardUploader {
                                     .timestamp(card.getTimestamp())
                                     .location(card.getLocation())
                                     .tags(card.getTags())
-                                    .duration(Duration.ofMinutes(null == card.getDurationminutes() ? 0L : card.getDurationminutes() + getMinutes(toUpload)).toString())
+                                    .duration(getSeconds(toUpload).plus(null == card.getDuration() ? Duration.ofMillis(0L) : Duration.parse(card.getDuration())).toString())
                                     .projectid(card.getProjectid())
                     );
                     report.delete();
@@ -103,7 +103,7 @@ public class CardUploader {
                                 .projectid(toUpload.getProject().getId())
                                 .description(toUpload.getTaskMessage())
                                 .tags(Collections.singletonList(toUpload.getTaskTag()))
-                                .duration(Duration.ofMinutes(getMinutes(toUpload)).toString())
+                                .duration(getSeconds(toUpload).toString())
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
                 );
                 uploadImageIfPossible(api, report, card);
@@ -114,8 +114,8 @@ public class CardUploader {
         }
     }
 
-    private long getMinutes(TimeLogToUploadDto toUpload) {
-        return Duration.ofMillis(toUpload.getLoggedDuration()).toMinutes();
+    private Duration getSeconds(TimeLogToUploadDto toUpload) {
+        return Duration.ofMillis(toUpload.getLoggedDuration());
     }
 
     private void uploadImageIfPossible(TimeLogControllerApi api, File report, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * TimeLogCreateOrUpdate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.785+03:00[Europe/Kiev]")
 public class TimeLogCreateOrUpdate {
   public static final String SERIALIZED_NAME_PROJECTID = "projectid";
   @SerializedName(SERIALIZED_NAME_PROJECTID)

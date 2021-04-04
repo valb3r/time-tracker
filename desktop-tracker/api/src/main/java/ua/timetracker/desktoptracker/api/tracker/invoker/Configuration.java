@@ -13,7 +13,7 @@
 
 package ua.timetracker.desktoptracker.api.tracker.invoker;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.785+03:00[Europe/Kiev]")
 public class Configuration {
     private static ApiClient defaultApiClient = new ApiClient();
 

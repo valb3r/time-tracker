@@ -33,7 +33,7 @@ import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
 /**
  * TimeLogDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.785+03:00[Europe/Kiev]")
 public class TimeLogDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -50,6 +50,10 @@ public class TimeLogDto {
   public static final String SERIALIZED_NAME_DURATIONMINUTES = "durationminutes";
   @SerializedName(SERIALIZED_NAME_DURATIONMINUTES)
   private Long durationminutes;
+
+  public static final String SERIALIZED_NAME_DURATION = "duration";
+  @SerializedName(SERIALIZED_NAME_DURATION)
+  private String duration;
 
   public static final String SERIALIZED_NAME_DESCRIPTION = "description";
   @SerializedName(SERIALIZED_NAME_DESCRIPTION)
@@ -173,6 +177,28 @@ public class TimeLogDto {
 
   public void setDurationminutes(Long durationminutes) {
     this.durationminutes = durationminutes;
+  }
+
+
+  public TimeLogDto duration(String duration) {
+    
+    this.duration = duration;
+    return this;
+  }
+
+   /**
+   * Get duration
+   * @return duration
+  **/
+  @ApiModelProperty(example = "PT1S", required = true, value = "")
+
+  public String getDuration() {
+    return duration;
+  }
+
+
+  public void setDuration(String duration) {
+    this.duration = duration;
   }
 
 
@@ -335,6 +361,7 @@ public class TimeLogDto {
         Objects.equals(this.projectid, timeLogDto.projectid) &&
         Objects.equals(this.tags, timeLogDto.tags) &&
         Objects.equals(this.durationminutes, timeLogDto.durationminutes) &&
+        Objects.equals(this.duration, timeLogDto.duration) &&
         Objects.equals(this.description, timeLogDto.description) &&
         Objects.equals(this.location, timeLogDto.location) &&
         Objects.equals(this.projects, timeLogDto.projects) &&
@@ -345,7 +372,7 @@ public class TimeLogDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, projectid, tags, durationminutes, description, location, projects, timestamp, userid, username);
+    return Objects.hash(id, projectid, tags, durationminutes, duration, description, location, projects, timestamp, userid, username);
   }
 
   @Override
@@ -356,6 +383,7 @@ public class TimeLogDto {
     sb.append("    projectid: ").append(toIndentedString(projectid)).append("\n");
     sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    durationminutes: ").append(toIndentedString(durationminutes)).append("\n");
+    sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("    projects: ").append(toIndentedString(projects)).append("\n");

@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * TimeLogDtoDurationUnits
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:09.521+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.160+03:00[Europe/Kiev]")
 public class TimeLogDtoDurationUnits {
   public static final String SERIALIZED_NAME_DATE_BASED = "date_based";
   @SerializedName(SERIALIZED_NAME_DATE_BASED)

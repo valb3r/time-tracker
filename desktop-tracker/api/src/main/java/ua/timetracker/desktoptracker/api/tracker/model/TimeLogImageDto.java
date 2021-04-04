@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * TimeLogImageDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.785+03:00[Europe/Kiev]")
 public class TimeLogImageDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)

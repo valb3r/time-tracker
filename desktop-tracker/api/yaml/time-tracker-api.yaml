@@ -205,6 +205,8 @@ components:
           type: integer
           format: int64
     TimeLogDto:
+      required:
+        - duration
       type: object
       properties:
         id:
@@ -220,6 +222,10 @@ components:
         durationminutes:
           type: integer
           format: int64
+        duration:
+          type: string
+          format: duration
+          example: PT1S
         description:
           type: string
         location:
