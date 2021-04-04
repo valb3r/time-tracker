@@ -19,4 +19,9 @@ public class ProjectCreateOrUpdate {
     private Set<@NotBlank String> activities;
 
     private String description;
+
+    // screenshots
+    private boolean screenshots;
+    private Float quality;
+    private Long intervalminutes;
 }

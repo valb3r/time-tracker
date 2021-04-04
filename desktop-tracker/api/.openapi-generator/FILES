@@ -19,5 +19,4 @@ src/main/java/ua/timetracker/desktoptracker/api/tracker/invoker/auth/HttpBearerA
 src/main/java/ua/timetracker/desktoptracker/api/tracker/model/ProjectDto.java
 src/main/java/ua/timetracker/desktoptracker/api/tracker/model/TimeLogCreateOrUpdate.java
 src/main/java/ua/timetracker/desktoptracker/api/tracker/model/TimeLogDto.java
-src/main/java/ua/timetracker/desktoptracker/api/tracker/model/TimeLogDtoDuration.java
-src/main/java/ua/timetracker/desktoptracker/api/tracker/model/TimeLogDtoDurationUnits.java
+src/main/java/ua/timetracker/desktoptracker/api/tracker/model/TimeLogImageDto.java

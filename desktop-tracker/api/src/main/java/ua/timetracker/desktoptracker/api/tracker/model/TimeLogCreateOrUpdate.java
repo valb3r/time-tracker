@@ -23,14 +23,14 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * TimeLogCreateOrUpdate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.378203+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
 public class TimeLogCreateOrUpdate {
   public static final String SERIALIZED_NAME_PROJECTID = "projectid";
   @SerializedName(SERIALIZED_NAME_PROJECTID)
@@ -54,7 +54,7 @@ public class TimeLogCreateOrUpdate {
 
   public static final String SERIALIZED_NAME_TIMESTAMP = "timestamp";
   @SerializedName(SERIALIZED_NAME_TIMESTAMP)
-  private OffsetDateTime timestamp;
+  private LocalDateTime timestamp;
 
   public static final String SERIALIZED_NAME_PROJECT_ID = "project_id";
   @SerializedName(SERIALIZED_NAME_PROJECT_ID)
@@ -177,7 +177,7 @@ public class TimeLogCreateOrUpdate {
   }
 
 
-  public TimeLogCreateOrUpdate timestamp(OffsetDateTime timestamp) {
+  public TimeLogCreateOrUpdate timestamp(LocalDateTime timestamp) {
     
     this.timestamp = timestamp;
     return this;
@@ -189,12 +189,12 @@ public class TimeLogCreateOrUpdate {
   **/
   @ApiModelProperty(required = true, value = "")
 
-  public OffsetDateTime getTimestamp() {
+  public LocalDateTime getTimestamp() {
     return timestamp;
   }
 
 
-  public void setTimestamp(OffsetDateTime timestamp) {
+  public void setTimestamp(LocalDateTime timestamp) {
     this.timestamp = timestamp;
   }
 

@@ -26,7 +26,7 @@ task openApiGenerateAdminApi(type: GenerateTask) {
     invokerPackage = "ua.timetracker.desktoptracker.api.admin.invoker"
     modelPackage = "ua.timetracker.desktoptracker.api.admin.model"
     configOptions = [
-            dateLibrary: "java8",
+            dateLibrary: "java8-localdatetime",
             useRuntimeException: "true"
     ]
     globalProperties = [
@@ -35,6 +35,9 @@ task openApiGenerateAdminApi(type: GenerateTask) {
     generateModelTests = false
     generateApiTests = false
     generateApiDocumentation = false
+    typeMappings = [
+            OffsetDateTime: 'java.time.LocalDateTime'
+    ]
 }
 
 task openApiGenerateTrackerApi(type: GenerateTask) {
@@ -45,7 +48,7 @@ task openApiGenerateTrackerApi(type: GenerateTask) {
     invokerPackage = "ua.timetracker.desktoptracker.api.tracker.invoker"
     modelPackage = "ua.timetracker.desktoptracker.api.tracker.model"
     configOptions = [
-            dateLibrary: "java8",
+            dateLibrary: "java8-localdatetime",
             useRuntimeException: "true"
     ]
     globalProperties = [
@@ -54,6 +57,9 @@ task openApiGenerateTrackerApi(type: GenerateTask) {
     generateModelTests = false
     generateApiTests = false
     generateApiDocumentation = false
+    typeMappings = [
+            OffsetDateTime: 'java.time.LocalDateTime'
+    ]
 }
 
 dependencies {

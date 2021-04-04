@@ -11,7 +11,7 @@
  */
 
 
-package ua.timetracker.desktoptracker.api.tracker.model;
+package ua.timetracker.desktoptracker.api.admin.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -25,12 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import ua.timetracker.desktoptracker.api.tracker.model.TimeLogDtoDurationUnits;
+import ua.timetracker.desktoptracker.api.admin.model.TimeLogDtoDurationUnits;
 
 /**
  * TimeLogDtoDuration
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.378203+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:09.521+03:00[Europe/Kiev]")
 public class TimeLogDtoDuration {
   public static final String SERIALIZED_NAME_SECONDS = "seconds";
   @SerializedName(SERIALIZED_NAME_SECONDS)
@@ -40,10 +40,6 @@ public class TimeLogDtoDuration {
   @SerializedName(SERIALIZED_NAME_ZERO)
   private Boolean zero;
 
-  public static final String SERIALIZED_NAME_UNITS = "units";
-  @SerializedName(SERIALIZED_NAME_UNITS)
-  private List<TimeLogDtoDurationUnits> units = null;
-
   public static final String SERIALIZED_NAME_NEGATIVE = "negative";
   @SerializedName(SERIALIZED_NAME_NEGATIVE)
   private Boolean negative;
@@ -51,6 +47,10 @@ public class TimeLogDtoDuration {
   public static final String SERIALIZED_NAME_NANO = "nano";
   @SerializedName(SERIALIZED_NAME_NANO)
   private Integer nano;
+
+  public static final String SERIALIZED_NAME_UNITS = "units";
+  @SerializedName(SERIALIZED_NAME_UNITS)
+  private List<TimeLogDtoDurationUnits> units = null;
 
 
   public TimeLogDtoDuration seconds(Long seconds) {
@@ -96,37 +96,6 @@ public class TimeLogDtoDuration {
 
   public void setZero(Boolean zero) {
     this.zero = zero;
-  }
-
-
-  public TimeLogDtoDuration units(List<TimeLogDtoDurationUnits> units) {
-    
-    this.units = units;
-    return this;
-  }
-
-  public TimeLogDtoDuration addUnitsItem(TimeLogDtoDurationUnits unitsItem) {
-    if (this.units == null) {
-      this.units = new ArrayList<>();
-    }
-    this.units.add(unitsItem);
-    return this;
-  }
-
-   /**
-   * Get units
-   * @return units
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(value = "")
-
-  public List<TimeLogDtoDurationUnits> getUnits() {
-    return units;
-  }
-
-
-  public void setUnits(List<TimeLogDtoDurationUnits> units) {
-    this.units = units;
   }
 
 
@@ -176,6 +145,37 @@ public class TimeLogDtoDuration {
   }
 
 
+  public TimeLogDtoDuration units(List<TimeLogDtoDurationUnits> units) {
+    
+    this.units = units;
+    return this;
+  }
+
+  public TimeLogDtoDuration addUnitsItem(TimeLogDtoDurationUnits unitsItem) {
+    if (this.units == null) {
+      this.units = new ArrayList<>();
+    }
+    this.units.add(unitsItem);
+    return this;
+  }
+
+   /**
+   * Get units
+   * @return units
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public List<TimeLogDtoDurationUnits> getUnits() {
+    return units;
+  }
+
+
+  public void setUnits(List<TimeLogDtoDurationUnits> units) {
+    this.units = units;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -187,14 +187,14 @@ public class TimeLogDtoDuration {
     TimeLogDtoDuration timeLogDtoDuration = (TimeLogDtoDuration) o;
     return Objects.equals(this.seconds, timeLogDtoDuration.seconds) &&
         Objects.equals(this.zero, timeLogDtoDuration.zero) &&
-        Objects.equals(this.units, timeLogDtoDuration.units) &&
         Objects.equals(this.negative, timeLogDtoDuration.negative) &&
-        Objects.equals(this.nano, timeLogDtoDuration.nano);
+        Objects.equals(this.nano, timeLogDtoDuration.nano) &&
+        Objects.equals(this.units, timeLogDtoDuration.units);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(seconds, zero, units, negative, nano);
+    return Objects.hash(seconds, zero, negative, nano, units);
   }
 
   @Override
@@ -203,9 +203,9 @@ public class TimeLogDtoDuration {
     sb.append("class TimeLogDtoDuration {\n");
     sb.append("    seconds: ").append(toIndentedString(seconds)).append("\n");
     sb.append("    zero: ").append(toIndentedString(zero)).append("\n");
-    sb.append("    units: ").append(toIndentedString(units)).append("\n");
     sb.append("    negative: ").append(toIndentedString(negative)).append("\n");
     sb.append("    nano: ").append(toIndentedString(nano)).append("\n");
+    sb.append("    units: ").append(toIndentedString(units)).append("\n");
     sb.append("}");
     return sb.toString();
   }

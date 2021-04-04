@@ -27,8 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import java.io.File;
-import ua.timetracker.desktoptracker.api.admin.model.ReportTemplateDto;
+import java.time.LocalDateTime;
+import java.util.Set;
+import ua.timetracker.desktoptracker.api.admin.model.TimeLogDto;
+import ua.timetracker.desktoptracker.api.admin.model.TimeLogImageDto;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,14 +38,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportTemplatesControllerApi {
+public class ManagedTimeLogsControllerApi {
     private ApiClient localVarApiClient;
 
-    public ReportTemplatesControllerApi() {
+    public ManagedTimeLogsControllerApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    public ReportTemplatesControllerApi(ApiClient apiClient) {
+    public ManagedTimeLogsControllerApi(ApiClient apiClient) {
         this.localVarApiClient = apiClient;
     }
 
@@ -56,7 +58,8 @@ public class ReportTemplatesControllerApi {
     }
 
     /**
-     * Build call for availableTemplates
+     * Build call for downloadTimecardImage
+     * @param path  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -66,348 +69,12 @@ public class ReportTemplatesControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call availableTemplatesCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call downloadTimecardImageCall(String path, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
-        String localVarPath = "/v1/resources/reports/templates";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "*/*"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call availableTemplatesValidateBeforeCall(final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = availableTemplatesCall(_callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * 
-     * 
-     * @return List&lt;ReportTemplateDto&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<ReportTemplateDto> availableTemplates() throws ApiException {
-        ApiResponse<List<ReportTemplateDto>> localVarResp = availableTemplatesWithHttpInfo();
-        return localVarResp.getData();
-    }
-
-    /**
-     * 
-     * 
-     * @return ApiResponse&lt;List&lt;ReportTemplateDto&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<ReportTemplateDto>> availableTemplatesWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = availableTemplatesValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<List<ReportTemplateDto>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     *  (asynchronously)
-     * 
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call availableTemplatesAsync(final ApiCallback<List<ReportTemplateDto>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = availableTemplatesValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<List<ReportTemplateDto>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for createTemplate
-     * @param description  (required)
-     * @param file  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call createTemplateCall(String description, File file, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/v1/resources/reports/templates/{description}"
-            .replaceAll("\\{" + "description" + "\\}", localVarApiClient.escapeString(description.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        if (file != null) {
-            localVarFormParams.put("file", file);
-        }
-
-        final String[] localVarAccepts = {
-            "*/*"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            "multipart/form-data"
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call createTemplateValidateBeforeCall(String description, File file, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'description' is set
-        if (description == null) {
-            throw new ApiException("Missing the required parameter 'description' when calling createTemplate(Async)");
-        }
-        
-        // verify the required parameter 'file' is set
-        if (file == null) {
-            throw new ApiException("Missing the required parameter 'file' when calling createTemplate(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = createTemplateCall(description, file, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * 
-     * 
-     * @param description  (required)
-     * @param file  (required)
-     * @return ReportTemplateDto
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public ReportTemplateDto createTemplate(String description, File file) throws ApiException {
-        ApiResponse<ReportTemplateDto> localVarResp = createTemplateWithHttpInfo(description, file);
-        return localVarResp.getData();
-    }
-
-    /**
-     * 
-     * 
-     * @param description  (required)
-     * @param file  (required)
-     * @return ApiResponse&lt;ReportTemplateDto&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<ReportTemplateDto> createTemplateWithHttpInfo(String description, File file) throws ApiException {
-        okhttp3.Call localVarCall = createTemplateValidateBeforeCall(description, file, null);
-        Type localVarReturnType = new TypeToken<ReportTemplateDto>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     *  (asynchronously)
-     * 
-     * @param description  (required)
-     * @param file  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call createTemplateAsync(String description, File file, final ApiCallback<ReportTemplateDto> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = createTemplateValidateBeforeCall(description, file, _callback);
-        Type localVarReturnType = new TypeToken<ReportTemplateDto>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for deleteTemplate
-     * @param id  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call deleteTemplateCall(Long id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/v1/resources/reports/templates/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] {  };
-        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call deleteTemplateValidateBeforeCall(Long id, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling deleteTemplate(Async)");
-        }
-        
-
-        okhttp3.Call localVarCall = deleteTemplateCall(id, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * 
-     * 
-     * @param id  (required)
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public void deleteTemplate(Long id) throws ApiException {
-        deleteTemplateWithHttpInfo(id);
-    }
-
-    /**
-     * 
-     * 
-     * @param id  (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<Void> deleteTemplateWithHttpInfo(Long id) throws ApiException {
-        okhttp3.Call localVarCall = deleteTemplateValidateBeforeCall(id, null);
-        return localVarApiClient.execute(localVarCall);
-    }
-
-    /**
-     *  (asynchronously)
-     * 
-     * @param id  (required)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call deleteTemplateAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = deleteTemplateValidateBeforeCall(id, _callback);
-        localVarApiClient.executeAsync(localVarCall, _callback);
-        return localVarCall;
-    }
-    /**
-     * Build call for downloadTemplate
-     * @param id  (required)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call downloadTemplateCall(Long id, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/v1/resources/reports/templates/{id}"
-            .replaceAll("\\{" + "id" + "\\}", localVarApiClient.escapeString(id.toString()));
+        String localVarPath = "/v1/resources/managed/timelogs/cards/images/{path}"
+            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -434,15 +101,15 @@ public class ReportTemplatesControllerApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call downloadTemplateValidateBeforeCall(Long id, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call downloadTimecardImageValidateBeforeCall(String path, final ApiCallback _callback) throws ApiException {
         
-        // verify the required parameter 'id' is set
-        if (id == null) {
-            throw new ApiException("Missing the required parameter 'id' when calling downloadTemplate(Async)");
+        // verify the required parameter 'path' is set
+        if (path == null) {
+            throw new ApiException("Missing the required parameter 'path' when calling downloadTimecardImage(Async)");
         }
         
 
-        okhttp3.Call localVarCall = downloadTemplateCall(id, _callback);
+        okhttp3.Call localVarCall = downloadTimecardImageCall(path, _callback);
         return localVarCall;
 
     }
@@ -450,7 +117,7 @@ public class ReportTemplatesControllerApi {
     /**
      * 
      * 
-     * @param id  (required)
+     * @param path  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
@@ -458,14 +125,14 @@ public class ReportTemplatesControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public void downloadTemplate(Long id) throws ApiException {
-        downloadTemplateWithHttpInfo(id);
+    public void downloadTimecardImage(String path) throws ApiException {
+        downloadTimecardImageWithHttpInfo(path);
     }
 
     /**
      * 
      * 
-     * @param id  (required)
+     * @param path  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -474,15 +141,15 @@ public class ReportTemplatesControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> downloadTemplateWithHttpInfo(Long id) throws ApiException {
-        okhttp3.Call localVarCall = downloadTemplateValidateBeforeCall(id, null);
+    public ApiResponse<Void> downloadTimecardImageWithHttpInfo(String path) throws ApiException {
+        okhttp3.Call localVarCall = downloadTimecardImageValidateBeforeCall(path, null);
         return localVarApiClient.execute(localVarCall);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param id  (required)
+     * @param path  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -492,10 +159,260 @@ public class ReportTemplatesControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call downloadTemplateAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call downloadTimecardImageAsync(String path, final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = downloadTemplateValidateBeforeCall(id, _callback);
+        okhttp3.Call localVarCall = downloadTimecardImageValidateBeforeCall(path, _callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for timeCardImagesForTimeLogs
+     * @param projectIds  (required)
+     * @param timeLogIds  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardImagesForTimeLogsCall(Set<Long> projectIds, Set<Long> timeLogIds, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/v1/resources/managed/timelogs/projects/{project_ids}/cards/{time_log_ids}"
+            .replaceAll("\\{" + "project_ids" + "\\}", localVarApiClient.escapeString(localVarApiClient.collectionPathParameterToString("csv", projectIds)))
+            .replaceAll("\\{" + "time_log_ids" + "\\}", localVarApiClient.escapeString(localVarApiClient.collectionPathParameterToString("csv", timeLogIds)));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "*/*"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call timeCardImagesForTimeLogsValidateBeforeCall(Set<Long> projectIds, Set<Long> timeLogIds, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'projectIds' is set
+        if (projectIds == null) {
+            throw new ApiException("Missing the required parameter 'projectIds' when calling timeCardImagesForTimeLogs(Async)");
+        }
+        
+        // verify the required parameter 'timeLogIds' is set
+        if (timeLogIds == null) {
+            throw new ApiException("Missing the required parameter 'timeLogIds' when calling timeCardImagesForTimeLogs(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsCall(projectIds, timeLogIds, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * 
+     * 
+     * @param projectIds  (required)
+     * @param timeLogIds  (required)
+     * @return List&lt;TimeLogImageDto&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public List<TimeLogImageDto> timeCardImagesForTimeLogs(Set<Long> projectIds, Set<Long> timeLogIds) throws ApiException {
+        ApiResponse<List<TimeLogImageDto>> localVarResp = timeCardImagesForTimeLogsWithHttpInfo(projectIds, timeLogIds);
+        return localVarResp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param projectIds  (required)
+     * @param timeLogIds  (required)
+     * @return ApiResponse&lt;List&lt;TimeLogImageDto&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<List<TimeLogImageDto>> timeCardImagesForTimeLogsWithHttpInfo(Set<Long> projectIds, Set<Long> timeLogIds) throws ApiException {
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsValidateBeforeCall(projectIds, timeLogIds, null);
+        Type localVarReturnType = new TypeToken<List<TimeLogImageDto>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param projectIds  (required)
+     * @param timeLogIds  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardImagesForTimeLogsAsync(Set<Long> projectIds, Set<Long> timeLogIds, final ApiCallback<List<TimeLogImageDto>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsValidateBeforeCall(projectIds, timeLogIds, _callback);
+        Type localVarReturnType = new TypeToken<List<TimeLogImageDto>>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for timeCardsForManagedProjects
+     * @param projectIds  (required)
+     * @param from  (optional)
+     * @param to  (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardsForManagedProjectsCall(Set<Long> projectIds, LocalDateTime from, LocalDateTime to, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/v1/resources/managed/timelogs/projects/{project_ids}"
+            .replaceAll("\\{" + "project_ids" + "\\}", localVarApiClient.escapeString(localVarApiClient.collectionPathParameterToString("csv", projectIds)));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (from != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from", from));
+        }
+
+        if (to != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("to", to));
+        }
+
+        final String[] localVarAccepts = {
+            "*/*"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call timeCardsForManagedProjectsValidateBeforeCall(Set<Long> projectIds, LocalDateTime from, LocalDateTime to, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'projectIds' is set
+        if (projectIds == null) {
+            throw new ApiException("Missing the required parameter 'projectIds' when calling timeCardsForManagedProjects(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = timeCardsForManagedProjectsCall(projectIds, from, to, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * 
+     * 
+     * @param projectIds  (required)
+     * @param from  (optional)
+     * @param to  (optional)
+     * @return List&lt;TimeLogDto&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public List<TimeLogDto> timeCardsForManagedProjects(Set<Long> projectIds, LocalDateTime from, LocalDateTime to) throws ApiException {
+        ApiResponse<List<TimeLogDto>> localVarResp = timeCardsForManagedProjectsWithHttpInfo(projectIds, from, to);
+        return localVarResp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param projectIds  (required)
+     * @param from  (optional)
+     * @param to  (optional)
+     * @return ApiResponse&lt;List&lt;TimeLogDto&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<List<TimeLogDto>> timeCardsForManagedProjectsWithHttpInfo(Set<Long> projectIds, LocalDateTime from, LocalDateTime to) throws ApiException {
+        okhttp3.Call localVarCall = timeCardsForManagedProjectsValidateBeforeCall(projectIds, from, to, null);
+        Type localVarReturnType = new TypeToken<List<TimeLogDto>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param projectIds  (required)
+     * @param from  (optional)
+     * @param to  (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardsForManagedProjectsAsync(Set<Long> projectIds, LocalDateTime from, LocalDateTime to, final ApiCallback<List<TimeLogDto>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = timeCardsForManagedProjectsValidateBeforeCall(projectIds, from, to, _callback);
+        Type localVarReturnType = new TypeToken<List<TimeLogDto>>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
 }

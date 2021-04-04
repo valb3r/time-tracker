@@ -59,14 +59,14 @@ public class ReportControllerApi {
     /**
      * Build call for createReportForProjects
      * @param projectIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createReportForProjectsCall(Set<Long> projectIds, NewReportDto newReportDto, final ApiCallback _callback) throws ApiException {
@@ -108,6 +108,11 @@ public class ReportControllerApi {
             throw new ApiException("Missing the required parameter 'projectIds' when calling createReportForProjects(Async)");
         }
         
+        // verify the required parameter 'newReportDto' is set
+        if (newReportDto == null) {
+            throw new ApiException("Missing the required parameter 'newReportDto' when calling createReportForProjects(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = createReportForProjectsCall(projectIds, newReportDto, _callback);
         return localVarCall;
@@ -118,13 +123,13 @@ public class ReportControllerApi {
      * 
      * 
      * @param projectIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @return ReportDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ReportDto createReportForProjects(Set<Long> projectIds, NewReportDto newReportDto) throws ApiException {
@@ -136,13 +141,13 @@ public class ReportControllerApi {
      * 
      * 
      * @param projectIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @return ApiResponse&lt;ReportDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<ReportDto> createReportForProjectsWithHttpInfo(Set<Long> projectIds, NewReportDto newReportDto) throws ApiException {
@@ -155,14 +160,14 @@ public class ReportControllerApi {
      *  (asynchronously)
      * 
      * @param projectIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createReportForProjectsAsync(Set<Long> projectIds, NewReportDto newReportDto, final ApiCallback<ReportDto> _callback) throws ApiException {
@@ -175,14 +180,14 @@ public class ReportControllerApi {
     /**
      * Build call for createReportForUsers
      * @param userIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createReportForUsersCall(Set<Long> userIds, NewReportDto newReportDto, final ApiCallback _callback) throws ApiException {
@@ -224,6 +229,11 @@ public class ReportControllerApi {
             throw new ApiException("Missing the required parameter 'userIds' when calling createReportForUsers(Async)");
         }
         
+        // verify the required parameter 'newReportDto' is set
+        if (newReportDto == null) {
+            throw new ApiException("Missing the required parameter 'newReportDto' when calling createReportForUsers(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = createReportForUsersCall(userIds, newReportDto, _callback);
         return localVarCall;
@@ -234,13 +244,13 @@ public class ReportControllerApi {
      * 
      * 
      * @param userIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @return ReportDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ReportDto createReportForUsers(Set<Long> userIds, NewReportDto newReportDto) throws ApiException {
@@ -252,13 +262,13 @@ public class ReportControllerApi {
      * 
      * 
      * @param userIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @return ApiResponse&lt;ReportDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<ReportDto> createReportForUsersWithHttpInfo(Set<Long> userIds, NewReportDto newReportDto) throws ApiException {
@@ -271,14 +281,14 @@ public class ReportControllerApi {
      *  (asynchronously)
      * 
      * @param userIds  (required)
-     * @param newReportDto  (optional)
+     * @param newReportDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createReportForUsersAsync(Set<Long> userIds, NewReportDto newReportDto, final ApiCallback<ReportDto> _callback) throws ApiException {
@@ -297,7 +307,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteReportCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -353,7 +363,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public void deleteReport(Long id) throws ApiException {
@@ -369,7 +379,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> deleteReportWithHttpInfo(Long id) throws ApiException {
@@ -387,7 +397,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteReportAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
@@ -405,7 +415,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call downloadReportCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -461,7 +471,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public void downloadReport(Long id) throws ApiException {
@@ -477,7 +487,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> downloadReportWithHttpInfo(Long id) throws ApiException {
@@ -495,7 +505,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call downloadReportAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
@@ -512,7 +522,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call ownedReportsCall(final ApiCallback _callback) throws ApiException {
@@ -562,7 +572,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public List<ReportDto> ownedReports() throws ApiException {
@@ -578,7 +588,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<List<ReportDto>> ownedReportsWithHttpInfo() throws ApiException {
@@ -596,7 +606,7 @@ public class ReportControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call ownedReportsAsync(final ApiCallback<List<ReportDto>> _callback) throws ApiException {

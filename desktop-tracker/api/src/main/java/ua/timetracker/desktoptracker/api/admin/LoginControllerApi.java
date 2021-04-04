@@ -56,14 +56,14 @@ public class LoginControllerApi {
 
     /**
      * Build call for login
-     * @param loginDto  (optional)
+     * @param loginDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call loginCall(LoginDto loginDto, final ApiCallback _callback) throws ApiException {
@@ -99,6 +99,11 @@ public class LoginControllerApi {
     @SuppressWarnings("rawtypes")
     private okhttp3.Call loginValidateBeforeCall(LoginDto loginDto, final ApiCallback _callback) throws ApiException {
         
+        // verify the required parameter 'loginDto' is set
+        if (loginDto == null) {
+            throw new ApiException("Missing the required parameter 'loginDto' when calling login(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = loginCall(loginDto, _callback);
         return localVarCall;
@@ -108,55 +113,55 @@ public class LoginControllerApi {
     /**
      * 
      * 
-     * @param loginDto  (optional)
-     * @return Object
+     * @param loginDto  (required)
+     * @return String
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public Object login(LoginDto loginDto) throws ApiException {
-        ApiResponse<Object> localVarResp = loginWithHttpInfo(loginDto);
+    public String login(LoginDto loginDto) throws ApiException {
+        ApiResponse<String> localVarResp = loginWithHttpInfo(loginDto);
         return localVarResp.getData();
     }
 
     /**
      * 
      * 
-     * @param loginDto  (optional)
-     * @return ApiResponse&lt;Object&gt;
+     * @param loginDto  (required)
+     * @return ApiResponse&lt;String&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Object> loginWithHttpInfo(LoginDto loginDto) throws ApiException {
+    public ApiResponse<String> loginWithHttpInfo(LoginDto loginDto) throws ApiException {
         okhttp3.Call localVarCall = loginValidateBeforeCall(loginDto, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param loginDto  (optional)
+     * @param loginDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call loginAsync(LoginDto loginDto, final ApiCallback<Object> _callback) throws ApiException {
+    public okhttp3.Call loginAsync(LoginDto loginDto, final ApiCallback<String> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = loginValidateBeforeCall(loginDto, _callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }
@@ -168,7 +173,7 @@ public class LoginControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call logoutCall(final ApiCallback _callback) throws ApiException {
@@ -213,33 +218,33 @@ public class LoginControllerApi {
     /**
      * 
      * 
-     * @return Object
+     * @return String
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public Object logout() throws ApiException {
-        ApiResponse<Object> localVarResp = logoutWithHttpInfo();
+    public String logout() throws ApiException {
+        ApiResponse<String> localVarResp = logoutWithHttpInfo();
         return localVarResp.getData();
     }
 
     /**
      * 
      * 
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;String&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Object> logoutWithHttpInfo() throws ApiException {
+    public ApiResponse<String> logoutWithHttpInfo() throws ApiException {
         okhttp3.Call localVarCall = logoutValidateBeforeCall(null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
@@ -252,13 +257,13 @@ public class LoginControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call logoutAsync(final ApiCallback<Object> _callback) throws ApiException {
+    public okhttp3.Call logoutAsync(final ApiCallback<String> _callback) throws ApiException {
 
         okhttp3.Call localVarCall = logoutValidateBeforeCall(_callback);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

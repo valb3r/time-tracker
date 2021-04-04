@@ -58,14 +58,14 @@ public class ProjectControllerApi {
     /**
      * Build call for createProject
      * @param parentGroupId  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createProjectCall(Long parentGroupId, ProjectCreateOrUpdate projectCreateOrUpdate, final ApiCallback _callback) throws ApiException {
@@ -107,6 +107,11 @@ public class ProjectControllerApi {
             throw new ApiException("Missing the required parameter 'parentGroupId' when calling createProject(Async)");
         }
         
+        // verify the required parameter 'projectCreateOrUpdate' is set
+        if (projectCreateOrUpdate == null) {
+            throw new ApiException("Missing the required parameter 'projectCreateOrUpdate' when calling createProject(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = createProjectCall(parentGroupId, projectCreateOrUpdate, _callback);
         return localVarCall;
@@ -117,13 +122,13 @@ public class ProjectControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @return ProjectDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ProjectDto createProject(Long parentGroupId, ProjectCreateOrUpdate projectCreateOrUpdate) throws ApiException {
@@ -135,13 +140,13 @@ public class ProjectControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @return ApiResponse&lt;ProjectDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<ProjectDto> createProjectWithHttpInfo(Long parentGroupId, ProjectCreateOrUpdate projectCreateOrUpdate) throws ApiException {
@@ -154,14 +159,14 @@ public class ProjectControllerApi {
      *  (asynchronously)
      * 
      * @param parentGroupId  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createProjectAsync(Long parentGroupId, ProjectCreateOrUpdate projectCreateOrUpdate, final ApiCallback<ProjectDto> _callback) throws ApiException {
@@ -180,7 +185,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteProjectCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -236,7 +241,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public void deleteProject(Long id) throws ApiException {
@@ -252,7 +257,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> deleteProjectWithHttpInfo(Long id) throws ApiException {
@@ -270,7 +275,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteProjectAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
@@ -288,7 +293,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call getProjectCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -345,7 +350,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ProjectDto getProject(Long id) throws ApiException {
@@ -362,7 +367,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<ProjectDto> getProjectWithHttpInfo(Long id) throws ApiException {
@@ -381,7 +386,7 @@ public class ProjectControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call getProjectAsync(Long id, final ApiCallback<ProjectDto> _callback) throws ApiException {
@@ -394,14 +399,14 @@ public class ProjectControllerApi {
     /**
      * Build call for updateProject
      * @param id  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateProjectCall(Long id, ProjectCreateOrUpdate projectCreateOrUpdate, final ApiCallback _callback) throws ApiException {
@@ -443,6 +448,11 @@ public class ProjectControllerApi {
             throw new ApiException("Missing the required parameter 'id' when calling updateProject(Async)");
         }
         
+        // verify the required parameter 'projectCreateOrUpdate' is set
+        if (projectCreateOrUpdate == null) {
+            throw new ApiException("Missing the required parameter 'projectCreateOrUpdate' when calling updateProject(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = updateProjectCall(id, projectCreateOrUpdate, _callback);
         return localVarCall;
@@ -453,13 +463,13 @@ public class ProjectControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @return ProjectDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ProjectDto updateProject(Long id, ProjectCreateOrUpdate projectCreateOrUpdate) throws ApiException {
@@ -471,13 +481,13 @@ public class ProjectControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @return ApiResponse&lt;ProjectDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<ProjectDto> updateProjectWithHttpInfo(Long id, ProjectCreateOrUpdate projectCreateOrUpdate) throws ApiException {
@@ -490,14 +500,14 @@ public class ProjectControllerApi {
      *  (asynchronously)
      * 
      * @param id  (required)
-     * @param projectCreateOrUpdate  (optional)
+     * @param projectCreateOrUpdate  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateProjectAsync(Long id, ProjectCreateOrUpdate projectCreateOrUpdate, final ApiCallback<ProjectDto> _callback) throws ApiException {

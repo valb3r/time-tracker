@@ -54,7 +54,7 @@ import ua.timetracker.desktoptracker.api.admin.invoker.auth.ApiKeyAuth;
 
 public class ApiClient {
 
-    private String basePath = "http://demo.timetracker.tk";
+    private String basePath = "http://localhost:20081";
     private boolean debugging = false;
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
     private Map<String, String> defaultCookieMap = new HashMap<String, String>();
@@ -138,7 +138,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g http://demo.timetracker.tk
+     * @param basePath Base path of the URL (e.g http://localhost:20081
      * @return An instance of OkHttpClient
      */
     public ApiClient setBasePath(String basePath) {

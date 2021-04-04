@@ -23,7 +23,7 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +32,7 @@ import ua.timetracker.desktoptracker.api.admin.model.UserDto;
 /**
  * ReportDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.193792+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:09.521+03:00[Europe/Kiev]")
 public class ReportDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -99,15 +99,15 @@ public class ReportDto {
 
   public static final String SERIALIZED_NAME_CREATED = "created";
   @SerializedName(SERIALIZED_NAME_CREATED)
-  private OffsetDateTime created;
+  private LocalDateTime created;
 
   public static final String SERIALIZED_NAME_FROM = "from";
   @SerializedName(SERIALIZED_NAME_FROM)
-  private OffsetDateTime from;
+  private LocalDateTime from;
 
   public static final String SERIALIZED_NAME_TO = "to";
   @SerializedName(SERIALIZED_NAME_TO)
-  private OffsetDateTime to;
+  private LocalDateTime to;
 
   public static final String SERIALIZED_NAME_TARGETS = "targets";
   @SerializedName(SERIALIZED_NAME_TARGETS)
@@ -115,7 +115,7 @@ public class ReportDto {
 
   public static final String SERIALIZED_NAME_CREATEDAT = "createdat";
   @SerializedName(SERIALIZED_NAME_CREATEDAT)
-  private OffsetDateTime createdat;
+  private LocalDateTime createdat;
 
   /**
    * Gets or Sets status
@@ -265,7 +265,7 @@ public class ReportDto {
   }
 
 
-  public ReportDto created(OffsetDateTime created) {
+  public ReportDto created(LocalDateTime created) {
     
     this.created = created;
     return this;
@@ -278,17 +278,17 @@ public class ReportDto {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public OffsetDateTime getCreated() {
+  public LocalDateTime getCreated() {
     return created;
   }
 
 
-  public void setCreated(OffsetDateTime created) {
+  public void setCreated(LocalDateTime created) {
     this.created = created;
   }
 
 
-  public ReportDto from(OffsetDateTime from) {
+  public ReportDto from(LocalDateTime from) {
     
     this.from = from;
     return this;
@@ -301,17 +301,17 @@ public class ReportDto {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public OffsetDateTime getFrom() {
+  public LocalDateTime getFrom() {
     return from;
   }
 
 
-  public void setFrom(OffsetDateTime from) {
+  public void setFrom(LocalDateTime from) {
     this.from = from;
   }
 
 
-  public ReportDto to(OffsetDateTime to) {
+  public ReportDto to(LocalDateTime to) {
     
     this.to = to;
     return this;
@@ -324,12 +324,12 @@ public class ReportDto {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public OffsetDateTime getTo() {
+  public LocalDateTime getTo() {
     return to;
   }
 
 
-  public void setTo(OffsetDateTime to) {
+  public void setTo(LocalDateTime to) {
     this.to = to;
   }
 
@@ -365,7 +365,7 @@ public class ReportDto {
   }
 
 
-  public ReportDto createdat(OffsetDateTime createdat) {
+  public ReportDto createdat(LocalDateTime createdat) {
     
     this.createdat = createdat;
     return this;
@@ -378,12 +378,12 @@ public class ReportDto {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public OffsetDateTime getCreatedat() {
+  public LocalDateTime getCreatedat() {
     return createdat;
   }
 
 
-  public void setCreatedat(OffsetDateTime createdat) {
+  public void setCreatedat(LocalDateTime createdat) {
     this.createdat = createdat;
   }
 

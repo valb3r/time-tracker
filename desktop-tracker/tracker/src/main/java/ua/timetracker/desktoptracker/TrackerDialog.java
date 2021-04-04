@@ -1,12 +1,16 @@
 package ua.timetracker.desktoptracker;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import ua.timetracker.desktoptracker.api.admin.LoginControllerApi;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiClient;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiException;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiResponse;
+import ua.timetracker.desktoptracker.api.admin.invoker.JSON;
 import ua.timetracker.desktoptracker.api.admin.model.LoginDto;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
@@ -15,6 +19,9 @@ import ua.timetracker.desktoptracker.verifier.NotBlankVerifier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TrackerDialog {
@@ -83,7 +90,7 @@ public class TrackerDialog {
 
             this.frame.setTitle(String.format("[%s] Tracking...", activeProject.getProject().getCode()));
             tracker.setScreenshots(captureScreenshots.isSelected());
-            tracker.startTracking(activeProject.getProject());
+            tracker.startTracking(activeProject.getProject(), taskDescription.getText(), (String) workType.getSelectedItem());
             currentProject.setEnabled(false);
             taskDescription.setEnabled(false);
             workType.setEnabled(false);
@@ -108,6 +115,7 @@ public class TrackerDialog {
             }
 
             workType.removeAllItems();
+            captureScreenshots.setSelected(Boolean.TRUE.equals(activeProject.getProject().getScreenshots()));
             activeProject.getProject().getActivities().forEach(it -> workType.addItem(it));
         });
 
@@ -139,7 +147,11 @@ public class TrackerDialog {
                 SwingUtilities.invokeLater(() -> {
                     authCookie = resp.getHeaders().get("set-cookie").get(0).split("=")[1];
                     timeLog = new TimeLogControllerApi(
-                            new ua.timetracker.desktoptracker.api.tracker.invoker.ApiClient().setBasePath(apiUploadUrl.getText() + "/tracker-api").addDefaultCookie("X-Authorization", authCookie)
+                            new ua.timetracker.desktoptracker.api.tracker.invoker.ApiClient()
+                                    .setBasePath(apiUploadUrl.getText() + "/tracker-api")
+                                    .addDefaultCookie("X-Authorization", authCookie)
+                                    // FIXME https://github.com/swagger-api/swagger-codegen/issues/6992
+                                    .setJSON(new ua.timetracker.desktoptracker.api.tracker.invoker.JSON().setGson(JSON.createGson().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create()))
                     );
                     this.uploader.setApi(timeLog);
                     trackerTabs.setEnabledAt(2, true);
@@ -159,6 +171,7 @@ public class TrackerDialog {
     private void doLoadTrackingScreenData() {
         this.start.setEnabled(false);
         this.stop.setEnabled(false);
+        this.trackingErrorMessage.setText("");
         new Thread(() -> {
             try {
                 List<ProjectDto> projects = timeLog.availableProjects();
@@ -200,6 +213,32 @@ public class TrackerDialog {
         @Override
         public String toString() {
             return String.format("[%s] %s", project.getCode(), project.getName());
+        }
+    }
+
+    class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
+
+        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+        @Override
+        public void write(JsonWriter out, LocalDateTime date) throws IOException {
+            if (date == null) {
+                out.nullValue();
+            } else {
+                out.value(formatter.format(date));
+            }
+        }
+
+        @Override
+        public LocalDateTime read(JsonReader in) throws IOException {
+            switch (in.peek()) {
+                case NULL:
+                    in.nextNull();
+                    return null;
+                default:
+                    String date = in.nextString();
+                    return LocalDateTime.parse(date, formatter);
+            }
         }
     }
 

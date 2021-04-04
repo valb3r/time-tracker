@@ -1,10 +1,6 @@
 package ua.timetracker.shared.persistence.entity.projects;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
@@ -13,6 +9,7 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 import ua.timetracker.shared.restapi.dto.project.ProjectCreateOrUpdate;
 
+import java.time.Duration;
 import java.util.Set;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -36,6 +33,10 @@ public class Project {
     private String code;
     private String description;
     private Set<String> activities;
+    // screenshot related
+    private boolean screenshots;
+    private float quality;
+    private Duration interval;
 
     // SDN / RX Neo4J currently does not work properly with abstract relationship classes. Omitting them and using queries.
 
@@ -46,7 +47,14 @@ public class Project {
 
     @Mapper(nullValuePropertyMappingStrategy = IGNORE)
     public interface Merge {
-        void update(ProjectCreateOrUpdate updated, @MappingTarget Project result);
+        default void update(ProjectCreateOrUpdate updated, Project result) {
+            doUpdate(updated, result);
+            if (null != updated.getIntervalminutes()) {
+                result.setInterval(Duration.ofMinutes(updated.getIntervalminutes()));
+            }
+        }
+
+        void doUpdate(ProjectCreateOrUpdate updated, @MappingTarget Project result);
     }
 
 }

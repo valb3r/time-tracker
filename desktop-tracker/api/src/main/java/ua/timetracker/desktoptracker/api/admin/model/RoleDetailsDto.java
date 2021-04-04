@@ -23,12 +23,12 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 /**
  * RoleDetailsDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.193792+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:09.521+03:00[Europe/Kiev]")
 public class RoleDetailsDto {
   public static final String SERIALIZED_NAME_RATE = "rate";
   @SerializedName(SERIALIZED_NAME_RATE)
@@ -36,11 +36,11 @@ public class RoleDetailsDto {
 
   public static final String SERIALIZED_NAME_FROM = "from";
   @SerializedName(SERIALIZED_NAME_FROM)
-  private OffsetDateTime from;
+  private LocalDateTime from;
 
   public static final String SERIALIZED_NAME_TO = "to";
   @SerializedName(SERIALIZED_NAME_TO)
-  private OffsetDateTime to;
+  private LocalDateTime to;
 
 
   public RoleDetailsDto rate(String rate) {
@@ -65,7 +65,7 @@ public class RoleDetailsDto {
   }
 
 
-  public RoleDetailsDto from(OffsetDateTime from) {
+  public RoleDetailsDto from(LocalDateTime from) {
     
     this.from = from;
     return this;
@@ -77,17 +77,17 @@ public class RoleDetailsDto {
   **/
   @ApiModelProperty(required = true, value = "")
 
-  public OffsetDateTime getFrom() {
+  public LocalDateTime getFrom() {
     return from;
   }
 
 
-  public void setFrom(OffsetDateTime from) {
+  public void setFrom(LocalDateTime from) {
     this.from = from;
   }
 
 
-  public RoleDetailsDto to(OffsetDateTime to) {
+  public RoleDetailsDto to(LocalDateTime to) {
     
     this.to = to;
     return this;
@@ -99,12 +99,12 @@ public class RoleDetailsDto {
   **/
   @ApiModelProperty(required = true, value = "")
 
-  public OffsetDateTime getTo() {
+  public LocalDateTime getTo() {
     return to;
   }
 
 
-  public void setTo(OffsetDateTime to) {
+  public void setTo(LocalDateTime to) {
     this.to = to;
   }
 

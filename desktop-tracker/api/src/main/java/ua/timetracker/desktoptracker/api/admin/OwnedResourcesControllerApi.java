@@ -64,7 +64,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call ownedGroupsCall(Long owningGroupOrUserId, final ApiCallback _callback) throws ApiException {
@@ -121,7 +121,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public List<GroupDto> ownedGroups(Long owningGroupOrUserId) throws ApiException {
@@ -138,7 +138,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<List<GroupDto>> ownedGroupsWithHttpInfo(Long owningGroupOrUserId) throws ApiException {
@@ -157,7 +157,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call ownedGroupsAsync(Long owningGroupOrUserId, final ApiCallback<List<GroupDto>> _callback) throws ApiException {
@@ -175,7 +175,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call selfOwnedResourcesCall(final ApiCallback _callback) throws ApiException {
@@ -225,7 +225,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public List<PathEntryGroupDto> selfOwnedResources() throws ApiException {
@@ -241,7 +241,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<List<PathEntryGroupDto>> selfOwnedResourcesWithHttpInfo() throws ApiException {
@@ -259,7 +259,7 @@ public class OwnedResourcesControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call selfOwnedResourcesAsync(final ApiCallback<List<PathEntryGroupDto>> _callback) throws ApiException {

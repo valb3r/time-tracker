@@ -11,7 +11,7 @@
  */
 
 
-package ua.timetracker.desktoptracker.api.admin.model;
+package ua.timetracker.desktoptracker.api.tracker.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -25,20 +25,20 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * ReportTemplateDto
+ * TimeLogImageDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:09.521+03:00[Europe/Kiev]")
-public class ReportTemplateDto {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
+public class TimeLogImageDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private Long id;
 
-  public static final String SERIALIZED_NAME_DESCRIPTION = "description";
-  @SerializedName(SERIALIZED_NAME_DESCRIPTION)
-  private String description;
+  public static final String SERIALIZED_NAME_IMAGEURL = "imageurl";
+  @SerializedName(SERIALIZED_NAME_IMAGEURL)
+  private String imageurl;
 
 
-  public ReportTemplateDto id(Long id) {
+  public TimeLogImageDto id(Long id) {
     
     this.id = id;
     return this;
@@ -61,26 +61,26 @@ public class ReportTemplateDto {
   }
 
 
-  public ReportTemplateDto description(String description) {
+  public TimeLogImageDto imageurl(String imageurl) {
     
-    this.description = description;
+    this.imageurl = imageurl;
     return this;
   }
 
    /**
-   * Get description
-   * @return description
+   * Get imageurl
+   * @return imageurl
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public String getDescription() {
-    return description;
+  public String getImageurl() {
+    return imageurl;
   }
 
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setImageurl(String imageurl) {
+    this.imageurl = imageurl;
   }
 
 
@@ -92,22 +92,22 @@ public class ReportTemplateDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReportTemplateDto reportTemplateDto = (ReportTemplateDto) o;
-    return Objects.equals(this.id, reportTemplateDto.id) &&
-        Objects.equals(this.description, reportTemplateDto.description);
+    TimeLogImageDto timeLogImageDto = (TimeLogImageDto) o;
+    return Objects.equals(this.id, timeLogImageDto.id) &&
+        Objects.equals(this.imageurl, timeLogImageDto.imageurl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description);
+    return Objects.hash(id, imageurl);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ReportTemplateDto {\n");
+    sb.append("class TimeLogImageDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    imageurl: ").append(toIndentedString(imageurl)).append("\n");
     sb.append("}");
     return sb.toString();
   }

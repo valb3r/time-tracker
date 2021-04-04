@@ -39,6 +39,7 @@ public class TimeLogCreateOrUpdate implements WithProjectId {
     private String location;
 
     @NotNull
+    @Schema(type = "string" , format = "date-time")
     private LocalDateTime timestamp;
 
     @Override

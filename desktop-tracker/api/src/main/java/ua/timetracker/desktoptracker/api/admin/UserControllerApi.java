@@ -62,14 +62,14 @@ public class UserControllerApi {
     /**
      * Build call for createUser
      * @param parentGroupId  (required)
-     * @param userCreateDto  (optional)
+     * @param userCreateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createUserCall(Long parentGroupId, UserCreateDto userCreateDto, final ApiCallback _callback) throws ApiException {
@@ -111,6 +111,11 @@ public class UserControllerApi {
             throw new ApiException("Missing the required parameter 'parentGroupId' when calling createUser(Async)");
         }
         
+        // verify the required parameter 'userCreateDto' is set
+        if (userCreateDto == null) {
+            throw new ApiException("Missing the required parameter 'userCreateDto' when calling createUser(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = createUserCall(parentGroupId, userCreateDto, _callback);
         return localVarCall;
@@ -121,13 +126,13 @@ public class UserControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param userCreateDto  (optional)
+     * @param userCreateDto  (required)
      * @return UserDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserDto createUser(Long parentGroupId, UserCreateDto userCreateDto) throws ApiException {
@@ -139,13 +144,13 @@ public class UserControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param userCreateDto  (optional)
+     * @param userCreateDto  (required)
      * @return ApiResponse&lt;UserDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserDto> createUserWithHttpInfo(Long parentGroupId, UserCreateDto userCreateDto) throws ApiException {
@@ -158,14 +163,14 @@ public class UserControllerApi {
      *  (asynchronously)
      * 
      * @param parentGroupId  (required)
-     * @param userCreateDto  (optional)
+     * @param userCreateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createUserAsync(Long parentGroupId, UserCreateDto userCreateDto, final ApiCallback<UserDto> _callback) throws ApiException {
@@ -184,7 +189,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteUserCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -240,7 +245,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public void deleteUser(Long id) throws ApiException {
@@ -256,7 +261,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> deleteUserWithHttpInfo(Long id) throws ApiException {
@@ -274,7 +279,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteUserAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
@@ -292,7 +297,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call getUserCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -349,7 +354,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserDto getUser(Long id) throws ApiException {
@@ -366,7 +371,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserDto> getUserWithHttpInfo(Long id) throws ApiException {
@@ -385,7 +390,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call getUserAsync(Long id, final ApiCallback<UserDto> _callback) throws ApiException {
@@ -403,7 +408,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call myselfCall(final ApiCallback _callback) throws ApiException {
@@ -453,7 +458,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserWithoutRateDto myself() throws ApiException {
@@ -469,7 +474,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserWithoutRateDto> myselfWithHttpInfo() throws ApiException {
@@ -487,7 +492,7 @@ public class UserControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call myselfAsync(final ApiCallback<UserWithoutRateDto> _callback) throws ApiException {
@@ -499,14 +504,14 @@ public class UserControllerApi {
     }
     /**
      * Build call for updatePassword
-     * @param passwordUpdateDto  (optional)
+     * @param passwordUpdateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updatePasswordCall(PasswordUpdateDto passwordUpdateDto, final ApiCallback _callback) throws ApiException {
@@ -542,6 +547,11 @@ public class UserControllerApi {
     @SuppressWarnings("rawtypes")
     private okhttp3.Call updatePasswordValidateBeforeCall(PasswordUpdateDto passwordUpdateDto, final ApiCallback _callback) throws ApiException {
         
+        // verify the required parameter 'passwordUpdateDto' is set
+        if (passwordUpdateDto == null) {
+            throw new ApiException("Missing the required parameter 'passwordUpdateDto' when calling updatePassword(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = updatePasswordCall(passwordUpdateDto, _callback);
         return localVarCall;
@@ -551,13 +561,13 @@ public class UserControllerApi {
     /**
      * 
      * 
-     * @param passwordUpdateDto  (optional)
+     * @param passwordUpdateDto  (required)
      * @return UserDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserDto updatePassword(PasswordUpdateDto passwordUpdateDto) throws ApiException {
@@ -568,13 +578,13 @@ public class UserControllerApi {
     /**
      * 
      * 
-     * @param passwordUpdateDto  (optional)
+     * @param passwordUpdateDto  (required)
      * @return ApiResponse&lt;UserDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserDto> updatePasswordWithHttpInfo(PasswordUpdateDto passwordUpdateDto) throws ApiException {
@@ -586,14 +596,14 @@ public class UserControllerApi {
     /**
      *  (asynchronously)
      * 
-     * @param passwordUpdateDto  (optional)
+     * @param passwordUpdateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updatePasswordAsync(PasswordUpdateDto passwordUpdateDto, final ApiCallback<UserDto> _callback) throws ApiException {
@@ -606,14 +616,14 @@ public class UserControllerApi {
     /**
      * Build call for updateUser
      * @param id  (required)
-     * @param userUpdateDto  (optional)
+     * @param userUpdateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateUserCall(Long id, UserUpdateDto userUpdateDto, final ApiCallback _callback) throws ApiException {
@@ -655,6 +665,11 @@ public class UserControllerApi {
             throw new ApiException("Missing the required parameter 'id' when calling updateUser(Async)");
         }
         
+        // verify the required parameter 'userUpdateDto' is set
+        if (userUpdateDto == null) {
+            throw new ApiException("Missing the required parameter 'userUpdateDto' when calling updateUser(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = updateUserCall(id, userUpdateDto, _callback);
         return localVarCall;
@@ -665,13 +680,13 @@ public class UserControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param userUpdateDto  (optional)
+     * @param userUpdateDto  (required)
      * @return UserDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserDto updateUser(Long id, UserUpdateDto userUpdateDto) throws ApiException {
@@ -683,13 +698,13 @@ public class UserControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param userUpdateDto  (optional)
+     * @param userUpdateDto  (required)
      * @return ApiResponse&lt;UserDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserDto> updateUserWithHttpInfo(Long id, UserUpdateDto userUpdateDto) throws ApiException {
@@ -702,14 +717,14 @@ public class UserControllerApi {
      *  (asynchronously)
      * 
      * @param id  (required)
-     * @param userUpdateDto  (optional)
+     * @param userUpdateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateUserAsync(Long id, UserUpdateDto userUpdateDto, final ApiCallback<UserDto> _callback) throws ApiException {
@@ -722,14 +737,14 @@ public class UserControllerApi {
     /**
      * Build call for updateUser1
      * @param id  (required)
-     * @param simpleUserUpdateDto  (optional)
+     * @param simpleUserUpdateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateUser1Call(Long id, SimpleUserUpdateDto simpleUserUpdateDto, final ApiCallback _callback) throws ApiException {
@@ -771,6 +786,11 @@ public class UserControllerApi {
             throw new ApiException("Missing the required parameter 'id' when calling updateUser1(Async)");
         }
         
+        // verify the required parameter 'simpleUserUpdateDto' is set
+        if (simpleUserUpdateDto == null) {
+            throw new ApiException("Missing the required parameter 'simpleUserUpdateDto' when calling updateUser1(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = updateUser1Call(id, simpleUserUpdateDto, _callback);
         return localVarCall;
@@ -781,13 +801,13 @@ public class UserControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param simpleUserUpdateDto  (optional)
+     * @param simpleUserUpdateDto  (required)
      * @return UserDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public UserDto updateUser1(Long id, SimpleUserUpdateDto simpleUserUpdateDto) throws ApiException {
@@ -799,13 +819,13 @@ public class UserControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param simpleUserUpdateDto  (optional)
+     * @param simpleUserUpdateDto  (required)
      * @return ApiResponse&lt;UserDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<UserDto> updateUser1WithHttpInfo(Long id, SimpleUserUpdateDto simpleUserUpdateDto) throws ApiException {
@@ -818,14 +838,14 @@ public class UserControllerApi {
      *  (asynchronously)
      * 
      * @param id  (required)
-     * @param simpleUserUpdateDto  (optional)
+     * @param simpleUserUpdateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateUser1Async(Long id, SimpleUserUpdateDto simpleUserUpdateDto, final ApiCallback<UserDto> _callback) throws ApiException {

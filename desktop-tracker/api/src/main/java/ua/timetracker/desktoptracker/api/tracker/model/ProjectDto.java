@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * ProjectDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-02T21:48:51.378203+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T22:51:10.214+03:00[Europe/Kiev]")
 public class ProjectDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -51,6 +51,18 @@ public class ProjectDto {
   public static final String SERIALIZED_NAME_ACTIVITIES = "activities";
   @SerializedName(SERIALIZED_NAME_ACTIVITIES)
   private Set<String> activities = null;
+
+  public static final String SERIALIZED_NAME_SCREENSHOTS = "screenshots";
+  @SerializedName(SERIALIZED_NAME_SCREENSHOTS)
+  private Boolean screenshots;
+
+  public static final String SERIALIZED_NAME_QUALITY = "quality";
+  @SerializedName(SERIALIZED_NAME_QUALITY)
+  private Float quality;
+
+  public static final String SERIALIZED_NAME_INTERVALMINUTES = "intervalminutes";
+  @SerializedName(SERIALIZED_NAME_INTERVALMINUTES)
+  private Long intervalminutes;
 
 
   public ProjectDto id(Long id) {
@@ -176,6 +188,75 @@ public class ProjectDto {
   }
 
 
+  public ProjectDto screenshots(Boolean screenshots) {
+    
+    this.screenshots = screenshots;
+    return this;
+  }
+
+   /**
+   * Get screenshots
+   * @return screenshots
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Boolean getScreenshots() {
+    return screenshots;
+  }
+
+
+  public void setScreenshots(Boolean screenshots) {
+    this.screenshots = screenshots;
+  }
+
+
+  public ProjectDto quality(Float quality) {
+    
+    this.quality = quality;
+    return this;
+  }
+
+   /**
+   * Get quality
+   * @return quality
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Float getQuality() {
+    return quality;
+  }
+
+
+  public void setQuality(Float quality) {
+    this.quality = quality;
+  }
+
+
+  public ProjectDto intervalminutes(Long intervalminutes) {
+    
+    this.intervalminutes = intervalminutes;
+    return this;
+  }
+
+   /**
+   * Get intervalminutes
+   * @return intervalminutes
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Long getIntervalminutes() {
+    return intervalminutes;
+  }
+
+
+  public void setIntervalminutes(Long intervalminutes) {
+    this.intervalminutes = intervalminutes;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -189,12 +270,15 @@ public class ProjectDto {
         Objects.equals(this.name, projectDto.name) &&
         Objects.equals(this.code, projectDto.code) &&
         Objects.equals(this.description, projectDto.description) &&
-        Objects.equals(this.activities, projectDto.activities);
+        Objects.equals(this.activities, projectDto.activities) &&
+        Objects.equals(this.screenshots, projectDto.screenshots) &&
+        Objects.equals(this.quality, projectDto.quality) &&
+        Objects.equals(this.intervalminutes, projectDto.intervalminutes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, code, description, activities);
+    return Objects.hash(id, name, code, description, activities, screenshots, quality, intervalminutes);
   }
 
   @Override
@@ -206,6 +290,9 @@ public class ProjectDto {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    activities: ").append(toIndentedString(activities)).append("\n");
+    sb.append("    screenshots: ").append(toIndentedString(screenshots)).append("\n");
+    sb.append("    quality: ").append(toIndentedString(quality)).append("\n");
+    sb.append("    intervalminutes: ").append(toIndentedString(intervalminutes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

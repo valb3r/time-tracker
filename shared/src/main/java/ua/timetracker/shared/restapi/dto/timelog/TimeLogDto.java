@@ -1,5 +1,6 @@
 package ua.timetracker.shared.restapi.dto.timelog;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -7,7 +8,6 @@ import org.mapstruct.factory.Mappers;
 import ua.timetracker.shared.persistence.entity.projects.TimeLog;
 import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
@@ -21,12 +21,14 @@ public class TimeLogDto {
 
     private Long projectid; // should be replaced by projects field
     private Collection<String> tags;
-    private Duration duration;
     private long durationminutes;
     private String description;
     private String location;
     private Set<ProjectDto> projects;
+
+    @Schema(type = "string" , format = "date-time")
     private LocalDateTime timestamp;
+
     private Long userid;
     private String username;
 

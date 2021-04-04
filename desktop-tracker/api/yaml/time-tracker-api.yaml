@@ -3,28 +3,44 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-  - url: http://demo.timetracker.tk
+  - url: http://localhost:20080
     description: Generated server url
 paths:
-  /v1/resources/timelogs/projects:
-    get:
+  /v1/resources/timelogs/{id}/images/{tag}:
+    put:
       tags:
         - time-log-controller
-      operationId: availableProjects
+      operationId: uploadTimelogImage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: tag
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
         "200":
-          description: default response
+          description: OK
           content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectDto'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProjectDto'
+                $ref: '#/components/schemas/TimeLogImageDto'
   /v1/resources/timelogs:
     get:
       tags:
@@ -45,13 +61,8 @@ paths:
             format: date-time
       responses:
         "200":
-          description: default response
+          description: OK
           content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TimeLogDto'
             application/json:
               schema:
                 type: array
@@ -66,13 +77,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TimeLogCreateOrUpdate'
+        required: true
       responses:
         "200":
-          description: default response
+          description: OK
           content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/TimeLogDto'
             application/json:
               schema:
                 $ref: '#/components/schemas/TimeLogDto'
@@ -93,13 +102,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TimeLogCreateOrUpdate'
+        required: true
       responses:
         "200":
-          description: default response
+          description: OK
           content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/TimeLogDto'
             application/json:
               schema:
                 $ref: '#/components/schemas/TimeLogDto'
@@ -116,78 +123,31 @@ paths:
             format: int64
       responses:
         "200":
-          description: default response
+          description: OK
+  /v1/resources/timelogs/projects:
+    get:
+      tags:
+        - time-log-controller
+      operationId: availableProjects
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectDto'
 components:
   schemas:
-    ProjectDto:
+    TimeLogImageDto:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        name:
+        imageurl:
           type: string
-        code:
-          type: string
-        description:
-          type: string
-        activities:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-    TimeLogDto:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        projectid:
-          type: integer
-          format: int64
-        tags:
-          type: array
-          items:
-            type: string
-        duration:
-          type: object
-          properties:
-            seconds:
-              type: integer
-              format: int64
-            zero:
-              type: boolean
-            units:
-              type: array
-              items:
-                type: object
-                properties:
-                  date_based:
-                    type: boolean
-                  time_based:
-                    type: boolean
-                  duration_estimated:
-                    type: boolean
-            negative:
-              type: boolean
-            nano:
-              type: integer
-              format: int32
-        durationminutes:
-          type: integer
-          format: int64
-        description:
-          type: string
-        location:
-          type: string
-        projects:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectDto'
-        timestamp:
-          type: string
-          format: date-time
     TimeLogCreateOrUpdate:
       required:
         - description
@@ -219,3 +179,61 @@ components:
         project_id:
           type: integer
           format: int64
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        activities:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        screenshots:
+          type: boolean
+        quality:
+          type: number
+          format: float
+        intervalminutes:
+          type: integer
+          format: int64
+    TimeLogDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectid:
+          type: integer
+          format: int64
+        tags:
+          type: array
+          items:
+            type: string
+        durationminutes:
+          type: integer
+          format: int64
+        description:
+          type: string
+        location:
+          type: string
+        projects:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDto'
+        timestamp:
+          type: string
+          format: date-time
+        userid:
+          type: integer
+          format: int64
+        username:
+          type: string

@@ -66,7 +66,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call addProjectCall(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback _callback) throws ApiException {
@@ -130,7 +130,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public Long addProject(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -148,7 +148,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Long> addProjectWithHttpInfo(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -168,7 +168,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call addProjectAsync(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback<Long> _callback) throws ApiException {
@@ -188,7 +188,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call addUserOrGroupCall(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback _callback) throws ApiException {
@@ -252,7 +252,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public Long addUserOrGroup(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -270,7 +270,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Long> addUserOrGroupWithHttpInfo(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -290,7 +290,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call addUserOrGroupAsync(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback<Long> _callback) throws ApiException {
@@ -303,14 +303,14 @@ public class GroupControllerApi {
     /**
      * Build call for createGroup
      * @param parentGroupId  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createGroupCall(Long parentGroupId, GroupCreateOrUpdateDto groupCreateOrUpdateDto, final ApiCallback _callback) throws ApiException {
@@ -352,6 +352,11 @@ public class GroupControllerApi {
             throw new ApiException("Missing the required parameter 'parentGroupId' when calling createGroup(Async)");
         }
         
+        // verify the required parameter 'groupCreateOrUpdateDto' is set
+        if (groupCreateOrUpdateDto == null) {
+            throw new ApiException("Missing the required parameter 'groupCreateOrUpdateDto' when calling createGroup(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = createGroupCall(parentGroupId, groupCreateOrUpdateDto, _callback);
         return localVarCall;
@@ -362,13 +367,13 @@ public class GroupControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @return GroupDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public GroupDto createGroup(Long parentGroupId, GroupCreateOrUpdateDto groupCreateOrUpdateDto) throws ApiException {
@@ -380,13 +385,13 @@ public class GroupControllerApi {
      * 
      * 
      * @param parentGroupId  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @return ApiResponse&lt;GroupDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<GroupDto> createGroupWithHttpInfo(Long parentGroupId, GroupCreateOrUpdateDto groupCreateOrUpdateDto) throws ApiException {
@@ -399,14 +404,14 @@ public class GroupControllerApi {
      *  (asynchronously)
      * 
      * @param parentGroupId  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createGroupAsync(Long parentGroupId, GroupCreateOrUpdateDto groupCreateOrUpdateDto, final ApiCallback<GroupDto> _callback) throws ApiException {
@@ -425,7 +430,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteGroupCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -481,7 +486,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public void deleteGroup(Long id) throws ApiException {
@@ -497,7 +502,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> deleteGroupWithHttpInfo(Long id) throws ApiException {
@@ -515,7 +520,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call deleteGroupAsync(Long id, final ApiCallback<Void> _callback) throws ApiException {
@@ -533,7 +538,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call groupByIdCall(Long id, final ApiCallback _callback) throws ApiException {
@@ -590,7 +595,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public GroupDto groupById(Long id) throws ApiException {
@@ -607,7 +612,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<GroupDto> groupByIdWithHttpInfo(Long id) throws ApiException {
@@ -626,7 +631,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call groupByIdAsync(Long id, final ApiCallback<GroupDto> _callback) throws ApiException {
@@ -646,7 +651,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call removeProjectCall(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback _callback) throws ApiException {
@@ -710,7 +715,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public Long removeProject(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -728,7 +733,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Long> removeProjectWithHttpInfo(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -748,7 +753,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call removeProjectAsync(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback<Long> _callback) throws ApiException {
@@ -768,7 +773,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call removeUserOrGroupCall(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback _callback) throws ApiException {
@@ -832,7 +837,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public Long removeUserOrGroup(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -850,7 +855,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Long> removeUserOrGroupWithHttpInfo(Set<Long> ownerGroupIds, Set<Long> childrenIds) throws ApiException {
@@ -870,7 +875,7 @@ public class GroupControllerApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call removeUserOrGroupAsync(Set<Long> ownerGroupIds, Set<Long> childrenIds, final ApiCallback<Long> _callback) throws ApiException {
@@ -883,14 +888,14 @@ public class GroupControllerApi {
     /**
      * Build call for updateGroup
      * @param id  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateGroupCall(Long id, GroupCreateOrUpdateDto groupCreateOrUpdateDto, final ApiCallback _callback) throws ApiException {
@@ -932,6 +937,11 @@ public class GroupControllerApi {
             throw new ApiException("Missing the required parameter 'id' when calling updateGroup(Async)");
         }
         
+        // verify the required parameter 'groupCreateOrUpdateDto' is set
+        if (groupCreateOrUpdateDto == null) {
+            throw new ApiException("Missing the required parameter 'groupCreateOrUpdateDto' when calling updateGroup(Async)");
+        }
+        
 
         okhttp3.Call localVarCall = updateGroupCall(id, groupCreateOrUpdateDto, _callback);
         return localVarCall;
@@ -942,13 +952,13 @@ public class GroupControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @return GroupDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public GroupDto updateGroup(Long id, GroupCreateOrUpdateDto groupCreateOrUpdateDto) throws ApiException {
@@ -960,13 +970,13 @@ public class GroupControllerApi {
      * 
      * 
      * @param id  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @return ApiResponse&lt;GroupDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<GroupDto> updateGroupWithHttpInfo(Long id, GroupCreateOrUpdateDto groupCreateOrUpdateDto) throws ApiException {
@@ -979,14 +989,14 @@ public class GroupControllerApi {
      *  (asynchronously)
      * 
      * @param id  (required)
-     * @param groupCreateOrUpdateDto  (optional)
+     * @param groupCreateOrUpdateDto  (required)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> default response </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call updateGroupAsync(Long id, GroupCreateOrUpdateDto groupCreateOrUpdateDto, final ApiCallback<GroupDto> _callback) throws ApiException {

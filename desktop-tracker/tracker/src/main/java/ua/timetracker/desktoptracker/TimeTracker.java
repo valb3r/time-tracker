@@ -1,11 +1,9 @@
 package ua.timetracker.desktoptracker;
 
 import com.google.gson.Gson;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
+import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -14,11 +12,11 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,8 +26,8 @@ import java.util.concurrent.locks.LockSupport;
 public class TimeTracker {
 
     private static final int MIN_REPORT_EACH_N_MS = 10_000;
-    private static final int MAX_REPORT_EACH_N_MS = 60_000;
-    private static final float JPEG_QUALITY = 0.5f;
+    private static final int MAX_REPORT_EACH_N_MS = 600_000;
+    private static final float JPEG_QUALITY = 0.3f;
 
     private final AtomicReference<TrackingData> trackingData = new AtomicReference<>();
     private final AtomicBoolean screenShotsEnabled = new AtomicBoolean();
@@ -39,8 +37,8 @@ public class TimeTracker {
         startTimeTrackingThread();
     }
 
-    public void startTracking(ProjectDto project) {
-        trackingData.set(new TrackingData(nextSchedule(), project));
+    public void startTracking(ProjectDto project, String taskDescription, String taskTag) {
+        trackingData.set(new TrackingData(nextSchedule(project), System.currentTimeMillis(), taskDescription, taskTag, project));
     }
 
     public void stopTracking() {
@@ -61,7 +59,7 @@ public class TimeTracker {
                 }
 
                 // Report
-                trackingData.set(data.toBuilder().reportAt(nextSchedule()).build());
+                trackingData.set(data.toBuilder().forTime(System.currentTimeMillis()).reportAt(nextSchedule(data.getProject())).build());
                 captureTimeLog(data);
             }
         });
@@ -70,16 +68,29 @@ public class TimeTracker {
 
     @SneakyThrows
     private void captureTimeLog(TrackingData data) {
-        File jarDir = new File(TimeTracker.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-        Path logDir = jarDir.toPath().resolve("timelogs");
+        Path logDir = ProjectFileStructUtil.logDir();
         logDir.toFile().mkdir();
         String baseName = "" + Instant.now().toEpochMilli();
-        writeScreenshotIfNeeded(logDir, baseName);
-        Files.write(logDir.resolve(baseName), gson.toJson(data).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
+        writeScreenshotIfNeeded(logDir, baseName, data.getProject());
+        val duration = System.currentTimeMillis() - data.getForTime();
+        if (duration <= 0) {
+            return;
+        }
+
+        Files.write(
+                logDir.resolve(baseName),
+                gson.toJson(new TimeLogToUploadDto(
+                        duration,
+                        data.getProject(),
+                        data.getTaskDescription(),
+                        data.getTaskTag()
+                )).getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE_NEW
+        );
     }
 
     @SneakyThrows
-    private void writeScreenshotIfNeeded(Path dir, String baseName) {
+    private void writeScreenshotIfNeeded(Path dir, String baseName, ProjectDto project) {
         if (!screenShotsEnabled.get()) {
            return;
         }
@@ -88,7 +99,7 @@ public class TimeTracker {
         ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
         ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
         jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        jpgWriteParam.setCompressionQuality(JPEG_QUALITY);
+        jpgWriteParam.setCompressionQuality(null != project.getQuality() ? project.getQuality() : JPEG_QUALITY);
 
         try (ImageOutputStream os = ImageIO.createImageOutputStream(dir.resolve(baseName + ".jpg").toFile())) {
             jpgWriter.setOutput(os);
@@ -99,15 +110,21 @@ public class TimeTracker {
         }
     }
 
-    private long nextSchedule() {
-        return System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(MIN_REPORT_EACH_N_MS, MAX_REPORT_EACH_N_MS);
+    private long nextSchedule(ProjectDto project) {
+        return System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(
+                MIN_REPORT_EACH_N_MS,
+                Math.max(MIN_REPORT_EACH_N_MS, null != project.getIntervalminutes() ? (int) Duration.ofMinutes(project.getIntervalminutes()).toMillis() : MAX_REPORT_EACH_N_MS)
+        );
     }
 
     @Getter
     @Builder(toBuilder = true)
     @RequiredArgsConstructor
     private static class TrackingData {
+        private final long forTime;
         private final long reportAt;
+        private final String taskDescription;
+        private final String taskTag;
         private final ProjectDto project;
     }
 }
