@@ -23,3 +23,7 @@ oauth2:
 cors:
   origins:
     - http://localhost:6500
+
+image-upload:
+  path: images-for-cards
+  base-url: http://localhost:20080
