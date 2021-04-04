@@ -5,16 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
@@ -23,6 +16,8 @@ import ua.timetracker.shared.restapi.EntityNotFoundException;
 import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
+import ua.timetracker.shared.restapi.dto.timelog.TimeLogImageDto;
+import ua.timetracker.timetrackingserver.service.TimeLogImagesService;
 import ua.timetracker.timetrackingserver.service.securityaspect.OnlyProjectWorkers;
 import ua.timetracker.timetrackingserver.service.update.TimeLogUpdater;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
@@ -30,6 +25,7 @@ import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 import static ua.timetracker.shared.util.UserIdUtil.id;
 
@@ -42,6 +38,7 @@ public class TimeLogController {
     private final ProjectsRepository projects;
     private final TimeLogUpdater updater;
     private final TimeLogUploader uploader;
+    private final TimeLogImagesService images;
 
     @GetMapping(path = "/projects", consumes = MediaType.ALL_VALUE)
     public Flux<ProjectDto> availableProjects(
@@ -92,5 +89,14 @@ public class TimeLogController {
         @Valid @RequestBody TimeLogCreateOrUpdate log) {
         return uploader.upload(id(user), log)
             .switchIfEmpty(EntityNotFoundException.mono());
+    }
+
+    @PutMapping(path = "/{id}/images/{tag}", consumes = MULTIPART_FORM_DATA_VALUE)
+    public Mono<TimeLogImageDto> uploadTimelogImage(
+            @Parameter(hidden = true) Authentication user,
+            @PathVariable("id") long cardId,
+            @PathVariable("tag") String tag,
+            @RequestPart("file") FilePart file) {
+        return images.uploadTimelogImage(id(user), cardId, tag, file);
     }
 }

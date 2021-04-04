@@ -1,0 +1,68 @@
+group 'ua.timetracker.desktoptracker'
+version '0.1-SNAPSHOT'
+description = 'Desktop time tracker'
+
+apply from: "$rootProject.projectDir/shared.gradle"
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    maven { url "https://www.jetbrains.com/intellij-repository/releases" }
+    maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    antTask
+}
+
+dependencies {
+    compile project(":desktop-tracker-api")
+
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
+    implementation "com.google.guava:guava:${versions.guava}"
+    implementation "org.slf4j:slf4j-api:${versions.slf4j}"
+    implementation "org.slf4j:slf4j-simple:${versions.slf4j}"
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.formdev:flatlaf:1.1.1'
+    antTask 'com.jetbrains.intellij.java:java-compiler-ant-tasks:203.7148.30'
+
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+}
+
+jar {
+    version = project.version
+    enabled = true
+    manifest {
+        attributes(
+                'Main-Class': 'ua.timetracker.desktoptracker.TrackerDialog'
+        )
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task compileJava(type: JavaCompile, overwrite: true, dependsOn: configurations.compile.getTaskDependencyFromProjectDependency(true, 'jar')) {
+    doLast {
+        project.sourceSets.main.output.classesDirs.each { project.mkdir(it) }
+        ant.taskdef name: 'javac2', classname: 'com.intellij.ant.Javac2', classpath: configurations.antTask.asPath
+        ant.javac2 srcdir: project.sourceSets.main.java.srcDirs.join(':'),
+                classpath: project.sourceSets.main.compileClasspath.asPath,
+                destdir: project.sourceSets.main.output.classesDirs[0],
+                source: sourceCompatibility,
+                target: targetCompatibility,
+                includeAntRuntime: false
+    }
+}
+
+task printCommitSha() {
+    println("COMMIT:${commitSha()}")
+}
