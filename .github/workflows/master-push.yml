@@ -75,6 +75,16 @@ jobs:
             . ./all-env.sh
             docker stack deploy --compose-file docker-compose.yml base-demo
 
+      - name: Copy docker-image to Business-1
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.BUSINESS_1_HOST }}
+          username: ${{ secrets.BUSINESS_1_USERNAME }}
+          key: ${{ secrets.BUSINESS_1_CI_CD_PRIVATE_KEY }}
+          source: "*.img"
+          target: "apps/timetracker"
+          overwrite: true
+
       - name: Deploy new docker image on Business-1
         uses: appleboy/ssh-action@master
         with:
