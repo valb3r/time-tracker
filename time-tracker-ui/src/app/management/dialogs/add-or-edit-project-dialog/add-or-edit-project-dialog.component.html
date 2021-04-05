@@ -63,6 +63,24 @@
                   cdkAutosizeMinRows="3"
                   cdkAutosizeMaxRows="10"></textarea>
       </mat-form-field>
+      <br/>
+
+      <h5>Screenshot settings:</h5>
+      <div>
+        <mat-checkbox [formControl]="trackScreenShots">
+          Do track screenshots
+        </mat-checkbox>
+      </div>
+      <br/>
+      <div>
+        Screenshot quality:
+        <mat-slider min="0" max="1" step="0.1" [formControl]="screenShotQuality" thumbLabel="true"></mat-slider>
+      </div>
+      <br/>
+      <div>
+        Screenshot interval, minutes:
+        <mat-slider min="1" max="30" step="1" [formControl]="screenShotIntervalM" thumbLabel="true"></mat-slider>
+      </div>
     </form>
   </mat-card-content>
 </div>

@@ -273,6 +273,9 @@ export interface ProjectCreateOrUpdateDto {
   name: string;
   activities: Set<string>;
   description: string;
+  screenshots?: boolean;
+  quality?: number;
+  intervalminutes?: number;
 }
 
 export class RoleDetailsDto {

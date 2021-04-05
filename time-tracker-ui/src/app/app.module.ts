@@ -30,6 +30,7 @@ import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {MAT_DATE_FORMATS} from "@angular/material/core";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatSliderModule} from "@angular/material/slider";
 import {MatListModule} from "@angular/material/list";
 import {MainScreenComponent} from './main-screen/main-screen.component';
 import {MyProfileComponent} from './my-profile/my-profile.component';
@@ -107,6 +108,7 @@ export const AppDateFormats = {
     MatCardModule,
     MatTreeModule,
     MatCheckboxModule,
+    MatSliderModule,
     MatProgressBarModule,
     MatButtonModule,
     MatMenuModule,

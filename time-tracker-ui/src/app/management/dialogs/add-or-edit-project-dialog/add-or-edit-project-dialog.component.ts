@@ -25,10 +25,17 @@ export class AddOrEditProjectDialogComponent implements OnInit {
 
   projectDescriptionControl = new FormControl('', []);
 
+  trackScreenShots = new FormControl(false, []);
+  screenShotQuality = new FormControl(0.5, [Validators.required, Validators.min(0), Validators.max(1)]);
+  screenShotIntervalM = new FormControl(10, []);
+
   newProjectForm = this.fb.group({
     username: this.projectCodeControl,
     fullname: this.projectNameControl,
     activities: this.fb.array([]),
+    trackScreenShots: this.trackScreenShots,
+    screenShotQuality: this.screenShotQuality,
+    screenShotIntervalM: this.screenShotIntervalM
   }, {validator: AddOrEditProjectDialogComponent.checkActivities});
 
   fieldMatcher = new FieldErrorStateMatcher();
@@ -50,6 +57,10 @@ export class AddOrEditProjectDialogComponent implements OnInit {
     }
 
     this.projectDescriptionControl.setValue(data.description)
+
+    this.trackScreenShots.setValue(data.screenshots);
+    this.screenShotQuality.setValue(data.quality);
+    this.screenShotIntervalM.setValue(data.intervalminutes);
   }
 
   ngOnInit() {
@@ -79,6 +90,8 @@ export class AddOrEditProjectDialogComponent implements OnInit {
   }
 
   onSaveClick(): void {
+    console.log(this.newProjectForm.valid)
+    console.log(this.newProjectForm.errors)
     if (!this.newProjectForm.valid || this.activitiesControl.controls.filter(it => !it.valid).length > 0) {
       return
     }
@@ -88,8 +101,11 @@ export class AddOrEditProjectDialogComponent implements OnInit {
         code: this.projectCodeControl.value,
         name: this.projectNameControl.value,
         activities: this.activitiesControl.controls.map(it => it.value),
-        description: this.projectDescriptionControl.value}
-      );
+        description: this.projectDescriptionControl.value,
+        screenshots: this.trackScreenShots.value,
+        quality: this.screenShotQuality.value,
+        intervalminutes: this.screenShotIntervalM.value
+      });
   }
 
   onNoClick(): void {

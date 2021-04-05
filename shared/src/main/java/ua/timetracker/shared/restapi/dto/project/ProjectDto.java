@@ -30,7 +30,7 @@ public class ProjectDto {
 
         default ProjectDto map(Project project) {
             ProjectDto mapped = map(project, new ProjectDto());
-            mapped.setIntervalminutes(null == project.getInterval() ? 0 : project.getInterval().toMinutes());
+            mapped.setIntervalminutes(null == project.getIntervalM() ? 0 : project.getIntervalM());
             return mapped;
         }
     }
