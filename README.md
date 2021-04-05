@@ -4,6 +4,12 @@ Typically, authorization applications include some form of group and user relati
 Such resource management, in essence, is backed by a user-group-resource relationship. This project aims to demonstrate the simplicity and cleanliness of the corporate authorization solution if it would be implemented using
 graphs and Neo4j in particular. 
 
+
+# Desktop tracker
+
+Desktop tracker is [available at **releases page**](https://github.com/valb3r/time-tracker/releases/download/v0.1.0/time-tracker.zip)
+
+
 # Tech stack:
 
 1. Spring Boot 2 with reactive WebFlux REST endpoints and security.
