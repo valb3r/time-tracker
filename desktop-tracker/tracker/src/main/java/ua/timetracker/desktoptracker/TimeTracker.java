@@ -38,7 +38,7 @@ public class TimeTracker {
     }
 
     public void startTracking(ProjectDto project, String taskDescription, String taskTag) {
-        trackingData.set(new TrackingData(nextSchedule(project), System.currentTimeMillis(), taskDescription, taskTag, project));
+        trackingData.set(new TrackingData(System.currentTimeMillis(), nextSchedule(project), taskDescription, taskTag, project));
     }
 
     public void stopTracking() {
