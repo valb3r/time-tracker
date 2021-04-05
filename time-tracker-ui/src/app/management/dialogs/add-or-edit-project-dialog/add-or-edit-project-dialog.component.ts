@@ -58,9 +58,9 @@ export class AddOrEditProjectDialogComponent implements OnInit {
 
     this.projectDescriptionControl.setValue(data.description)
 
-    this.trackScreenShots.setValue(data.screenshots);
-    this.screenShotQuality.setValue(data.quality);
-    this.ticketingInterval.setValue(data.intervalminutes);
+    this.trackScreenShots.setValue(data.screenshots ? data.screenshots : false);
+    this.screenShotQuality.setValue(data.quality ? data.quality : 0.5);
+    this.ticketingInterval.setValue(data.intervalminutes ? data.intervalminutes : 10);
   }
 
   ngOnInit() {
