@@ -31,6 +31,7 @@ dependencies {
     compile "io.projectreactor:reactor-core:${versions.reactor}"
 
     compile 'org.springframework.security:spring-security-core'
+    compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
     compile "org.neo4j.springframework.data:spring-data-neo4j-rx:${versions.neo4jRx}"
 
     compileOnly "org.projectlombok:lombok:${versions.lombok}"

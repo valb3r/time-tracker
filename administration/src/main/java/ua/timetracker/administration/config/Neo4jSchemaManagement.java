@@ -28,7 +28,7 @@ public class Neo4jSchemaManagement {
         // TODO: Schema management solution
         neo4jSchema.getSchema().forEach(statement -> client.query(statement).run()
                 .onErrorResume(ex -> {
-                    String message = ex.getCause().getMessage();
+                    String message = ex.getMessage();
                     if (message.contains("An equivalent constraint already exists")
                             || message.contains("already exists with label")) {
                         log.info("{} seem to be already executed", statement);

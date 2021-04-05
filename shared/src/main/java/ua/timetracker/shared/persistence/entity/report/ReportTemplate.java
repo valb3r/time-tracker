@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -14,6 +15,7 @@ import org.neo4j.springframework.data.core.schema.Node;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Node
+@NodeEntity
 @AllArgsConstructor
 public class ReportTemplate {
 

@@ -4,6 +4,7 @@ import lombok.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -16,6 +17,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Getter
 @Setter
 @Node
+@NodeEntity
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -34,7 +36,7 @@ public class Project {
     private Set<String> activities;
     // screenshot related
     private Boolean screenshots;
-    private Float quality;
+    private Double quality;
     // FIXME java.lang.ClassCastException: Cannot cast org.neo4j.driver.internal.InternalIsoDuration to java.time.Duration
     private Long intervalM;
 

@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -31,6 +32,7 @@ import static ua.timetracker.shared.persistence.entity.realationships.Relationsh
 @Getter
 @Setter
 @Node
+@NodeEntity
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
