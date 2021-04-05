@@ -7,7 +7,8 @@ graphs and Neo4j in particular.
 
 # Desktop tracker
 
-Desktop tracker is [available at **releases page**](https://github.com/valb3r/time-tracker/releases/download/v0.1.0/time-tracker.zip)
+Desktop tracker is [available at **releases page**](https://github.com/valb3r/time-tracker/releases/download/v0.1.0/time-tracker.zip),
+**requires** Java 8+
 
 
 # Tech stack:
