@@ -11,7 +11,9 @@ import java.io.FileReader;
 import java.nio.file.Paths;
 import java.time.*;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,6 +23,7 @@ public class CardUploader {
 
     private static final int UPLOAD_EACH_N_MS = 10_000;
 
+    private final Set<String> processedFiles = new HashSet<>();
     private final Gson gson = new Gson();
     private final AtomicReference<TimeLogControllerApi> api = new AtomicReference<>();
     private final AtomicLong nextUpload = new AtomicLong(System.currentTimeMillis());
@@ -73,8 +76,19 @@ public class CardUploader {
                 continue;
             }
 
+            if (processedFiles.contains(report.getAbsolutePath())) {
+                report.delete();
+                continue;
+            }
+
             try {
-                TimeLogToUploadDto toUpload = gson.fromJson(new FileReader(report), TimeLogToUploadDto.class);
+                TimeLogToUploadDto toUpload;
+                try (val reader = new FileReader(report)) {
+                    toUpload = gson.fromJson(reader, TimeLogToUploadDto.class);
+                } catch (Exception ex) {
+                    continue;
+                }
+
                 // FIXME double submission problem
                 val existingCard = cards.stream()
                         .filter(it -> Objects.equals(toUpload.getProject().getId(), it.getProjectid()))
@@ -93,6 +107,8 @@ public class CardUploader {
                                     .duration(getSeconds(toUpload).plus(null == card.getDuration() ? Duration.ofMillis(0L) : Duration.parse(card.getDuration())).toString())
                                     .projectid(card.getProjectid())
                     );
+                    // If anything prevents file removal - TODO double - submission
+                    processedFiles.add(report.getAbsolutePath());
                     report.delete();
                     uploadImageIfPossible(api, report, card);
                     continue;
