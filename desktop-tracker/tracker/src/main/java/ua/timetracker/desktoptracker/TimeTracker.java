@@ -113,7 +113,7 @@ public class TimeTracker {
     private long nextSchedule(ProjectDto project) {
         return System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(
                 MIN_REPORT_EACH_N_MS,
-                Math.max(MIN_REPORT_EACH_N_MS, null != project.getIntervalminutes() ? (int) Duration.ofMinutes(project.getIntervalminutes()).toMillis() : MAX_REPORT_EACH_N_MS)
+                Math.max(MIN_REPORT_EACH_N_MS + 1, null != project.getIntervalminutes() ? (int) Duration.ofMinutes(project.getIntervalminutes()).toMillis() : MAX_REPORT_EACH_N_MS)
         );
     }
 

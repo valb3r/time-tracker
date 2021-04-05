@@ -105,6 +105,7 @@ public class CardUploader {
                                 .tags(Collections.singletonList(toUpload.getTaskTag()))
                                 .duration(getSeconds(toUpload).toString())
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                                .location("UNKNOWN")
                 );
                 uploadImageIfPossible(api, report, card);
 
