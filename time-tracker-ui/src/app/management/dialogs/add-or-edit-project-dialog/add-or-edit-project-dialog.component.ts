@@ -27,7 +27,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
 
   trackScreenShots = new FormControl(false, []);
   screenShotQuality = new FormControl(0.5, [Validators.required, Validators.min(0), Validators.max(1)]);
-  screenShotIntervalM = new FormControl(10, []);
+  ticketingInterval = new FormControl(10, []);
 
   newProjectForm = this.fb.group({
     username: this.projectCodeControl,
@@ -35,7 +35,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
     activities: this.fb.array([]),
     trackScreenShots: this.trackScreenShots,
     screenShotQuality: this.screenShotQuality,
-    screenShotIntervalM: this.screenShotIntervalM
+    screenShotIntervalM: this.ticketingInterval
   }, {validator: AddOrEditProjectDialogComponent.checkActivities});
 
   fieldMatcher = new FieldErrorStateMatcher();
@@ -60,7 +60,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
 
     this.trackScreenShots.setValue(data.screenshots);
     this.screenShotQuality.setValue(data.quality);
-    this.screenShotIntervalM.setValue(data.intervalminutes);
+    this.ticketingInterval.setValue(data.intervalminutes);
   }
 
   ngOnInit() {
@@ -104,7 +104,7 @@ export class AddOrEditProjectDialogComponent implements OnInit {
         description: this.projectDescriptionControl.value,
         screenshots: this.trackScreenShots.value,
         quality: this.screenShotQuality.value,
-        intervalminutes: this.screenShotIntervalM.value
+        intervalminutes: this.ticketingInterval.value
       });
   }
 
