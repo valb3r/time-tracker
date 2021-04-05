@@ -146,7 +146,7 @@ export class TimeCardCalendarComponent implements OnInit {
         actions: this.actions,
         allDay: true,
         meta: {
-          hoursValue: card.durationminutes / 60.0,
+          hoursValue: Math.round((card.durationminutes / 60.0 + Number.EPSILON) * 100) / 100,
           src: card
         },
         draggable: !this.mobileQuery.matches
