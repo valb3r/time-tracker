@@ -53,7 +53,9 @@ public class ManagedTimeLogsController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam(value = "to", defaultValue = "2100-01-01T00:00") LocalDateTime toDate
     ) {
-        return logs.listUploadedCards(projectIds, fromDate, toDate).map(TimeLogDto.MAP::map);
+        return logs.listUploadedCards(projectIds, fromDate, toDate)
+                .flatMap(it -> logs.findById(it.getId())) // FIXME listUploadedCards does not load related data
+                .map(TimeLogDto.MAP::map);
     }
 
     @OnlyResourceManagers

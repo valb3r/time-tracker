@@ -249,6 +249,9 @@ export class ManagementComponent implements OnInit {
     ).subscribe(res => this.updateOwnedGroups(res));
   }
 
+  reviewProject(target: GroupNode) {
+  }
+
   addProject(parent: GroupNode) {
     const dialogRef = this.dialog.open(AddOrEditProjectDialogComponent, {
       data: {}
