@@ -26,6 +26,7 @@ public interface TimeLogsRepository extends ReactiveCrudRepository<TimeLog, Long
         @Param("to") LocalDateTime to
     );
 
+    // FIXME `RETURN o,to,` is ignored - null model is returned
     @Query(
             "MATCH (o:User)<-[to:" + OWNER + "]-(t:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) WHERE id(p) IN $projectIds AND t.timestamp >= $from AND t.timestamp <= $to RETURN o,to,t ORDER BY t.timestamp DESC"
     )
