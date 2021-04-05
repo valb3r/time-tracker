@@ -26,6 +26,7 @@ import {
 } from "./dialogs/add-user-or-group-to-project-dialog/add-user-or-group-to-project-dialog.component";
 import {EditProjectRoleComponent} from "./dialogs/edit-project-role/edit-project-role.component";
 import {filter, flatMap} from "rxjs/operators";
+import {ReviewProjectComponent} from "./dialogs/review-project/review-project.component";
 
 export class GroupDatabase {
   private expandedMemoize = new Set<string>();
@@ -250,6 +251,13 @@ export class ManagementComponent implements OnInit {
   }
 
   reviewProject(target: GroupNode) {
+    this.api.getProject(target.id).subscribe(res => {
+      this.dialog.open(ReviewProjectComponent, {
+        data: res,
+        height: '80%',
+        width: '80%',
+      });
+    })
   }
 
   addProject(parent: GroupNode) {

@@ -55,6 +55,8 @@ import {MatChipsModule} from "@angular/material/chips";
 import { TemplateManagementDialogComponent } from './reports/dialogs/template-management-dialog/template-management-dialog.component';
 import { EditProjectRoleComponent } from './management/dialogs/edit-project-role/edit-project-role.component';
 import { TimeCardReportComponent } from './time-card-report/time-card-report.component';
+import { ReviewProjectComponent } from './management/dialogs/review-project/review-project.component';
+import { TimeCardListComponent } from './dialogs/time-card-list/time-card-list.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -95,7 +97,9 @@ export const AppDateFormats = {
     NewProjectsReportComponent,
     TemplateManagementDialogComponent,
     EditProjectRoleComponent,
-    TimeCardReportComponent
+    TimeCardReportComponent,
+    ReviewProjectComponent,
+    TimeCardListComponent
   ],
   imports: [
     BrowserModule,

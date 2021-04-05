@@ -1,1 +1,64 @@
-<p>time-card-report works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Work log report
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="3" rowHeight="30pt">
+      <mat-grid-tile [colspan]="3" [rowspan]="1">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <button
+          mat-button
+          color="primary"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="viewDateChanged()">
+          Previous
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <button
+          mat-button
+          color="primary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+          (viewDateChange)="viewDateChanged()">
+          Today
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <button
+          mat-button
+          color="primary"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="viewDateChanged()">
+          Next
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <mat-divider></mat-divider>
+
+    <div>
+      <mat-slide-toggle (change)="excludeDays = excludeDays.length == 0 ? [0, 6] : []">Show weekends</mat-slide-toggle>
+    </div>
+    <mat-divider></mat-divider>
+
+    <mwl-calendar-month-view
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      [excludeDays]="excludeDays"
+      (dayClicked)="dayClicked($event.day)"
+      (beforeViewRender)="beforeMonthViewRender($event)"
+    >
+    </mwl-calendar-month-view>
+  </mat-card-content>
+</mat-card>

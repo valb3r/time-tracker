@@ -1,0 +1,11 @@
+<mat-card-header>
+  <mat-card-title>Project time log report</mat-card-title>
+</mat-card-header>
+
+<mat-dialog-content>
+  <timecard-reports [project]="project"></timecard-reports>
+</mat-dialog-content>
+
+<mat-card-actions>
+  <button mat-button (click)="onDoneClick()">Done</button>
+</mat-card-actions>

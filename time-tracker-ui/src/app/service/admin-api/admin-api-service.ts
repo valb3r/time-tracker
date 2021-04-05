@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {forkJoin, Observable} from "rxjs";
 import {Globals} from "../../globals";
 
@@ -27,6 +27,10 @@ export class AdminApiService {
 
   private baseReportsUri = this.base + "resources/reports/";
   private baseReportTemplatesUri = this.base + "resources/reports/templates/";
+
+  private baseManagedTimelogsUri = this.base + "resources/managed/timelogs/projects/"
+  private baseManagedTimelogCardsUri = this.base + "resources/managed/timelogs/projects/"
+  private baseManagedTimelogImagesUri = this.base + "resources/managed/timelogs/cards/images/"
 
   constructor(private httpClient: HttpClient, private globals: Globals) { }
 
@@ -225,6 +229,21 @@ export class AdminApiService {
   deleteReport(reportId: number) {
     return this.httpClient.delete(this.baseReportsUri + reportId);
   }
+
+  getManagedTimelogs(projectIds: number[], from: Date, to: Date) {
+    return this.httpClient.get<ManagedTimeLog[]>(
+      this.baseManagedTimelogsUri + projectIds,
+      {params: new HttpParams().append("from", from.toISOString()).append("to", to.toISOString()) }
+      );
+  }
+
+  getManagedTimelogCards(projectIds: number[], timelogIds: number[]) {
+    return this.httpClient.get<ManagedTimeLogCard[]>(this.baseManagedTimelogCardsUri + projectIds + "/cards/" + timelogIds);
+  }
+
+  getLinkManagedTimelogCardImages(path: string) {
+    return this.baseManagedTimelogImagesUri + path;
+  }
 }
 
 export class GroupDto {
@@ -308,4 +327,22 @@ export interface CreateReportDto {
 export interface UpdatePasswordDto {
   current: string;
   newpassword: string;
+}
+
+export interface ManagedTimeLog {
+  id?: number;
+  projectid: number;
+  tags: string[];
+  duration: string;
+  durationminutes?: number;
+  description: string;
+  location: string;
+  timestamp: string;
+  "userid": number;
+  "username": string;
+}
+
+export interface ManagedTimeLogCard {
+  "id": number;
+  "imageurl": string;
 }

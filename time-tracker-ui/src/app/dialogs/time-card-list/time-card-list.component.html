@@ -1,0 +1,17 @@
+<mat-card-header>
+  <mat-card-title>Uploaded time cards</mat-card-title>
+</mat-card-header>
+
+<mat-dialog-content>
+  <div>
+    <mat-grid-list cols="4" rowHeight="2:1">
+      <mat-grid-tile *ngFor='let img of images' [colspan]="selected === img ? 4 : 1" [rowspan]="selected === img ? 4 : 1" (click)="selected === img ? selected = null : selected = img">
+        <img src='{{ img }}' class="tile-image">
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</mat-dialog-content>
+
+<mat-card-actions>
+  <button mat-button (click)="onDoneClick()">Done</button>
+</mat-card-actions>
