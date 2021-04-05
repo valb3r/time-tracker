@@ -1,11 +1,14 @@
 package ua.timetracker.desktoptracker;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.val;
 import ua.timetracker.desktoptracker.api.admin.LoginControllerApi;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiClient;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiException;
@@ -14,22 +17,32 @@ import ua.timetracker.desktoptracker.api.admin.invoker.JSON;
 import ua.timetracker.desktoptracker.api.admin.model.LoginDto;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
+import ua.timetracker.desktoptracker.dto.PreferencesDto;
 import ua.timetracker.desktoptracker.verifier.MinLenVerifier;
 import ua.timetracker.desktoptracker.verifier.NotBlankVerifier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
 
 public class TrackerDialog {
     public static final String DEFAULT_TITLE = "Time Tracker";
 
+    private final Set<Long> projectsLoaded = new HashSet<>();
+
     private final JFrame frame;
     private final TimeTracker tracker;
     private final CardUploader uploader;
+    private final PreferencesDto preferences;
 
     private JTabbedPane trackerTabs;
     private JTextField usernameField;
@@ -53,10 +66,13 @@ public class TrackerDialog {
     private String authCookie;
     private ProjectComponent activeProject;
 
-    public TrackerDialog(JFrame frame, TimeTracker tracker, CardUploader uploader) {
+    public TrackerDialog(JFrame frame, TimeTracker tracker, CardUploader uploader, PreferencesDto preferences) {
         this.frame = frame;
         this.tracker = tracker;
         this.uploader = uploader;
+        this.preferences = preferences;
+        this.usernameField.setText(this.preferences.getUsername());
+        this.apiUploadUrl.setText(this.preferences.getApiUrl());
         setupUiAndHandlers();
     }
 
@@ -117,9 +133,29 @@ public class TrackerDialog {
             workType.removeAllItems();
             captureScreenshots.setSelected(Boolean.TRUE.equals(activeProject.getProject().getScreenshots()));
             activeProject.getProject().getActivities().forEach(it -> workType.addItem(it));
+
+            propagateProjectPrefs();
         });
 
         captureScreenshots.addActionListener(e -> tracker.setScreenshots(captureScreenshots.isSelected()));
+    }
+
+    private void propagateProjectPrefs() {
+        Long projectId = activeProject.getProject().getId();
+        if (projectsLoaded.contains(projectId)) {
+            return;
+        }
+        PreferencesDto.ProjectPreferences preferences = this.preferences.getPreferences().get(projectId);
+        projectsLoaded.add(projectId);
+        if (null != preferences) {
+            taskDescription.setText(preferences.getTaskDescription());
+            captureScreenshots.setSelected(preferences.isCaptureScreenshots());
+            IntStream.range(0, workType.getItemCount()).forEach(it -> {
+                if (preferences.getTaskTag().equals(workType.getItemAt(it))) {
+                    workType.setSelectedIndex(it);
+                }
+            });
+        }
     }
 
     private void doLogin() {
@@ -247,13 +283,58 @@ public class TrackerDialog {
         FlatLightLaf.install();
         JFrame frame = new JFrame(DEFAULT_TITLE);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Thread.currentThread().getContextClassLoader().getResource("icons/clock.png")));
-        TrackerDialog dialog = new TrackerDialog(frame, new TimeTracker(), new CardUploader());
+        val preferences = loadPreferences();
+        TrackerDialog dialog = new TrackerDialog(frame, new TimeTracker(), new CardUploader(), preferences);
         frame.setContentPane(dialog.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(600, 200);
+        frame.setSize(preferences.getWidth(), preferences.getHeight());
         dialog.trackerTabs.setEnabledAt(1, false);
         dialog.trackerTabs.setEnabledAt(2, false);
         frame.setVisible(true);
+        setupShutdownHook(dialog);
+    }
+
+    @SneakyThrows
+    private static PreferencesDto loadPreferences() {
+        File settingsFile = ProjectFileStructUtil.settingsFile().toFile();
+        if (!settingsFile.exists()) {
+            return new PreferencesDto();
+        }
+
+        PreferencesDto preferences = null;
+        try (val reader = new FileReader(settingsFile)) {
+            preferences = new Gson().fromJson(reader, PreferencesDto.class);
+        } catch (Exception ex) {
+            // NOP
+        }
+
+        return null == preferences ? new PreferencesDto() : preferences;
+    }
+
+    private static void setupShutdownHook(TrackerDialog dialog) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            val preferences = new PreferencesDto(
+                    dialog.usernameField.getText(),
+                    dialog.apiUploadUrl.getText(),
+                    dialog.frame.getWidth(),
+                    dialog.frame.getHeight(),
+                    null == dialog.activeProject ? null :
+                            ImmutableMap.of(
+                                    dialog.activeProject.getProject().getId(),
+                                    new PreferencesDto.ProjectPreferences(
+                                            dialog.taskDescription.getText(),
+                                            (String) dialog.workType.getSelectedItem(),
+                                            dialog.captureScreenshots.isSelected()
+                                    )
+                            )
+            );
+
+            try (val writer = new FileWriter(ProjectFileStructUtil.settingsFile().toFile(), false)) {
+                new Gson().toJson(preferences, writer);
+            } catch (Exception ex) {
+                // NOP
+            }
+        }));
     }
 }
