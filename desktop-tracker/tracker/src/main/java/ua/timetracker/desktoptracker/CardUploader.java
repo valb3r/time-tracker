@@ -1,8 +1,10 @@
 package ua.timetracker.desktoptracker;
 
 import com.google.gson.Gson;
+import lombok.Setter;
 import lombok.val;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
+import ua.timetracker.desktoptracker.api.tracker.invoker.ApiException;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
 
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
+import java.util.function.Supplier;
 
 public class CardUploader {
 
@@ -28,6 +31,9 @@ public class CardUploader {
     private final Gson gson = new Gson();
     private final AtomicReference<TimeLogControllerApi> api = new AtomicReference<>();
     private final AtomicLong nextUpload = new AtomicLong(System.currentTimeMillis());
+
+    @Setter
+    private Supplier<TimeLogControllerApi> reLogin;
 
     public CardUploader() {
         startCardUploadingThread();
@@ -109,9 +115,7 @@ public class CardUploader {
                                     .projectid(card.getProjectid())
                     );
                     // If anything prevents file removal - TODO double - submission
-                    processedFiles.add(report.getAbsolutePath());
-                    report.delete();
-                    uploadImageIfPossible(api, toUpload, report, card);
+                    uploadImagesAndCleanup(api, report, toUpload, card);
                     continue;
                 }
 
@@ -124,12 +128,28 @@ public class CardUploader {
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
                 );
-                uploadImageIfPossible(api, toUpload, report, card);
+                uploadImagesAndCleanup(api, report, toUpload, card);
 
+            } catch (ApiException ex) {
+                doRelogin();
             } catch (Exception ex) {
                 // NOP
             }
         }
+    }
+
+    private void doRelogin() {
+        try {
+            this.api.set(reLogin.get());
+        } catch (Exception reloginEx) {
+            // NOP
+        }
+    }
+
+    private void uploadImagesAndCleanup(TimeLogControllerApi api, File report, TimeLogToUploadDto toUpload, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {
+        processedFiles.add(report.getAbsolutePath());
+        report.delete();
+        uploadImageIfPossible(api, toUpload, report, card);
     }
 
     private Duration getSeconds(TimeLogToUploadDto toUpload) {

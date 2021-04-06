@@ -176,20 +176,12 @@ public class TrackerDialog {
         }
         loginErrorMessage.setText("");
 
-        LoginControllerApi loginApi = new LoginControllerApi(new ApiClient().setBasePath(apiUploadUrl.getText() + "/admin-api"));
         this.loginButton.setEnabled(false);
         new Thread(() -> {
             try {
-                ApiResponse<?> resp = loginApi.loginWithHttpInfo(new LoginDto().username(usernameField.getText()).password(new String(passwordField.getPassword())));
+                ApiResponse<?> loginResp = apiLogin();
                 SwingUtilities.invokeLater(() -> {
-                    authCookie = resp.getHeaders().get("set-cookie").get(0).split("=")[1];
-                    timeLog = new TimeLogControllerApi(
-                            new ua.timetracker.desktoptracker.api.tracker.invoker.ApiClient()
-                                    .setBasePath(apiUploadUrl.getText() + "/tracker-api")
-                                    .addDefaultCookie("X-Authorization", authCookie)
-                                    // FIXME https://github.com/swagger-api/swagger-codegen/issues/6992
-                                    .setJSON(new ua.timetracker.desktoptracker.api.tracker.invoker.JSON().setGson(JSON.createGson().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create()))
-                    );
+                    buildTrackerApi(loginResp);
                     this.uploader.setApi(timeLog);
                     trackerTabs.setEnabledAt(2, true);
                     trackerTabs.setEnabledAt(1, true);
@@ -203,6 +195,24 @@ public class TrackerDialog {
                 this.loginButton.setEnabled(true);
             }
         }).start();
+    }
+
+    private ApiResponse<?> apiLogin() {
+        LoginControllerApi loginApi = new LoginControllerApi(new ApiClient().setBasePath(apiUploadUrl.getText() + "/admin-api"));
+        return loginApi.loginWithHttpInfo(new LoginDto().username(usernameField.getText()).password(new String(passwordField.getPassword())));
+    }
+
+    private TimeLogControllerApi buildTrackerApi(ApiResponse<?> loginResp) {
+        authCookie = loginResp.getHeaders().get("set-cookie").get(0).split("=")[1];
+        timeLog = new TimeLogControllerApi(
+                new ua.timetracker.desktoptracker.api.tracker.invoker.ApiClient()
+                        .setBasePath(apiUploadUrl.getText() + "/tracker-api")
+                        .addDefaultCookie("X-Authorization", authCookie)
+                        // FIXME https://github.com/swagger-api/swagger-codegen/issues/6992
+                        .setJSON(new ua.timetracker.desktoptracker.api.tracker.invoker.JSON().setGson(JSON.createGson().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create()))
+        );
+
+        return timeLog;
     }
 
     private void doLoadTrackingScreenData() {
@@ -285,7 +295,13 @@ public class TrackerDialog {
         JFrame frame = new JFrame(DEFAULT_TITLE);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Thread.currentThread().getContextClassLoader().getResource("icons/clock.png")));
         val preferences = loadPreferences();
-        TrackerDialog dialog = new TrackerDialog(frame, new TimeTracker(), new CardUploader(), preferences);
+        val uploader = new CardUploader();
+        TrackerDialog dialog = new TrackerDialog(frame, new TimeTracker(), uploader, preferences);
+        uploader.setReLogin(() -> {
+            val login = dialog.apiLogin();
+            return dialog.buildTrackerApi(login);
+        });
+
         frame.setContentPane(dialog.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
