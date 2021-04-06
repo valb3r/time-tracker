@@ -42,6 +42,7 @@ public class TimeLogDto {
 
     private Long userid;
     private String username;
+    private String userfullname;
 
     @Mapper
     public interface FromEntity {
@@ -53,6 +54,7 @@ public class TimeLogDto {
             if (null != source.getUser()) {
                 target.setUserid(source.getUser().getId());
                 target.setUsername(source.getUser().getUsername());
+                target.setUserfullname(source.getUser().getFullname());
             }
 
             return map(source, target);

@@ -5,8 +5,14 @@
 <mat-dialog-content>
   <div>
     <mat-grid-list cols="4" rowHeight="2:1">
-      <mat-grid-tile *ngFor='let img of images' [colspan]="selected === img ? 4 : 1" [rowspan]="selected === img ? 4 : 1" (click)="selected === img ? selected = null : selected = img">
-        <img src='{{ img }}' class="tile-image">
+      <mat-grid-tile *ngFor='let img of images' [colspan]="selected === img ? 4 : 1"
+                     [rowspan]="selected === img ? 4 : 1" (click)="selected === img ? selected = null : selected = img">
+        <mat-card-content>
+          <div>
+            <img src='{{ img.url }}' class="tile-image">
+            <p class="top-left">{{img.timestamp}} @ {{img.duration}}</p>
+          </div>
+        </mat-card-content>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

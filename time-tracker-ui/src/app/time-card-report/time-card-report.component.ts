@@ -87,11 +87,11 @@ export class TimeCardReportComponent implements OnInit {
 
   private updateTimeCards(updates: ManagedTimeLog[]) {
     this.events = [];
-    updates.forEach(card => {
+    updates.sort((a, b) => parseISO(a.timestamp).valueOf() - parseISO(b.timestamp).valueOf()).forEach(card => {
       let event = {
         start: parseISO(card.timestamp),
         end: parseISO(card.timestamp),
-        title: `[${card.username}] ${card.description}`,
+        title: `[${card.userfullname ? card.userfullname + ',': ''}${card.username}] ${card.description}`,
         color: colors.blue,
         actions: this.actions,
         allDay: true,

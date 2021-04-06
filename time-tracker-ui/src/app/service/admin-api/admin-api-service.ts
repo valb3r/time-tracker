@@ -338,11 +338,14 @@ export interface ManagedTimeLog {
   description: string;
   location: string;
   timestamp: string;
-  "userid": number;
-  "username": string;
+  userid?: number;
+  username?: string;
+  userfullname?: string;
 }
 
 export interface ManagedTimeLogCard {
   "id": number;
   "imageurl": string;
+  duration: string;
+  timestamp: string;
 }
