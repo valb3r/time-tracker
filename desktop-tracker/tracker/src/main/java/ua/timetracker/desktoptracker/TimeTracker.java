@@ -77,7 +77,7 @@ public class TimeTracker {
             return;
         }
 
-        try(val writer = Files.newBufferedWriter(logDir.resolve(baseName), StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
+        try (val writer = Files.newBufferedWriter(logDir.resolve(baseName), StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
             val card = new TimeLogToUploadDto(
                     duration,
                     data.getProject(),
