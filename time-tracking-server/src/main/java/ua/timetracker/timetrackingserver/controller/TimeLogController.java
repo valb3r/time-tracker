@@ -102,7 +102,7 @@ public class TimeLogController {
             @PathVariable("id") long cardId,
             @PathVariable("tag") String tag,
             @RequestParam(value = "duration", required = false) String duration, // Openapi Codegen does not seem to support Duration
-            @RequestParam(value = "timestamp", required = false) LocalDateTime timestamp,
+            @RequestParam(value = "timestamp", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp,
             @RequestPart("file") FilePart file) {
         return images.uploadTimelogImage(id(user), cardId, tag, Duration.parse(duration), timestamp, file);
     }
