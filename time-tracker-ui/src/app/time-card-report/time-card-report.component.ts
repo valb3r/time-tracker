@@ -78,6 +78,7 @@ export class TimeCardReportComponent implements OnInit {
         event => event.meta ? event.meta.hoursValue : 0
       ).reduce((a, b) => a + b, 0);
     });
+    body.forEach(day => day.badgeTotal = +this.round(day.badgeTotal));
   }
 
   ngOnInit(): void {
@@ -109,7 +110,11 @@ export class TimeCardReportComponent implements OnInit {
   }
 
   private getHoursValue(card: ManagedTimeLog) {
-    return (Math.round((card.durationminutes / 60.0 + Number.EPSILON) * 100) / 100).toFixed(2);
+    return this.round(card.durationminutes / 60.0 );
+  }
+
+  private round(value: number) {
+    return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
   }
 }
 
