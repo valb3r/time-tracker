@@ -1,6 +1,5 @@
 package ua.timetracker.desktoptracker;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import lombok.val;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
@@ -8,7 +7,8 @@ import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.*;
 import java.util.Collections;
@@ -84,7 +84,7 @@ public class CardUploader {
 
             try {
                 TimeLogToUploadDto toUpload;
-                try (val reader = new FileReader(report)) {
+                try (val reader = Files.newBufferedReader(report.toPath(), StandardCharsets.UTF_8)) {
                     toUpload = gson.fromJson(reader, TimeLogToUploadDto.class);
                 } catch (Exception ex) {
                     continue;

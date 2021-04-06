@@ -77,16 +77,15 @@ public class TimeTracker {
             return;
         }
 
-        Files.write(
-                logDir.resolve(baseName),
-                gson.toJson(new TimeLogToUploadDto(
-                        duration,
-                        data.getProject(),
-                        data.getTaskDescription(),
-                        data.getTaskTag()
-                )).getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE_NEW
-        );
+        try(val writer = Files.newBufferedWriter(logDir.resolve(baseName), StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
+            val card = new TimeLogToUploadDto(
+                    duration,
+                    data.getProject(),
+                    data.getTaskDescription(),
+                    data.getTaskTag()
+            );
+            gson.toJson(card, writer);
+        }
     }
 
     @SneakyThrows
