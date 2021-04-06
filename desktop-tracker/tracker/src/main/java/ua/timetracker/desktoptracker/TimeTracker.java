@@ -18,6 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,6 +81,7 @@ public class TimeTracker {
 
         try (val writer = Files.newBufferedWriter(logDir.resolve(baseName), StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW)) {
             val card = new TimeLogToUploadDto(
+                    LocalDateTime.now(ZoneOffset.UTC),
                     duration,
                     data.getProject(),
                     data.getTaskDescription(),

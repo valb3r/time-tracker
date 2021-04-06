@@ -111,7 +111,7 @@ public class CardUploader {
                     // If anything prevents file removal - TODO double - submission
                     processedFiles.add(report.getAbsolutePath());
                     report.delete();
-                    uploadImageIfPossible(api, report, card);
+                    uploadImageIfPossible(api, toUpload, report, card);
                     continue;
                 }
 
@@ -124,7 +124,7 @@ public class CardUploader {
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
                 );
-                uploadImageIfPossible(api, report, card);
+                uploadImageIfPossible(api, toUpload, report, card);
 
             } catch (Exception ex) {
                 // NOP
@@ -136,10 +136,16 @@ public class CardUploader {
         return Duration.ofMillis(toUpload.getLoggedDuration());
     }
 
-    private void uploadImageIfPossible(TimeLogControllerApi api, File report, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {
+    private void uploadImageIfPossible(TimeLogControllerApi api, TimeLogToUploadDto toUpload, File report, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {
         val imageFile = Paths.get(report.getAbsolutePath() + ".jpg").toFile();
         if (Paths.get(report.getAbsolutePath() + ".jpg").toFile().exists()) {
-            api.uploadTimelogImage(card.getId(), "screenshot", imageFile, card.getDuration(), card.getTimestamp());
+            api.uploadTimelogImage(
+                    card.getId(),
+                    "screenshot",
+                    imageFile,
+                    Duration.ofMillis(toUpload.getLoggedDuration()).toString(),
+                    null == toUpload.getForTime() ? card.getTimestamp() : toUpload.getForTime()
+            );
             imageFile.delete();
         }
     }
