@@ -38,7 +38,6 @@ dependencies {
     compile project(":shared")
 
     compile 'org.springframework.boot:spring-boot-starter-batch'
-    compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-neo4j'
     compile "org.neo4j:neo4j-ogm-bolt-native-types:${versions.boltNativeTypes}"
     implementation "com.github.valb3r.springbatch.adapters:neo4j-adapter:${versions.springBatchAdapter}"
