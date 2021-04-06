@@ -7,7 +7,8 @@ import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.*;
 import java.util.Collections;
@@ -83,7 +84,7 @@ public class CardUploader {
 
             try {
                 TimeLogToUploadDto toUpload;
-                try (val reader = new FileReader(report)) {
+                try (val reader = Files.newBufferedReader(report.toPath(), StandardCharsets.UTF_8)) {
                     toUpload = gson.fromJson(reader, TimeLogToUploadDto.class);
                 } catch (Exception ex) {
                     continue;
@@ -138,7 +139,7 @@ public class CardUploader {
     private void uploadImageIfPossible(TimeLogControllerApi api, File report, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {
         val imageFile = Paths.get(report.getAbsolutePath() + ".jpg").toFile();
         if (Paths.get(report.getAbsolutePath() + ".jpg").toFile().exists()) {
-            api.uploadTimelogImage(card.getId(), "screenshot", imageFile);
+            api.uploadTimelogImage(card.getId(), "screenshot", imageFile, card.getDuration(), card.getTimestamp());
             imageFile.delete();
         }
     }

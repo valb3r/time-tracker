@@ -506,6 +506,8 @@ public class TimeLogControllerApi {
      * @param id  (required)
      * @param tag  (required)
      * @param file  (required)
+     * @param duration  (optional)
+     * @param timestamp  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -515,7 +517,7 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call uploadTimelogImageCall(Long id, String tag, File file, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call uploadTimelogImageCall(Long id, String tag, File file, String duration, LocalDateTime timestamp, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -531,6 +533,14 @@ public class TimeLogControllerApi {
 
         if (file != null) {
             localVarFormParams.put("file", file);
+        }
+
+        if (duration != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("duration", duration));
+        }
+
+        if (timestamp != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("timestamp", timestamp));
         }
 
         final String[] localVarAccepts = {
@@ -552,7 +562,7 @@ public class TimeLogControllerApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call uploadTimelogImageValidateBeforeCall(Long id, String tag, File file, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call uploadTimelogImageValidateBeforeCall(Long id, String tag, File file, String duration, LocalDateTime timestamp, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'id' is set
         if (id == null) {
@@ -570,7 +580,7 @@ public class TimeLogControllerApi {
         }
         
 
-        okhttp3.Call localVarCall = uploadTimelogImageCall(id, tag, file, _callback);
+        okhttp3.Call localVarCall = uploadTimelogImageCall(id, tag, file, duration, timestamp, _callback);
         return localVarCall;
 
     }
@@ -581,6 +591,8 @@ public class TimeLogControllerApi {
      * @param id  (required)
      * @param tag  (required)
      * @param file  (required)
+     * @param duration  (optional)
+     * @param timestamp  (optional)
      * @return TimeLogImageDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -589,8 +601,8 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public TimeLogImageDto uploadTimelogImage(Long id, String tag, File file) throws ApiException {
-        ApiResponse<TimeLogImageDto> localVarResp = uploadTimelogImageWithHttpInfo(id, tag, file);
+    public TimeLogImageDto uploadTimelogImage(Long id, String tag, File file, String duration, LocalDateTime timestamp) throws ApiException {
+        ApiResponse<TimeLogImageDto> localVarResp = uploadTimelogImageWithHttpInfo(id, tag, file, duration, timestamp);
         return localVarResp.getData();
     }
 
@@ -600,6 +612,8 @@ public class TimeLogControllerApi {
      * @param id  (required)
      * @param tag  (required)
      * @param file  (required)
+     * @param duration  (optional)
+     * @param timestamp  (optional)
      * @return ApiResponse&lt;TimeLogImageDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -608,8 +622,8 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<TimeLogImageDto> uploadTimelogImageWithHttpInfo(Long id, String tag, File file) throws ApiException {
-        okhttp3.Call localVarCall = uploadTimelogImageValidateBeforeCall(id, tag, file, null);
+    public ApiResponse<TimeLogImageDto> uploadTimelogImageWithHttpInfo(Long id, String tag, File file, String duration, LocalDateTime timestamp) throws ApiException {
+        okhttp3.Call localVarCall = uploadTimelogImageValidateBeforeCall(id, tag, file, duration, timestamp, null);
         Type localVarReturnType = new TypeToken<TimeLogImageDto>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -620,6 +634,8 @@ public class TimeLogControllerApi {
      * @param id  (required)
      * @param tag  (required)
      * @param file  (required)
+     * @param duration  (optional)
+     * @param timestamp  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -629,9 +645,9 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call uploadTimelogImageAsync(Long id, String tag, File file, final ApiCallback<TimeLogImageDto> _callback) throws ApiException {
+    public okhttp3.Call uploadTimelogImageAsync(Long id, String tag, File file, String duration, LocalDateTime timestamp, final ApiCallback<TimeLogImageDto> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = uploadTimelogImageValidateBeforeCall(id, tag, file, _callback);
+        okhttp3.Call localVarCall = uploadTimelogImageValidateBeforeCall(id, tag, file, duration, timestamp, _callback);
         Type localVarReturnType = new TypeToken<TimeLogImageDto>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

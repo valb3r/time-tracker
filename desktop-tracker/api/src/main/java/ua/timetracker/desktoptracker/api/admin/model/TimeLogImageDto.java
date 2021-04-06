@@ -23,11 +23,12 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * TimeLogImageDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.160+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T10:27:00.663405+03:00[Europe/Kiev]")
 public class TimeLogImageDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -36,6 +37,14 @@ public class TimeLogImageDto {
   public static final String SERIALIZED_NAME_IMAGEURL = "imageurl";
   @SerializedName(SERIALIZED_NAME_IMAGEURL)
   private String imageurl;
+
+  public static final String SERIALIZED_NAME_DURATION = "duration";
+  @SerializedName(SERIALIZED_NAME_DURATION)
+  private String duration;
+
+  public static final String SERIALIZED_NAME_TIMESTAMP = "timestamp";
+  @SerializedName(SERIALIZED_NAME_TIMESTAMP)
+  private LocalDateTime timestamp;
 
 
   public TimeLogImageDto id(Long id) {
@@ -84,6 +93,52 @@ public class TimeLogImageDto {
   }
 
 
+  public TimeLogImageDto duration(String duration) {
+    
+    this.duration = duration;
+    return this;
+  }
+
+   /**
+   * Get duration
+   * @return duration
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "PT1S", value = "")
+
+  public String getDuration() {
+    return duration;
+  }
+
+
+  public void setDuration(String duration) {
+    this.duration = duration;
+  }
+
+
+  public TimeLogImageDto timestamp(LocalDateTime timestamp) {
+    
+    this.timestamp = timestamp;
+    return this;
+  }
+
+   /**
+   * Get timestamp
+   * @return timestamp
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
+
+  public void setTimestamp(LocalDateTime timestamp) {
+    this.timestamp = timestamp;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -94,12 +149,14 @@ public class TimeLogImageDto {
     }
     TimeLogImageDto timeLogImageDto = (TimeLogImageDto) o;
     return Objects.equals(this.id, timeLogImageDto.id) &&
-        Objects.equals(this.imageurl, timeLogImageDto.imageurl);
+        Objects.equals(this.imageurl, timeLogImageDto.imageurl) &&
+        Objects.equals(this.duration, timeLogImageDto.duration) &&
+        Objects.equals(this.timestamp, timeLogImageDto.timestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, imageurl);
+    return Objects.hash(id, imageurl, duration, timestamp);
   }
 
   @Override
@@ -108,6 +165,8 @@ public class TimeLogImageDto {
     sb.append("class TimeLogImageDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    imageurl: ").append(toIndentedString(imageurl)).append("\n");
+    sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -24,9 +24,10 @@ import ua.timetracker.desktoptracker.verifier.NotBlankVerifier;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -303,7 +304,7 @@ public class TrackerDialog {
         }
 
         PreferencesDto preferences = null;
-        try (val reader = new FileReader(settingsFile)) {
+        try (val reader =  Files.newBufferedReader(settingsFile.toPath(), StandardCharsets.UTF_8)) {
             preferences = new Gson().fromJson(reader, PreferencesDto.class);
         } catch (Exception ex) {
             // NOP
@@ -330,7 +331,7 @@ public class TrackerDialog {
                             )
             );
 
-            try (val writer = new FileWriter(ProjectFileStructUtil.settingsFile().toFile(), false)) {
+            try (val writer =  Files.newBufferedWriter(ProjectFileStructUtil.settingsFile(), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
                 new Gson().toJson(preferences, writer);
             } catch (Exception ex) {
                 // NOP

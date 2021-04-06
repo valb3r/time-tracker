@@ -13,7 +13,7 @@
 
 package ua.timetracker.desktoptracker.api.admin.invoker;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.160+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T10:27:00.663405+03:00[Europe/Kiev]")
 public class Pair {
     private String name = "";
     private String value = "";

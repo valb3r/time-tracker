@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * ProjectCreateOrUpdate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-04T23:10:52.160+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T10:27:00.663405+03:00[Europe/Kiev]")
 public class ProjectCreateOrUpdate {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
@@ -47,6 +47,18 @@ public class ProjectCreateOrUpdate {
   public static final String SERIALIZED_NAME_DESCRIPTION = "description";
   @SerializedName(SERIALIZED_NAME_DESCRIPTION)
   private String description;
+
+  public static final String SERIALIZED_NAME_SCREENSHOTS = "screenshots";
+  @SerializedName(SERIALIZED_NAME_SCREENSHOTS)
+  private Boolean screenshots;
+
+  public static final String SERIALIZED_NAME_QUALITY = "quality";
+  @SerializedName(SERIALIZED_NAME_QUALITY)
+  private Float quality;
+
+  public static final String SERIALIZED_NAME_INTERVALMINUTES = "intervalminutes";
+  @SerializedName(SERIALIZED_NAME_INTERVALMINUTES)
+  private Long intervalminutes;
 
 
   public ProjectCreateOrUpdate name(String name) {
@@ -143,6 +155,75 @@ public class ProjectCreateOrUpdate {
   }
 
 
+  public ProjectCreateOrUpdate screenshots(Boolean screenshots) {
+    
+    this.screenshots = screenshots;
+    return this;
+  }
+
+   /**
+   * Get screenshots
+   * @return screenshots
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Boolean getScreenshots() {
+    return screenshots;
+  }
+
+
+  public void setScreenshots(Boolean screenshots) {
+    this.screenshots = screenshots;
+  }
+
+
+  public ProjectCreateOrUpdate quality(Float quality) {
+    
+    this.quality = quality;
+    return this;
+  }
+
+   /**
+   * Get quality
+   * @return quality
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Float getQuality() {
+    return quality;
+  }
+
+
+  public void setQuality(Float quality) {
+    this.quality = quality;
+  }
+
+
+  public ProjectCreateOrUpdate intervalminutes(Long intervalminutes) {
+    
+    this.intervalminutes = intervalminutes;
+    return this;
+  }
+
+   /**
+   * Get intervalminutes
+   * @return intervalminutes
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Long getIntervalminutes() {
+    return intervalminutes;
+  }
+
+
+  public void setIntervalminutes(Long intervalminutes) {
+    this.intervalminutes = intervalminutes;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -155,12 +236,15 @@ public class ProjectCreateOrUpdate {
     return Objects.equals(this.name, projectCreateOrUpdate.name) &&
         Objects.equals(this.code, projectCreateOrUpdate.code) &&
         Objects.equals(this.activities, projectCreateOrUpdate.activities) &&
-        Objects.equals(this.description, projectCreateOrUpdate.description);
+        Objects.equals(this.description, projectCreateOrUpdate.description) &&
+        Objects.equals(this.screenshots, projectCreateOrUpdate.screenshots) &&
+        Objects.equals(this.quality, projectCreateOrUpdate.quality) &&
+        Objects.equals(this.intervalminutes, projectCreateOrUpdate.intervalminutes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, code, activities, description);
+    return Objects.hash(name, code, activities, description, screenshots, quality, intervalminutes);
   }
 
   @Override
@@ -171,6 +255,9 @@ public class ProjectCreateOrUpdate {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    activities: ").append(toIndentedString(activities)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    screenshots: ").append(toIndentedString(screenshots)).append("\n");
+    sb.append("    quality: ").append(toIndentedString(quality)).append("\n");
+    sb.append("    intervalminutes: ").append(toIndentedString(intervalminutes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
