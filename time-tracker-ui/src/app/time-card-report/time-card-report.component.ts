@@ -88,15 +88,16 @@ export class TimeCardReportComponent implements OnInit {
   private updateTimeCards(updates: ManagedTimeLog[]) {
     this.events = [];
     updates.sort((a, b) => parseISO(a.timestamp).valueOf() - parseISO(b.timestamp).valueOf()).forEach(card => {
+      const timeValue = this.getHoursValue(card);
       let event = {
         start: parseISO(card.timestamp),
         end: parseISO(card.timestamp),
-        title: `[${card.userfullname ? card.userfullname + ',': ''}${card.username}] ${card.description}`,
+        title: `[${card.userfullname ? card.userfullname + ',': ''}${card.username}], ${timeValue}h ${card.description}`,
         color: colors.blue,
         actions: this.actions,
         allDay: true,
         meta: {
-          hoursValue: Math.round((card.durationminutes / 60.0 + Number.EPSILON) * 100) / 100,
+          hoursValue: +timeValue,
           src: card
         },
         draggable: !this.mobileQuery.matches
@@ -105,6 +106,10 @@ export class TimeCardReportComponent implements OnInit {
       this.events.push(event);
     });
     this.refresh.next();
+  }
+
+  private getHoursValue(card: ManagedTimeLog) {
+    return (Math.round((card.durationminutes / 60.0 + Number.EPSILON) * 100) / 100).toFixed(2);
   }
 }
 
