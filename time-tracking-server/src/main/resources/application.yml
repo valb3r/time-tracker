@@ -14,6 +14,10 @@ org:
       authentication:
         username: neo4j
         password: docker
+      pool:
+        idle-time-before-connection-test: 30s
+        max-connection-lifetime: 10m
+        log-leaked-sessions: true
 
 oauth2:
   keys:
