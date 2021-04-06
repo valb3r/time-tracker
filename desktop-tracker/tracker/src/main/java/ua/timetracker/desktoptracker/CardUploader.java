@@ -2,6 +2,7 @@ package ua.timetracker.desktoptracker;
 
 import com.google.gson.Gson;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.invoker.ApiException;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Supplier;
 
+@Slf4j
 public class CardUploader {
 
     private static final int UPLOAD_EACH_N_MS = 10_000;
@@ -59,7 +61,7 @@ public class CardUploader {
                 try {
                     doUploadCards();
                 } catch (RuntimeException ex) {
-                    // NOP
+                    log.warn("Upload failed {}", ex.getMessage());
                 }
             }
         });
@@ -81,6 +83,7 @@ public class CardUploader {
             }
 
             if (processedFiles.contains(report.getAbsolutePath())) {
+                log.warn("Already processed {}", report.getAbsolutePath());
                 report.delete();
                 continue;
             }
@@ -90,6 +93,7 @@ public class CardUploader {
                 try (val reader = Files.newBufferedReader(report.toPath(), StandardCharsets.UTF_8)) {
                     toUpload = gson.fromJson(reader, TimeLogToUploadDto.class);
                 } catch (Exception ex) {
+                    log.warn("Failed parsing {}", report.getAbsolutePath());
                     continue;
                 }
 
@@ -103,7 +107,7 @@ public class CardUploader {
                     val card = existingCard.get();
                     api.incrementTimeLog(
                             card.getId(),
-                            getSeconds(toUpload).plus(null == card.getDuration() ? Duration.ofMillis(0L) : Duration.parse(card.getDuration())).toString()
+                            uploadDuration(toUpload).toString()
                     );
                     // If anything prevents file removal - TODO double - submission
                     uploadImagesAndCleanup(api, report, toUpload, card);
@@ -115,7 +119,7 @@ public class CardUploader {
                                 .projectid(toUpload.getProject().getId())
                                 .description(toUpload.getTaskMessage())
                                 .tags(Collections.singletonList(toUpload.getTaskTag()))
-                                .duration(getSeconds(toUpload).toString())
+                                .duration(uploadDuration(toUpload).toString())
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
                 );
@@ -125,7 +129,7 @@ public class CardUploader {
             } catch (ApiException ex) {
                 doRelogin();
             } catch (Exception ex) {
-                // NOP
+                log.warn("Failed to upload {} of {}", ex.getMessage(), report.getAbsolutePath());
             }
         }
     }
@@ -144,7 +148,7 @@ public class CardUploader {
         uploadImageIfPossible(api, toUpload, report, card);
     }
 
-    private Duration getSeconds(TimeLogToUploadDto toUpload) {
+    private Duration uploadDuration(TimeLogToUploadDto toUpload) {
         return Duration.ofMillis(toUpload.getLoggedDuration());
     }
 
