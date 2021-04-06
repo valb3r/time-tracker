@@ -33,7 +33,7 @@ import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
 /**
  * TimeLogDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T10:27:00.958516+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T20:10:36.938113+03:00[Europe/Kiev]")
 public class TimeLogDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -78,6 +78,10 @@ public class TimeLogDto {
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
   private String username;
+
+  public static final String SERIALIZED_NAME_USERFULLNAME = "userfullname";
+  @SerializedName(SERIALIZED_NAME_USERFULLNAME)
+  private String userfullname;
 
 
   public TimeLogDto id(Long id) {
@@ -348,6 +352,29 @@ public class TimeLogDto {
   }
 
 
+  public TimeLogDto userfullname(String userfullname) {
+    
+    this.userfullname = userfullname;
+    return this;
+  }
+
+   /**
+   * Get userfullname
+   * @return userfullname
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public String getUserfullname() {
+    return userfullname;
+  }
+
+
+  public void setUserfullname(String userfullname) {
+    this.userfullname = userfullname;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -367,12 +394,13 @@ public class TimeLogDto {
         Objects.equals(this.projects, timeLogDto.projects) &&
         Objects.equals(this.timestamp, timeLogDto.timestamp) &&
         Objects.equals(this.userid, timeLogDto.userid) &&
-        Objects.equals(this.username, timeLogDto.username);
+        Objects.equals(this.username, timeLogDto.username) &&
+        Objects.equals(this.userfullname, timeLogDto.userfullname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, projectid, tags, durationminutes, duration, description, location, projects, timestamp, userid, username);
+    return Objects.hash(id, projectid, tags, durationminutes, duration, description, location, projects, timestamp, userid, username, userfullname);
   }
 
   @Override
@@ -390,6 +418,7 @@ public class TimeLogDto {
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    userid: ").append(toIndentedString(userid)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    userfullname: ").append(toIndentedString(userfullname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

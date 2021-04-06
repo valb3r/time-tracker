@@ -96,6 +96,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TimeLogDto'
+  /v1/resources/timelogs/{id}/increment:
+    post:
+      tags:
+        - time-log-controller
+      operationId: incrementTimeLog
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: duration
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeLogDto'
   /v1/resources/timelogs/{id}:
     post:
       tags:
@@ -260,4 +284,6 @@ components:
           type: integer
           format: int64
         username:
+          type: string
+        userfullname:
           type: string

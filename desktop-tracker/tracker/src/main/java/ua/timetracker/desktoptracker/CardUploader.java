@@ -101,15 +101,9 @@ public class CardUploader {
 
                 if (existingCard.isPresent()) {
                     val card = existingCard.get();
-                    api.updateTimeLog(
+                    api.incrementTimeLog(
                             card.getId(),
-                            new TimeLogCreateOrUpdate()
-                                    .description(card.getDescription())
-                                    .timestamp(card.getTimestamp())
-                                    .location(card.getLocation())
-                                    .tags(card.getTags())
-                                    .duration(getSeconds(toUpload).plus(null == card.getDuration() ? Duration.ofMillis(0L) : Duration.parse(card.getDuration())).toString())
-                                    .projectid(card.getProjectid())
+                            getSeconds(toUpload).plus(null == card.getDuration() ? Duration.ofMillis(0L) : Duration.parse(card.getDuration())).toString()
                     );
                     // If anything prevents file removal - TODO double - submission
                     uploadImagesAndCleanup(api, report, toUpload, card);

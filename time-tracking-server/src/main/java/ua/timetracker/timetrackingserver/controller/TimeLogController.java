@@ -78,6 +78,16 @@ public class TimeLogController {
     }
 
     @OnlyProjectWorkers
+    @PostMapping(value = "/{id}/increment", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<TimeLogDto> incrementTimeLog(
+            @Parameter(hidden = true) Authentication user,
+            @PathVariable("id") long cardId,
+            @RequestParam String duration
+    ) {
+        return updater.increment(id(user), cardId, Duration.parse(duration)).switchIfEmpty(EntityNotFoundException.mono());
+    }
+
+    @OnlyProjectWorkers
     @DeleteMapping("/{id}")
     public Mono<Void> deleteTimeLog(
         @Parameter(hidden = true) Authentication user,

@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 /**
  * UserWithoutRateDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T10:27:00.663405+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T20:10:36.657434+03:00[Europe/Kiev]")
 public class UserWithoutRateDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
