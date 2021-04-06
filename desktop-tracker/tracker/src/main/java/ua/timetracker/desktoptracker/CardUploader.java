@@ -13,10 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -77,7 +74,7 @@ public class CardUploader {
 
         TimeLogControllerApi api = this.api.get();
         val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
-        val cards = api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX));
+        val cards = new ArrayList<>(api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
         for (File report : listOfFiles) {
             if (report.getName().contains(".")) {
                 continue;
@@ -128,6 +125,7 @@ public class CardUploader {
                                 .timestamp(LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
                 );
+                cards.add(card);
                 uploadImagesAndCleanup(api, report, toUpload, card);
 
             } catch (ApiException ex) {
