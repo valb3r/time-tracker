@@ -1,7 +1,9 @@
 package ua.timetracker.timetrackingserver.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import ua.timetracker.timetrackingserver.service.update.TimeLogUpdater;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 
 import javax.validation.Valid;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -34,6 +37,7 @@ import static ua.timetracker.shared.util.UserIdUtil.id;
 @RequiredArgsConstructor
 public class TimeLogController {
 
+    private final ObjectMapper mapper;
     private final TimeLogsRepository logs;
     private final ProjectsRepository projects;
     private final TimeLogUpdater updater;
@@ -91,12 +95,15 @@ public class TimeLogController {
             .switchIfEmpty(EntityNotFoundException.mono());
     }
 
+    @SneakyThrows
     @PutMapping(path = "/{id}/images/{tag}", consumes = MULTIPART_FORM_DATA_VALUE)
     public Mono<TimeLogImageDto> uploadTimelogImage(
             @Parameter(hidden = true) Authentication user,
             @PathVariable("id") long cardId,
             @PathVariable("tag") String tag,
+            @RequestParam(value = "duration", required = false) String duration, // Openapi Codegen does not seem to support Duration
+            @RequestParam(value = "timestamp", required = false) LocalDateTime timestamp,
             @RequestPart("file") FilePart file) {
-        return images.uploadTimelogImage(id(user), cardId, tag, file);
+        return images.uploadTimelogImage(id(user), cardId, tag, Duration.parse(duration), timestamp, file);
     }
 }

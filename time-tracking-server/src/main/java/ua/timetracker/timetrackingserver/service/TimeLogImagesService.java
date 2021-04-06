@@ -12,6 +12,9 @@ import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogImageDto;
 import ua.timetracker.timetrackingserver.config.ImageUploadConfig;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
 @Service
@@ -23,12 +26,14 @@ public class TimeLogImagesService {
     private final ImageUploadConfig uploadConfig;
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<TimeLogImageDto> uploadTimelogImage(long userId, long cardId, String tag, FilePart file) {
+    public Mono<TimeLogImageDto> uploadTimelogImage(long userId, long cardId, String tag, Duration duration, LocalDateTime timestamp, FilePart file) {
         return logs.findByIdAndUserId(cardId, userId).flatMap(it -> logs.findById(it.getId()) /* Direct result usage removes relationships, so loading it*/).map(it -> {
             val image = new TimeLogImage();
             image.setOwner(it);
             image.setRelPhysicalPath(image.newPath(tag));
             image.setImageUrl(image.getRelPhysicalPath());
+            image.setDuration(duration);
+            image.setTimestamp(timestamp);
             file.transferTo(image.physicalFile(uploadConfig.getPath()));
             return image;
         }).flatMap(it -> images.save(it).map(TimeLogImageDto.MAP::map));

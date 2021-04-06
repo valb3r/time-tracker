@@ -10,7 +10,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static ua.timetracker.shared.persistence.entity.realationships.Relationships.LOGGED_FOR;
@@ -32,6 +34,9 @@ public class TimeLogImage {
 
     private String imageUrl;
     private String relPhysicalPath;
+
+    private Duration duration;
+    private LocalDateTime timestamp;
 
     @CreatedDate
     private Instant createdAt;

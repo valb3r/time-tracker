@@ -1,5 +1,6 @@
 package ua.timetracker.desktoptracker;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import lombok.val;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
@@ -138,7 +139,7 @@ public class CardUploader {
     private void uploadImageIfPossible(TimeLogControllerApi api, File report, ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto card) {
         val imageFile = Paths.get(report.getAbsolutePath() + ".jpg").toFile();
         if (Paths.get(report.getAbsolutePath() + ".jpg").toFile().exists()) {
-            api.uploadTimelogImage(card.getId(), "screenshot", imageFile);
+            api.uploadTimelogImage(card.getId(), "screenshot", imageFile, card.getDuration(), card.getTimestamp());
             imageFile.delete();
         }
     }

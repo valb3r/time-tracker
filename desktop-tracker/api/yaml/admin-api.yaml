@@ -1014,6 +1014,14 @@ components:
             type: string
         description:
           type: string
+        screenshots:
+          type: boolean
+        quality:
+          type: number
+          format: float
+        intervalminutes:
+          type: integer
+          format: int64
     ProjectDto:
       type: object
       properties:
@@ -1031,6 +1039,14 @@ components:
           type: array
           items:
             type: string
+        screenshots:
+          type: boolean
+        quality:
+          type: number
+          format: float
+        intervalminutes:
+          type: integer
+          format: int64
     GroupCreateOrUpdateDto:
       required:
         - name
@@ -1143,6 +1159,8 @@ components:
         entry:
           $ref: '#/components/schemas/GroupDto'
     TimeLogDto:
+      required:
+        - duration
       type: object
       properties:
         id:
@@ -1155,33 +1173,13 @@ components:
           type: array
           items:
             type: string
-        duration:
-          type: object
-          properties:
-            seconds:
-              type: integer
-              format: int64
-            zero:
-              type: boolean
-            negative:
-              type: boolean
-            nano:
-              type: integer
-              format: int32
-            units:
-              type: array
-              items:
-                type: object
-                properties:
-                  date_based:
-                    type: boolean
-                  time_based:
-                    type: boolean
-                  duration_estimated:
-                    type: boolean
         durationminutes:
           type: integer
           format: int64
+        duration:
+          type: string
+          format: duration
+          example: PT1S
         description:
           type: string
         location:
@@ -1207,3 +1205,10 @@ components:
           format: int64
         imageurl:
           type: string
+        duration:
+          type: string
+          format: duration
+          example: PT1S
+        timestamp:
+          type: string
+          format: date-time

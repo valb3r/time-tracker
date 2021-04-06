@@ -23,6 +23,17 @@ paths:
           required: true
           schema:
             type: string
+        - name: duration
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: timestamp
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
       requestBody:
         content:
           multipart/form-data:
@@ -148,6 +159,13 @@ components:
           format: int64
         imageurl:
           type: string
+        duration:
+          type: string
+          format: duration
+          example: PT1S
+        timestamp:
+          type: string
+          format: date-time
     TimeLogCreateOrUpdate:
       required:
         - description
