@@ -1,5 +1,7 @@
 <mat-card-header>
-  <mat-card-title>Uploaded time cards</mat-card-title>
+  <mat-card-title>
+    Uploaded time cards, quality {{round(timeOnScreenshots / (timeOnCard + 1e-12) * 100)}}%, on card {{timeOnCard}}m, screenshots {{timeOnScreenshots}}m
+  </mat-card-title>
 </mat-card-header>
 
 <mat-dialog-content>

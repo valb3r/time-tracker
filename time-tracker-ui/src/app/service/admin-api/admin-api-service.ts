@@ -344,8 +344,9 @@ export interface ManagedTimeLog {
 }
 
 export interface ManagedTimeLogCard {
-  "id": number;
-  "imageurl": string;
+  id: number;
+  imageurl: string;
   duration: string;
   timestamp: string;
+  durationminutes?: number;
 }
