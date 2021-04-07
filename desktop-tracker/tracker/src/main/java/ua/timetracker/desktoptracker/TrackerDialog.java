@@ -6,8 +6,10 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import ua.timetracker.desktoptracker.api.admin.LoginControllerApi;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiClient;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+@Slf4j
 public class TrackerDialog {
     public static final String DEFAULT_TITLE = "Time Tracker";
 
@@ -66,6 +69,7 @@ public class TrackerDialog {
     private TimeLogControllerApi timeLog;
     private String authCookie;
     private ProjectComponent activeProject;
+    private LoggedTime loggedMillisToday;
 
     public TrackerDialog(JFrame frame, TimeTracker tracker, CardUploader uploader, PreferencesDto preferences) {
         this.frame = frame;
@@ -117,6 +121,7 @@ public class TrackerDialog {
 
         stop.addActionListener(e -> {
             this.frame.setTitle(DEFAULT_TITLE);
+            updateLoggedTime(null);
             tracker.stopTracking();
             currentProject.setEnabled(true);
             taskDescription.setEnabled(true);
@@ -236,6 +241,29 @@ public class TrackerDialog {
         }).start();
     }
 
+    private void updateLoggedTime(Long value) {
+        if (null != value) {
+            loggedMillisToday = new LoggedTime(System.currentTimeMillis(), value, value);
+        } else if (null == loggedMillisToday){
+            loggedMillisToday = new LoggedTime(System.currentTimeMillis(), 0L, 0L);
+        }
+
+        if (null == value && start.isEnabled()) { // Tracking has stopped
+            return;
+        }
+
+        long workTime = loggedMillisToday.logged + System.currentTimeMillis() - loggedMillisToday.at;
+        val working = workTime / 1000;
+        val uploaded = loggedMillisToday.uploaded / 1000;
+        frame.setTitle(
+                String.format("%s, working %d:%02d:%02d / %d:%02d:%02d uploaded",
+                        frame.getTitle().split(",")[0],
+                        working / 3600, (working % 3600) / 60, (working % 60),
+                        uploaded / 3600, (uploaded % 3600) / 60, (uploaded % 60)
+                )
+        );
+    }
+
     private void doLogout() {
         tracker.stopTracking();
         authCookie = null;
@@ -263,7 +291,7 @@ public class TrackerDialog {
         }
     }
 
-    class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
+    static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
 
         private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -289,6 +317,13 @@ public class TrackerDialog {
         }
     }
 
+    @Data
+    static class LoggedTime {
+        private final long at;
+        private final long logged;
+        private final long uploaded;
+    }
+
     @SneakyThrows
     public static void main(String[] args) {
         FlatLightLaf.install();
@@ -301,6 +336,7 @@ public class TrackerDialog {
             val login = dialog.apiLogin();
             return dialog.buildTrackerApi(login);
         });
+        uploader.setUpdateTimeLogged(value -> SwingUtilities.invokeLater(() -> dialog.updateLoggedTime(value)));
 
         frame.setContentPane(dialog.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -34,6 +35,9 @@ public class CardUploader {
     @Setter
     private Supplier<TimeLogControllerApi> reLogin;
 
+    @Setter
+    private Consumer<Long> updateTimeLogged;
+
     public CardUploader() {
         startCardUploadingThread();
     }
@@ -44,6 +48,7 @@ public class CardUploader {
 
     private void startCardUploadingThread() {
         Thread uploadThread = new Thread(() -> {
+            boolean isInit = false;
             while (true) {
                 long reportAt = nextUpload.get();
                 if (System.currentTimeMillis() < reportAt) { // Note that System.currentTimeMillis() is not necessary monotonic
@@ -51,11 +56,26 @@ public class CardUploader {
                     continue;
                 }
 
+
                 // Report
                 nextUpload.set(System.currentTimeMillis() + UPLOAD_EACH_N_MS);
                 TimeLogControllerApi timeLog = api.get();
                 if (null == timeLog) {
                     continue;
+                }
+
+                if (null != updateTimeLogged) {
+                    if (!isInit) {
+                        try {
+                            val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
+                            val cards = new ArrayList<>(timeLog.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+                            updateTimeLogged.accept(cards.stream().mapToLong(it -> Duration.parse(it.getDuration()).toMillis()).sum());
+                            isInit = true;
+                        } catch (Exception ex) {
+                            log.warn("Failed prefetch of worked time {}", ex.getMessage());
+                        }
+                    }
+                    updateTimeLogged.accept(null);
                 }
 
                 try {
@@ -77,6 +97,7 @@ public class CardUploader {
         TimeLogControllerApi api = this.api.get();
         val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
         val cards = new ArrayList<>(api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+        updateTimeLogged.accept(cards.stream().mapToLong(it -> Duration.parse(it.getDuration()).toMillis()).sum());
         for (File report : listOfFiles) {
             if (report.getName().contains(".")) {
                 continue;
@@ -120,7 +141,7 @@ public class CardUploader {
                                 .description(toUpload.getTaskMessage())
                                 .tags(Collections.singletonList(toUpload.getTaskTag()))
                                 .duration(uploadDuration(toUpload).toString())
-                                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                                .timestamp(null != toUpload.getForTime() ? toUpload.getForTime() : LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
                 );
                 cards.add(card);
