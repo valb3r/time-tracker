@@ -383,9 +383,10 @@ public class TrackerDialog {
                             )
             );
 
-            try (val writer =  Files.newBufferedWriter(ProjectFileStructUtil.settingsFile(), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
+            try (val writer =  Files.newBufferedWriter(ProjectFileStructUtil.settingsFile(), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
                 new Gson().toJson(preferences, writer);
             } catch (Exception ex) {
+                loadPreferences();
                 // NOP
             }
         }));
