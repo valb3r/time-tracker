@@ -7,6 +7,7 @@ import lombok.val;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.invoker.ApiException;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
+import ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
 
 import java.io.File;
@@ -96,7 +97,16 @@ public class CardUploader {
 
         TimeLogControllerApi api = this.api.get();
         val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
-        val cards = new ArrayList<>(api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+        val cards = new ArrayList<TimeLogDto>();
+        try {
+            cards.addAll(api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+        } catch (ApiException ex) {
+            doRelogin();
+        } catch (Exception ex) {
+            log.warn("Failed to list cards {}", ex.getMessage());
+            return;
+        }
+
         updateTimeLogged.accept(cards.stream().mapToLong(it -> Duration.parse(it.getDuration()).toMillis()).sum());
         for (File report : listOfFiles) {
             if (report.getName().contains(".")) {
