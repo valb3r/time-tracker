@@ -14,6 +14,7 @@ import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component"
 import {TimeCardApiService, TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
 import {filter, flatMap} from "rxjs/operators";
+import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 
 const colors: any = {
   blue: {
@@ -128,6 +129,7 @@ export class TimeCardCalendarComponent implements OnInit {
         event => event.meta ? event.meta.hoursValue : 0
       ).reduce((a, b) => a + b, 0);
     });
+    body.forEach(day => day.badgeTotal = +this.round(day.badgeTotal));
   }
 
   ngOnInit(): void {
@@ -146,7 +148,7 @@ export class TimeCardCalendarComponent implements OnInit {
         actions: this.actions,
         allDay: true,
         meta: {
-          hoursValue: Math.round((card.durationminutes / 60.0 + Number.EPSILON) * 100) / 100,
+          hoursValue: this.getHoursValue(card),
           src: card
         },
         draggable: !this.mobileQuery.matches
@@ -155,6 +157,14 @@ export class TimeCardCalendarComponent implements OnInit {
       this.events.push(event);
     });
     this.refresh.next();
+  }
+
+  private getHoursValue(card: ManagedTimeLog) {
+    return this.round(card.durationminutes / 60.0 );
+  }
+
+  private round(value: number) {
+    return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
   }
 }
 
