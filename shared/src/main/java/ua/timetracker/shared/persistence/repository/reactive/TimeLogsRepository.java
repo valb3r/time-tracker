@@ -28,9 +28,9 @@ public interface TimeLogsRepository extends ReactiveCrudRepository<TimeLog, Long
 
     // FIXME `RETURN o,to,` is ignored - user is null in returned model
     @Query(
-            "MATCH (o:User)<-[to:" + OWNER + "]-(t:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) WHERE id(p) IN $projectIds AND t.timestamp >= $from AND t.timestamp <= $to RETURN o,to,t ORDER BY t.timestamp DESC"
+            "MATCH (o:User)<-[to:" + OWNER + "]-(t:TimeLog)-[:" + LOGGED_FOR + "]->(p:Project) WHERE id(p) IN $projectIds AND t.timestamp >= $from AND t.timestamp <= $to RETURN id(t) ORDER BY t.timestamp DESC"
     )
-    Flux<TimeLog> listUploadedCards(
+    Flux<Long> listUploadedCards(
             @Param("projectIds") Set<Long> projectIds,
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to

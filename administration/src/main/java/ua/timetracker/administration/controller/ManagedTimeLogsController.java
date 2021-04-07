@@ -2,6 +2,7 @@ package ua.timetracker.administration.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,9 +54,9 @@ public class ManagedTimeLogsController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam(value = "to", defaultValue = "2100-01-01T00:00") LocalDateTime toDate
     ) {
-        return logs.listUploadedCards(projectIds, fromDate, toDate)
-                .flatMap(it -> logs.findById(it.getId())) // FIXME listUploadedCards does not load related data
-                .map(TimeLogDto.MAP::map);
+        val uploads = logs.listUploadedCards(projectIds, fromDate, toDate);
+        // materialize collections (eager fetch of Projects[])
+        return logs.findAllById(uploads).map(TimeLogDto.MAP::map);
     }
 
     @OnlyResourceManagers
