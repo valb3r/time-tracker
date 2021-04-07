@@ -30,6 +30,7 @@ public class TimeLogImageDto {
     @Schema(type = "string" , format = "date-time")
     private LocalDateTime timestamp;
 
+    private long durationseconds;
     private long durationminutes;
 
     @Mapper
@@ -39,6 +40,7 @@ public class TimeLogImageDto {
         default TimeLogImageDto map(TimeLogImage source) {
             val target = new TimeLogImageDto();
             merge(source, target);
+            target.setDurationseconds(null == target.getDuration() ? 0L : target.getDuration().getSeconds());
             target.setDurationminutes(null == target.getDuration() ? 0L : target.getDuration().toMinutes());
             return target;
         }

@@ -27,6 +27,7 @@ public class TimeLogDto {
     private Long projectid; // should be replaced by projects field
     private Collection<String> tags;
     private long durationminutes;
+    private long durationseconds; // is informal
 
     @NotNull
     @JsonFormat(shape = STRING)
@@ -51,6 +52,7 @@ public class TimeLogDto {
         default TimeLogDto map(TimeLog source) {
             TimeLogDto target = new TimeLogDto();
             target.setDurationminutes(source.getDuration().toMinutes());
+            target.setDurationseconds(source.getDuration().getSeconds());
             if (null != source.getUser()) {
                 target.setUserid(source.getUser().getId());
                 target.setUsername(source.getUser().getUsername());

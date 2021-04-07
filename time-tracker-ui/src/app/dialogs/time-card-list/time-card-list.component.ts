@@ -11,8 +11,8 @@ export class TimeCardListComponent implements OnInit {
 
   selected: ManagedTimeLogData;
   images: ManagedTimeLogData[] = [];
-  timeOnCard: number;
-  timeOnScreenshots: number;
+  timeOnCardM: number;
+  timeOnScreenshotsM: number;
 
   constructor(@Inject(MAT_DIALOG_DATA) public log: [ProjectDto, ManagedTimeLog], public api: AdminApiService, public dialogRef: MatDialogRef<TimeCardListComponent>) { }
 
@@ -20,8 +20,8 @@ export class TimeCardListComponent implements OnInit {
     this.api.getManagedTimelogCards([this.log[0].id], [this.log[1].id])
       .subscribe(res => {
         this.images = res.map(it => new ManagedTimeLogData(this.api.getLinkManagedTimelogCardImages(it.imageurl), it.timestamp, it.duration));
-        this.timeOnCard = this.log[1].durationminutes;
-        this.timeOnScreenshots = res.map(it => it.durationminutes).reduce((a, b) => a + b, 0);
+        this.timeOnCardM = +this.round(this.log[1].durationseconds / 60.0);
+        this.timeOnScreenshotsM = +this.round(res.map(it => it.durationseconds).reduce((a, b) => a + b, 0) / 60.0);
       })
   }
 

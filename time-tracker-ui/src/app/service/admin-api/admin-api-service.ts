@@ -335,6 +335,7 @@ export interface ManagedTimeLog {
   tags: string[];
   duration: string;
   durationminutes?: number;
+  durationseconds?: number;
   description: string;
   location: string;
   timestamp: string;
@@ -349,4 +350,5 @@ export interface ManagedTimeLogCard {
   duration: string;
   timestamp: string;
   durationminutes?: number;
+  durationseconds?: number;
 }
