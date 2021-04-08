@@ -30,11 +30,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -65,6 +68,7 @@ public class TrackerDialog {
     private JPanel logoutPanel;
     private JLabel loginErrorMessage;
     private JLabel trackingErrorMessage;
+    private JComboBox waitBeforeUpload;
 
     private TimeLogControllerApi timeLog;
     private String authCookie;
@@ -82,6 +86,7 @@ public class TrackerDialog {
     }
 
     private void setupUiAndHandlers() {
+        workType.setPrototypeDisplayValue("QA testing");
         usernameField.setInputVerifier(new NotBlankVerifier());
         passwordField.setInputVerifier(new NotBlankVerifier());
         apiUploadUrl.setInputVerifier(new MinLenVerifier(5));
@@ -157,8 +162,13 @@ public class TrackerDialog {
             taskDescription.setText(preferences.getTaskDescription());
             captureScreenshots.setSelected(preferences.isCaptureScreenshots());
             IntStream.range(0, workType.getItemCount()).forEach(it -> {
-                if (preferences.getTaskTag().equals(workType.getItemAt(it))) {
+                if (workType.getItemAt(it).equals(preferences.getTaskTag())) {
                     workType.setSelectedIndex(it);
+                }
+            });
+            IntStream.range(0, waitBeforeUpload.getItemCount()).forEach(it -> {
+                if (waitBeforeUpload.getItemAt(it).equals(preferences.getWaitBeforeUpload())) {
+                    waitBeforeUpload.setSelectedIndex(it);
                 }
             });
         }
@@ -337,6 +347,22 @@ public class TrackerDialog {
             return dialog.buildTrackerApi(login);
         });
         uploader.setUpdateTimeLogged(value -> SwingUtilities.invokeLater(() -> dialog.updateLoggedTime(value)));
+        uploader.setWaitBeforeUploadS(() -> {
+            val task = new FutureTask<>(() -> {
+                val value = (String) dialog.waitBeforeUpload.getSelectedItem();
+                if (null == value || "no".equals(value)) {
+                    return 0L;
+                }
+                return Duration.ofMinutes(Long.parseLong(value.split("m")[0])).getSeconds();
+            });
+            SwingUtilities.invokeLater(task);
+            try {
+                return task.get();
+            } catch (ExecutionException|InterruptedException ex) { // TODO Handle it
+                // NOP
+                return 0L;
+            }
+        });
 
         frame.setContentPane(dialog.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -378,7 +404,8 @@ public class TrackerDialog {
                                     new PreferencesDto.ProjectPreferences(
                                             dialog.taskDescription.getText(),
                                             (String) dialog.workType.getSelectedItem(),
-                                            dialog.captureScreenshots.isSelected()
+                                            dialog.captureScreenshots.isSelected(),
+                                            (String) dialog.waitBeforeUpload.getSelectedItem()
                                     )
                             )
             );

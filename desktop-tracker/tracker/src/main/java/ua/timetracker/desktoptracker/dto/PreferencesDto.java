@@ -25,5 +25,6 @@ public class PreferencesDto {
         private String taskDescription = "";
         private String taskTag = "";
         private boolean captureScreenshots = false;
+        private String waitBeforeUpload;
     }
 }

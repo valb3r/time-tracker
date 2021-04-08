@@ -39,6 +39,9 @@ public class CardUploader {
     @Setter
     private Consumer<Long> updateTimeLogged;
 
+    @Setter
+    private Supplier<Long> waitBeforeUploadS;
+
     public CardUploader() {
         startCardUploadingThread();
     }
@@ -107,6 +110,7 @@ public class CardUploader {
             return;
         }
 
+        val waitBeforeUploadS = this.waitBeforeUploadS.get();
         updateTimeLogged.accept(cards.stream().mapToLong(it -> Duration.parse(it.getDuration()).toMillis()).sum());
         for (File report : listOfFiles) {
             if (report.getName().contains(".")) {
@@ -125,6 +129,10 @@ public class CardUploader {
                     toUpload = gson.fromJson(reader, TimeLogToUploadDto.class);
                 } catch (Exception ex) {
                     log.warn("Failed parsing {}", report.getAbsolutePath());
+                    continue;
+                }
+
+                if ((System.currentTimeMillis() / 1000.0 - toUpload.getForTime().toEpochSecond(ZoneOffset.UTC)) < waitBeforeUploadS) {
                     continue;
                 }
 
