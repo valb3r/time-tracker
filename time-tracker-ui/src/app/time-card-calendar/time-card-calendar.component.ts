@@ -148,7 +148,7 @@ export class TimeCardCalendarComponent implements OnInit {
         actions: this.actions,
         allDay: true,
         meta: {
-          hoursValue: this.getHoursValue(card),
+          hoursValue: +this.getHoursValue(card),
           src: card
         },
         draggable: !this.mobileQuery.matches
