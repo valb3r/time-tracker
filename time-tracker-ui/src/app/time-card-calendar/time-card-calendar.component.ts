@@ -9,6 +9,7 @@ import {
 import {Subject} from "rxjs";
 
 import {
+  addMonths,
   endOfISOWeek,
   endOfMonth,
   isSameDay,
@@ -16,7 +17,7 @@ import {
   parseISO,
   startOfISOWeek,
   startOfMonth,
-  subDays
+  subDays, subMonths
 } from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
@@ -126,7 +127,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   private doLoadTimecards() {
     this.loading = true;
-    return this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)).pipe(
+    return this.api.listTimeCards(subDays(startOfMonth(this.viewDate), 14), endOfMonth(this.viewDate)).pipe(
       map(it => {
         this.loading = false;
         return it;
