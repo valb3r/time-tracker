@@ -62,5 +62,10 @@
       (beforeViewRender)="beforeMonthViewRender($event)"
     >
     </mwl-calendar-month-view>
+    <mat-divider></mat-divider>
+    <h4>Your aggregate time statistics</h4>
+    <p>Hours worked this week: {{weeklyH}}</p>
+    <p>Hours worked this and previous week: {{biWeeklyH}}</p>
+    <p>Hours worked this month: {{monthlyH}}</p>
   </mat-card-content>
 </mat-card>

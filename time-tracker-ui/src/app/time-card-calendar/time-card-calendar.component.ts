@@ -8,18 +8,27 @@ import {
 } from "angular-calendar";
 import {Subject} from "rxjs";
 
-import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-fns';
+import {
+  endOfISOWeek,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  parseISO,
+  startOfISOWeek,
+  startOfMonth,
+  startOfWeek, subDays
+} from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
 import {TimeCardApiService, TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
 import {filter, flatMap, map} from "rxjs/operators";
-import {ManagedTimeLog, ProjectDto} from "../service/admin-api/admin-api-service";
-import {TimeCardImagesListComponent} from "../dialogs/time-card-images-list/time-card-images-list.component";
+import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 import {
   UserTimeCardDialogData,
   UserTimeCardImagesListComponent
 } from "../dialogs/user-time-card-images-list/user-time-card-images-list.component";
+import moment = require("moment");
 
 const colors: any = {
   blue: {
@@ -43,6 +52,10 @@ export class TimeCardCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   excludeDays: number[] = [0, 6];
   loading = true;
+
+  weeklyH = 0;
+  biWeeklyH = 0;
+  monthlyH = 0;
 
   actions: CalendarEventAction[] = [
     {
@@ -166,6 +179,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   private updateTimeCards(updates: TimeLogUpload[]) {
     this.events = [];
+    this.computeAggregateStats(updates);
     updates.forEach(card => {
       let event = {
         start: parseISO(card.timestamp),
@@ -186,12 +200,40 @@ export class TimeCardCalendarComponent implements OnInit {
     this.refresh.next();
   }
 
+  private computeAggregateStats(updates: TimeLogUpload[]) {
+    const date = new Date()
+    const weekStart = startOfISOWeek(date);
+    const weekEnd = endOfISOWeek(date);
+    const biWeekStart = startOfISOWeek(subDays(weekStart, 1));
+    const monthStart = startOfMonth(date);
+    const monthEnd = endOfMonth(date);
+    const cardData = updates.map(it => {
+      return [parseISO(it.timestamp), it.durationminutes]
+    });
+    this.weeklyH = +this.round(cardData.filter(it => it[0] >= weekStart && it[0] <= weekEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
+    this.biWeeklyH = +this.round(cardData.filter(it => it[0] >= biWeekStart && it[0] <= weekEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
+    this.monthlyH = +this.round(cardData.filter(it => it[0] >= monthStart && it[0] <= monthEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
+  }
+
+  private twoWeekStart(weekStart: Date) {
+    let twoWeekStart = new Date(weekStart);
+    twoWeekStart.setDate(weekStart.getDate() - 1);
+    return this.monday(twoWeekStart);
+  }
+
   private getHoursValue(card: ManagedTimeLog) {
     return this.round(card.durationminutes / 60.0 );
   }
 
   private round(value: number) {
     return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
+  }
+
+  private monday(d: Date) {
+    d = new Date(d);
+    let day = d.getDay();
+    let diff = d.getDate() - day + (day == 0 ? -6 : 1);
+    return new Date(d.setDate(diff));
   }
 }
 
