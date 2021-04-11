@@ -1,27 +1,27 @@
 {
   "/admin-api/*": {
-    "target": "https://erp1.timetracker.tk/admin-api/",
+    "target": "https://demo.timetracker.tk/admin-api/",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
       "^/admin-api": ""
     },
     "headers": {
-      "host": "erp1.timetracker.tk",
-      "origin": "https://erp1.timetracker.tk"
+      "host": "demo.timetracker.tk",
+      "origin": "https://demo.timetracker.tk"
     },
     "logLevel": "debug"
   },
   "/tracker-api/*": {
-    "target": "https://erp1.timetracker.tk/tracker-api/",
+    "target": "https://demo.timetracker.tk/tracker-api/",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
       "^/tracker-api": ""
     },
     "headers": {
-      "host": "erp1.timetracker.tk",
-      "origin": "https://erp1.timetracker.tk"
+      "host": "demo.timetracker.tk",
+      "origin": "https://demo.timetracker.tk"
     }
   }
 }
