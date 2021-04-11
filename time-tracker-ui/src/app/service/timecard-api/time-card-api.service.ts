@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {plainToClass} from "class-transformer";
+import {ManagedTimeLogCard} from "../admin-api/admin-api-service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,9 @@ export class TimeCardApiService {
   private base = environment.trackerBaseUri;
   private listProjectsUri = this.base + "resources/timelogs/projects";
   private timeLogsUri = this.base + "resources/timelogs";
+
+  private baseManagedTimelogCardsUri = this.base + "resources/timelogs/cards/"
+  private baseManagedTimelogImagesUri = this.base + "resources/timelogs/cards/images/"
 
   constructor(private httpClient: HttpClient) { }
 
@@ -35,6 +39,18 @@ export class TimeCardApiService {
 
   uploadTimeCard(timecard: TimeLogUpload) {
     return this.httpClient.put<TimeLogUpload>(this.timeLogsUri, timecard);
+  }
+
+  getTimelogCards(timelogIds: number[]) {
+    return this.httpClient.get<TimeLogCard[]>(this.baseManagedTimelogCardsUri + timelogIds);
+  }
+
+  getLinkManagedTimelogCardImages(path: string) {
+    return this.baseManagedTimelogImagesUri + path;
+  }
+
+  deleteTimeCardImage(path: string) {
+    return this.httpClient.delete(this.baseManagedTimelogImagesUri + "/" + path);
   }
 }
 
@@ -68,4 +84,13 @@ export interface TimeLogUpload {
   description: string;
   location: string;
   timestamp: string;
+}
+
+export interface TimeLogCard {
+  id: number;
+  imageurl: string;
+  duration: string;
+  timestamp: string;
+  durationminutes?: number;
+  durationseconds?: number;
 }

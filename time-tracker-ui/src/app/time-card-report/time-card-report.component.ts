@@ -8,7 +8,7 @@ import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component"
 import {TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
 import {AdminApiService, ManagedTimeLog, ProjectDto} from "../service/admin-api/admin-api-service";
-import {TimeCardListComponent} from "../dialogs/time-card-list/time-card-list.component";
+import {TimeCardImagesListComponent} from "../dialogs/time-card-images-list/time-card-images-list.component";
 
 const colors: any = {
   blue: {
@@ -40,7 +40,7 @@ export class TimeCardReportComponent implements OnInit {
       label: '<i class="material-icons">preview</i>',
       a11yLabel: 'Details',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.dialog.open(TimeCardListComponent, {
+        this.dialog.open(TimeCardImagesListComponent, {
           data: [this.project, event.meta.src],
           width: "70%",
           height: "70%"

@@ -1,0 +1,31 @@
+<mat-card-header>
+  <mat-card-title>
+    Uploaded time cards
+  </mat-card-title>
+</mat-card-header>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+<mat-dialog-content>
+  <div>
+    <mat-grid-list cols="4" rowHeight="2:1">
+      <mat-grid-tile *ngFor='let img of images' [colspan]="selected === img ? 4 : 1"
+                     [rowspan]="selected === img ? 4 : 1" (click)="selected === img ? selected = null : selected = img">
+        <mat-card-content>
+          <div>
+            <img src='{{ img.url }}' class="tile-image">
+            <p class="top-left">
+              {{img.timestamp}} @ {{img.duration}}
+              <button mat-icon-button (click)="doDelete(img)" *ngIf="selected === img">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</mat-dialog-content>
+
+<mat-card-actions>
+  <button mat-button (click)="onDoneClick()">Done</button>
+</mat-card-actions>

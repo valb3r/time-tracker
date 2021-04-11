@@ -4,10 +4,10 @@ import {AdminApiService, ManagedTimeLog, ProjectDto} from "../../service/admin-a
 
 @Component({
   selector: 'app-time-card-list',
-  templateUrl: './time-card-list.component.html',
-  styleUrls: ['./time-card-list.component.scss']
+  templateUrl: './time-card-images-list.component.html',
+  styleUrls: ['./time-card-images-list.component.scss']
 })
-export class TimeCardListComponent implements OnInit {
+export class TimeCardImagesListComponent implements OnInit {
 
   selected: ManagedTimeLogData;
   images: ManagedTimeLogData[] = [];
@@ -15,7 +15,7 @@ export class TimeCardListComponent implements OnInit {
   timeOnScreenshotsM: number;
   loading = true;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public log: [ProjectDto, ManagedTimeLog], public api: AdminApiService, public dialogRef: MatDialogRef<TimeCardListComponent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public log: [ProjectDto, ManagedTimeLog], public api: AdminApiService, public dialogRef: MatDialogRef<TimeCardImagesListComponent>) { }
 
   ngOnInit(): void {
     this.loading = true;

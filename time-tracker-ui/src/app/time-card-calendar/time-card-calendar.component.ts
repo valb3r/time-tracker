@@ -14,7 +14,12 @@ import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component"
 import {TimeCardApiService, TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
 import {filter, flatMap, map} from "rxjs/operators";
-import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
+import {ManagedTimeLog, ProjectDto} from "../service/admin-api/admin-api-service";
+import {TimeCardImagesListComponent} from "../dialogs/time-card-images-list/time-card-images-list.component";
+import {
+  UserTimeCardDialogData,
+  UserTimeCardImagesListComponent
+} from "../dialogs/user-time-card-images-list/user-time-card-images-list.component";
 
 const colors: any = {
   blue: {
@@ -53,6 +58,17 @@ export class TimeCardCalendarComponent implements OnInit {
           flatMap((result: TimeLogUpload) => this.api.updateTimeCard(event.meta.src.id, result)),
           flatMap(() => this.doLoadTimecards())
         ).subscribe(res => this.updateTimeCards(res));
+      }
+    },
+    {
+      label: '<i class="material-icons">preview</i>',
+      a11yLabel: 'Details',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.dialog.open(UserTimeCardImagesListComponent, {
+          data: new UserTimeCardDialogData(event.meta.src.id),
+          width: "70%",
+          height: "70%"
+        });
       }
     },
     {

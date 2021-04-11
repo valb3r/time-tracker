@@ -56,7 +56,8 @@ import { TemplateManagementDialogComponent } from './reports/dialogs/template-ma
 import { EditProjectRoleComponent } from './management/dialogs/edit-project-role/edit-project-role.component';
 import { TimeCardReportComponent } from './time-card-report/time-card-report.component';
 import { ReviewProjectComponent } from './management/dialogs/review-project/review-project.component';
-import { TimeCardListComponent } from './dialogs/time-card-list/time-card-list.component';
+import { TimeCardImagesListComponent } from './dialogs/time-card-images-list/time-card-images-list.component';
+import { UserTimeCardImagesListComponent } from './dialogs/user-time-card-images-list/user-time-card-images-list.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -99,7 +100,8 @@ export const AppDateFormats = {
     EditProjectRoleComponent,
     TimeCardReportComponent,
     ReviewProjectComponent,
-    TimeCardListComponent
+    TimeCardImagesListComponent,
+    UserTimeCardImagesListComponent
   ],
   imports: [
     BrowserModule,
