@@ -66,7 +66,7 @@ public class ManagedTimeLogsController {
             @ManagedResourceId @PathVariable("project_ids") @Valid @NotEmpty Set<@NotNull Long> projectIds,
             @PathVariable("time_log_ids") @Valid @NotEmpty Set<@NotNull Long> timeLogIds
     ) {
-        return images.findByCardIdsForProjects(projectIds, timeLogIds).map(TimeLogImageDto.MAP::map);
+        return images.findByProjectsAndCardIds(projectIds, timeLogIds).map(TimeLogImageDto.MAP::map);
     }
 
     @GetMapping("/cards/images/{path}")

@@ -1,6 +1,7 @@
 package ua.timetracker.timetrackingserver.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogImageDto;
 import ua.timetracker.timetrackingserver.config.ImageUploadConfig;
 
+import java.nio.file.Files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -37,5 +39,16 @@ public class TimeLogImagesService {
             file.transferTo(image.physicalFile(uploadConfig.getPath()));
             return image;
         }).flatMap(it -> images.save(it).map(TimeLogImageDto.MAP::map));
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Void> deleteTimecardImage(long userId, String path) {
+        return images.deleteAll(images.findByUserIdAndPath(userId, path).map(this::doDelete));
+    }
+
+    @SneakyThrows
+    private TimeLogImage doDelete(TimeLogImage image) {
+        Files.deleteIfExists(TimeLogImage.physicalFile(uploadConfig.getPath(), image.getRelPhysicalPath()));
+        return image;
     }
 }

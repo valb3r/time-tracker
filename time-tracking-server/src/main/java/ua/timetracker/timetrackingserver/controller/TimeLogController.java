@@ -1,34 +1,46 @@
 package ua.timetracker.timetrackingserver.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ZeroCopyHttpOutputMessage;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ua.timetracker.shared.persistence.entity.projects.TimeLogImage;
 import ua.timetracker.shared.persistence.repository.reactive.ProjectsRepository;
+import ua.timetracker.shared.persistence.repository.reactive.TimeLogImagesRepository;
 import ua.timetracker.shared.persistence.repository.reactive.TimeLogsRepository;
 import ua.timetracker.shared.restapi.EntityNotFoundException;
 import ua.timetracker.shared.restapi.dto.project.ProjectDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogImageDto;
+import ua.timetracker.timetrackingserver.config.ImageUploadConfig;
 import ua.timetracker.timetrackingserver.service.TimeLogImagesService;
 import ua.timetracker.timetrackingserver.service.securityaspect.OnlyProjectWorkers;
 import ua.timetracker.timetrackingserver.service.update.TimeLogUpdater;
 import ua.timetracker.timetrackingserver.service.upload.TimeLogUploader;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 import static ua.timetracker.shared.util.UserIdUtil.id;
 
@@ -37,12 +49,15 @@ import static ua.timetracker.shared.util.UserIdUtil.id;
 @RequiredArgsConstructor
 public class TimeLogController {
 
-    private final ObjectMapper mapper;
+    private static final int BUFFER_SIZE = 1024;
+
     private final TimeLogsRepository logs;
     private final ProjectsRepository projects;
     private final TimeLogUpdater updater;
     private final TimeLogUploader uploader;
     private final TimeLogImagesService images;
+    private final ImageUploadConfig config;
+    private final TimeLogImagesRepository imagesRepo;
 
     @GetMapping(path = "/projects", consumes = MediaType.ALL_VALUE)
     public Flux<ProjectDto> availableProjects(
@@ -115,5 +130,41 @@ public class TimeLogController {
             @RequestParam(value = "timestamp", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp,
             @RequestPart("file") FilePart file) {
         return images.uploadTimelogImage(id(user), cardId, tag, Duration.parse(duration), timestamp, file);
+    }
+
+    @GetMapping(path = "/cards/{time_log_ids}")
+    public Flux<TimeLogImageDto> timeCardImagesForTimeLogs(
+            @Parameter(hidden = true) Authentication user,
+            @PathVariable("time_log_ids") @Valid @NotEmpty Set<@NotNull Long> timeLogIds
+    ) {
+        return imagesRepo.findByUserIdAndCardIds(id(user), timeLogIds).map(TimeLogImageDto.MAP::map);
+    }
+
+    @GetMapping("/cards/images/{path}")
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Void> downloadTimecardImage(
+            @Parameter(hidden = true) Authentication user,
+            @PathVariable("path") String path,
+            ServerHttpResponse response
+    ) {
+        ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
+        response.getHeaders().set(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        String[] segments = path.split("/", -1);
+        response.getHeaders().set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + segments[segments.length - 1]);
+        response.getHeaders().setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return zeroCopyResponse.writeWith(
+                DataBufferUtils.read(
+                        TimeLogImage.physicalFile(config.getPath(), path), new DefaultDataBufferFactory(), BUFFER_SIZE
+                )
+        );
+    }
+
+    @DeleteMapping("/cards/images/{path}")
+    @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<Void> deleteTimecardImage(
+            @Parameter(hidden = true) Authentication user,
+            @PathVariable("path") String path
+    ) {
+        return images.deleteTimecardImage(id(user), path);
     }
 }
