@@ -16,7 +16,7 @@ import {
   parseISO,
   startOfISOWeek,
   startOfMonth,
-  startOfWeek, subDays
+  subDays
 } from 'date-fns';
 import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
@@ -28,7 +28,6 @@ import {
   UserTimeCardDialogData,
   UserTimeCardImagesListComponent
 } from "../dialogs/user-time-card-images-list/user-time-card-images-list.component";
-import moment = require("moment");
 
 const colors: any = {
   blue: {
@@ -207,12 +206,10 @@ export class TimeCardCalendarComponent implements OnInit {
     const biWeekStart = startOfISOWeek(subDays(weekStart, 1));
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
-    const cardData = updates.map(it => {
-      return [parseISO(it.timestamp), it.durationminutes]
-    });
-    this.weeklyH = +this.round(cardData.filter(it => it[0] >= weekStart && it[0] <= weekEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
-    this.biWeeklyH = +this.round(cardData.filter(it => it[0] >= biWeekStart && it[0] <= weekEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
-    this.monthlyH = +this.round(cardData.filter(it => it[0] >= monthStart && it[0] <= monthEnd).map(it => it[1]).reduce((a, b) => a + b, 0) / 60.0);
+    const cardData = updates.map(it => new CardDuration(parseISO(it.timestamp), it.durationminutes));
+    this.weeklyH = +this.round(cardData.filter(it => it.at >= weekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
+    this.biWeeklyH = +this.round(cardData.filter(it => it.at >= biWeekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
+    this.monthlyH = +this.round(cardData.filter(it => it.at >= monthStart && it.at <= monthEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
   }
 
   private twoWeekStart(weekStart: Date) {
@@ -234,6 +231,11 @@ export class TimeCardCalendarComponent implements OnInit {
     let day = d.getDay();
     let diff = d.getDate() - day + (day == 0 ? -6 : 1);
     return new Date(d.setDate(diff));
+  }
+}
+
+class CardDuration {
+  constructor(public at, public durationminutes) {
   }
 }
 
