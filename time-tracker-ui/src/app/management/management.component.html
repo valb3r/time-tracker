@@ -3,6 +3,7 @@
     <mat-card-title>Users, projects and groups management</mat-card-title>
   </mat-card-header>
 
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
     <ng-template #actionButtons let-node="node" let-kind="kind" let-hasChildren="hasChildren">
       <span *ngIf="hasChildren && (node.kind === kind.GROUP)">

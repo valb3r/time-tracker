@@ -13,15 +13,18 @@ export class TimeCardListComponent implements OnInit {
   images: ManagedTimeLogData[] = [];
   timeOnCardM: number;
   timeOnScreenshotsM: number;
+  loading = true;
 
   constructor(@Inject(MAT_DIALOG_DATA) public log: [ProjectDto, ManagedTimeLog], public api: AdminApiService, public dialogRef: MatDialogRef<TimeCardListComponent>) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.api.getManagedTimelogCards([this.log[0].id], [this.log[1].id])
       .subscribe(res => {
         this.images = res.map(it => new ManagedTimeLogData(this.api.getLinkManagedTimelogCardImages(it.imageurl), it.timestamp, it.duration));
         this.timeOnCardM = +this.round(this.log[1].durationseconds / 60.0);
         this.timeOnScreenshotsM = +this.round(res.map(it => it.durationseconds).reduce((a, b) => a + b, 0) / 60.0);
+        this.loading = false;
       })
   }
 

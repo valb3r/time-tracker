@@ -3,6 +3,7 @@
     <mat-card-title>My reports</mat-card-title>
   </mat-card-header>
 
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <mat-card-content fxLayout="column">
     <mat-list>
       <mat-list-item *ngFor="let report of reports">

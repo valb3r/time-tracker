@@ -75,6 +75,7 @@ export class ManagementComponent implements OnInit {
   database: GroupDatabase = new GroupDatabase(this.treeControl);
 
   public kind = Kind;
+  loading = true;
 
   constructor(private api: AdminApiService, private dialog: MatDialog) {
   }
@@ -293,9 +294,11 @@ export class ManagementComponent implements OnInit {
   }
 
   private updateOwnedGroups(res: GroupDtoWithPath[]) {
+    this.loading = true;
     const data = this.buildGroupTree(res);
     this.database.dataChange.next(data);
     this.database.keepExpandedNodesState(data);
+    this.loading = false;
   }
 
   private buildInternalGroups(path: string, node: GroupDto): GroupNode[] {

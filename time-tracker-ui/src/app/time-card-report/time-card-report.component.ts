@@ -33,6 +33,7 @@ export class TimeCardReportComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   excludeDays: number[] = [0, 6];
+  loading = true;
 
   actions: CalendarEventAction[] = [
     {
@@ -68,8 +69,16 @@ export class TimeCardReportComponent implements OnInit {
 
   viewDateChanged() {
     this.activeDayIsOpen = false;
+    this.loadTimeLogs();
+  }
+
+  private loadTimeLogs() {
+    this.loading = true;
     this.api.getManagedTimelogs([this.project.id], startOfMonth(this.viewDate), endOfMonth(this.viewDate))
-      .subscribe(res => this.updateTimeCards(res));
+      .subscribe(res => {
+        this.loading = false;
+        this.updateTimeCards(res);
+      });
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
@@ -82,8 +91,7 @@ export class TimeCardReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.getManagedTimelogs([this.project.id], startOfMonth(this.viewDate), endOfMonth(this.viewDate))
-      .subscribe(res => this.updateTimeCards(res));
+    this.loadTimeLogs();
   }
 
   private updateTimeCards(updates: ManagedTimeLog[]) {

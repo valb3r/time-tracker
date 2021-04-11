@@ -13,7 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
 import {TimeCardApiService, TimeLogUpload} from "../service/timecard-api/time-card-api.service";
 import {MediaMatcher} from "@angular/cdk/layout";
-import {filter, flatMap} from "rxjs/operators";
+import {filter, flatMap, map} from "rxjs/operators";
 import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 
 const colors: any = {
@@ -37,6 +37,7 @@ export class TimeCardCalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   excludeDays: number[] = [0, 6];
+  loading = true;
 
   actions: CalendarEventAction[] = [
     {
@@ -50,7 +51,7 @@ export class TimeCardCalendarComponent implements OnInit {
         dialogRef.afterClosed().pipe(
           filter(result => result !== undefined),
           flatMap((result: TimeLogUpload) => this.api.updateTimeCard(event.meta.src.id, result)),
-          flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+          flatMap(() => this.doLoadTimecards())
         ).subscribe(res => this.updateTimeCards(res));
       }
     },
@@ -61,7 +62,7 @@ export class TimeCardCalendarComponent implements OnInit {
         this.events = this.events.filter(iEvent => iEvent !== event);
         this.api.deleteTimeCard(event.meta.src.id)
           .pipe(
-            flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+            flatMap(() => this.doLoadTimecards())
           ).subscribe(res => this.updateTimeCards(res))
       }
     }
@@ -91,8 +92,18 @@ export class TimeCardCalendarComponent implements OnInit {
     dialogRef.afterClosed().pipe(
       filter(result => result !== undefined),
       flatMap((result: TimeLogUpload) => this.api.uploadTimeCard(result)),
-      flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+      flatMap(() => this.doLoadTimecards())
     ).subscribe(res => this.updateTimeCards(res));
+  }
+
+  private doLoadTimecards() {
+    this.loading = true;
+    return this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)).pipe(
+      map(it => {
+        this.loading = false;
+        return it;
+      })
+    )
   }
 
   eventTimesChanged({
@@ -105,7 +116,7 @@ export class TimeCardCalendarComponent implements OnInit {
         event.meta.src.timestamp = newStart;
         this.api.updateTimeCard(event.meta.src.id, event.meta.src)
           .pipe(
-            flatMap(() => this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate)))
+            flatMap(() => this.doLoadTimecards())
           ).subscribe(res => this.updateTimeCards(res));
         return {
           ...event,
@@ -119,7 +130,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   viewDateChanged() {
     this.activeDayIsOpen = false;
-    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+    this.doLoadTimecards()
       .subscribe(res => this.updateTimeCards(res));
   }
 
@@ -133,7 +144,7 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.listTimeCards(startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+    this.doLoadTimecards()
       .subscribe(res => this.updateTimeCards(res));
   }
 

@@ -5,6 +5,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
     <mat-grid-list cols="3" rowHeight="30pt">
       <mat-grid-tile [colspan]="3" [rowspan]="1">
         <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>

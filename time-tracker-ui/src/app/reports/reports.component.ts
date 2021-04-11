@@ -14,19 +14,30 @@ import {NewUsersReportComponent} from "./dialogs/new-users-report/new-users-repo
 export class ReportsComponent implements OnInit {
 
   reports: ReportDto[];
+  loading = true;
 
   constructor(private api: AdminApiService, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.api.getAllMineReports().subscribe(reports => this.reports = reports);
+    this.loading = true;
+    this.api.getAllMineReports().subscribe(reports => {
+      this.loading = false;
+      this.reports = reports
+    });
 
     // Await for updates
     interval(5000)
       .pipe(
         startWith(0),
-        switchMap(() => this.api.getAllMineReports())
+        switchMap(() => {
+          this.loading = true;
+          return this.api.getAllMineReports();
+        })
       )
-      .subscribe(res => this.reports = res);
+      .subscribe(res => {
+        this.loading = false;
+        this.reports = res;
+      });
   }
 
 
