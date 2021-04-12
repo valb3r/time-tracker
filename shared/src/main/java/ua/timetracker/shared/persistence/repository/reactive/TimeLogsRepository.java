@@ -42,7 +42,7 @@ public interface TimeLogsRepository extends ReactiveCrudRepository<TimeLog, Long
     )
     Flux<Long> listUploadedCards(
             @Param("projectIds") Set<Long> projectIds,
-            @Param("projectIds") Set<Long> userIds,
+            @Param("userIds") Set<Long> userIds,
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to
     );
