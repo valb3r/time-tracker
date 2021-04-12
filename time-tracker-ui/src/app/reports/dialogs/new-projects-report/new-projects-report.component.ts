@@ -29,6 +29,7 @@ export class NewProjectsReportComponent implements OnInit {
   templatesControl = new FormControl("", []);
   templates: ReportTemplateDto[] = [];
   filteredTemplates: Observable<ReportTemplateDto[]>;
+  loading = true;
 
 
   @ViewChild('projectInput') projectInput: ElementRef<HTMLInputElement>;
@@ -42,6 +43,7 @@ export class NewProjectsReportComponent implements OnInit {
       res.forEach(it => this.projects.push(...it.entry.projects.filter(project => {
         let contains = !ids.has(project.id);
         ids.add(project.id);
+        this.loading = false;
         return contains;
       })));
     });
@@ -95,10 +97,12 @@ export class NewProjectsReportComponent implements OnInit {
   }
 
   onSaveClick() {
+    this.loading = true;
     this.api.createProjectBasedReport(
       this.projectsSelected.map(it => it.id),
       {templateid: this.templatesControl.value.id, from: this.fromDateControl.value, to: this.toDateControl.value}
     ).subscribe(res => {
+      this.loading = false;
       this.dialogRef.close(true);
     })
   }

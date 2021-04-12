@@ -35,6 +35,7 @@ export class NewUsersReportComponent implements OnInit {
   templatesControl = new FormControl("", []);
   templates: ReportTemplateDto[] = [];
   filteredTemplates: Observable<ReportTemplateDto[]>;
+  loading = true;
 
 
   @ViewChild('usersInput') usersInput: ElementRef<HTMLInputElement>;
@@ -48,6 +49,7 @@ export class NewUsersReportComponent implements OnInit {
       res.forEach(it => this.users.push(...it.entry.users.filter(user => {
         let contains = !ids.has(user.id);
         ids.add(user.id);
+        this.loading = false;
         return contains;
       })));
     });
@@ -98,10 +100,12 @@ export class NewUsersReportComponent implements OnInit {
   }
 
   onSaveClick() {
+    this.loading = true;
     this.api.createUserBasedReport(
       this.selectedUsers.map(it => it.id),
       {templateid: this.templatesControl.value.id, from: this.fromDateControl.value, to: this.toDateControl.value}
     ).subscribe(res => {
+      this.loading = false;
       this.dialogRef.close(true);
     })
   }

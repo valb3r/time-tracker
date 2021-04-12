@@ -3,6 +3,7 @@
 </mat-card-header>
 
 <mat-dialog-content>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <mat-form-field>
     <mat-chip-list #chipList aria-label="Users selection">
       <mat-chip
