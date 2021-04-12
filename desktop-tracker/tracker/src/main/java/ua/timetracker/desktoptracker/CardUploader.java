@@ -72,7 +72,7 @@ public class CardUploader {
                     if (!isInit) {
                         try {
                             val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
-                            val cards = new ArrayList<>(timeLog.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+                            val cards = new ArrayList<>(getUploadedCardsOfDay(timeLog, time));
                             updateTimeLogged.accept(cards.stream().mapToLong(it -> Duration.parse(it.getDuration()).toMillis()).sum());
                             isInit = true;
                         } catch (Exception ex) {
@@ -99,12 +99,13 @@ public class CardUploader {
         }
 
         TimeLogControllerApi api = this.api.get();
-        val time = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
+        val date = OffsetDateTime.now(ZoneOffset.UTC).toLocalDate();
         val cards = new ArrayList<TimeLogDto>();
         try {
-            cards.addAll(api.uploadedTimeCards(time.atStartOfDay(), time.atTime(LocalTime.MAX)));
+            cards.addAll(getUploadedCardsOfDay(api, date));
         } catch (ApiException ex) {
             doRelogin();
+            cards.addAll(getUploadedCardsOfDay(api, date));
         } catch (Exception ex) {
             log.warn("Failed to list cards {}", ex.getMessage());
             return;
@@ -171,6 +172,10 @@ public class CardUploader {
                 log.warn("Failed to upload {} of {}", ex.getMessage(), report.getAbsolutePath());
             }
         }
+    }
+
+    private List<TimeLogDto> getUploadedCardsOfDay(TimeLogControllerApi api, LocalDate date) {
+        return api.uploadedTimeCards(date.atStartOfDay(), date.atTime(LocalTime.MAX));
     }
 
     private void doRelogin() {
