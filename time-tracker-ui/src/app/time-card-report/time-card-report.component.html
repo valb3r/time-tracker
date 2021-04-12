@@ -70,5 +70,7 @@
       (beforeViewRender)="beforeMonthViewRender($event)"
     >
     </mwl-calendar-month-view>
+    <mat-divider></mat-divider>
+    <app-time-card-aggregate-stats [updates]="timecards"></app-time-card-aggregate-stats>
   </mat-card-content>
 </mat-card>

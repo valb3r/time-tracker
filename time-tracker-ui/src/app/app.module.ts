@@ -58,6 +58,7 @@ import { TimeCardReportComponent } from './time-card-report/time-card-report.com
 import { ReviewProjectComponent } from './management/dialogs/review-project/review-project.component';
 import { TimeCardImagesListComponent } from './dialogs/time-card-images-list/time-card-images-list.component';
 import { UserTimeCardImagesListComponent } from './dialogs/user-time-card-images-list/user-time-card-images-list.component';
+import { TimeCardAggregateStatsComponent } from './time-card-aggregate-stats/time-card-aggregate-stats.component';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -101,7 +102,8 @@ export const AppDateFormats = {
     TimeCardReportComponent,
     ReviewProjectComponent,
     TimeCardImagesListComponent,
-    UserTimeCardImagesListComponent
+    UserTimeCardImagesListComponent,
+    TimeCardAggregateStatsComponent
   ],
   imports: [
     BrowserModule,

@@ -40,6 +40,8 @@ export class TimeCardReportComponent implements OnInit {
   users: UserDto[] = [];
   selectedUserId = new FormControl(this.ALL);
 
+  timecards: TimeLogUpload[];
+
   actions: CalendarEventAction[] = [
     {
       label: '<i class="material-icons">preview</i>',
@@ -108,6 +110,7 @@ export class TimeCardReportComponent implements OnInit {
   }
 
   private updateTimeCards(updates: ManagedTimeLog[]) {
+    this.timecards = updates;
     this.events = [];
     if (this.ALL === this.selectedUserId.value) {
       const userMap = new Map();

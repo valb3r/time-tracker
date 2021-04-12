@@ -53,9 +53,7 @@ export class TimeCardCalendarComponent implements OnInit {
   excludeDays: number[] = [0, 6];
   loading = true;
 
-  weeklyH = 0;
-  biWeeklyH = 0;
-  monthlyH = 0;
+  timecards: TimeLogUpload[];
 
   actions: CalendarEventAction[] = [
     {
@@ -179,7 +177,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   private updateTimeCards(updates: TimeLogUpload[]) {
     this.events = [];
-    this.computeAggregateStats(updates);
+    this.timecards = updates;
     updates.forEach(card => {
       let event = {
         start: parseISO(card.timestamp),
@@ -200,25 +198,6 @@ export class TimeCardCalendarComponent implements OnInit {
     this.refresh.next();
   }
 
-  private computeAggregateStats(updates: TimeLogUpload[]) {
-    const date = new Date();
-    const weekStart = startOfISOWeek(date);
-    const weekEnd = endOfISOWeek(date);
-    const biWeekStart = startOfISOWeek(subDays(weekStart, 1));
-    const monthStart = startOfMonth(date);
-    const monthEnd = endOfMonth(date);
-    const cardData = updates.map(it => new CardDuration(parseISO(it.timestamp), it.durationminutes));
-    this.weeklyH = +this.round(cardData.filter(it => it.at >= weekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
-    this.biWeeklyH = +this.round(cardData.filter(it => it.at >= biWeekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
-    this.monthlyH = +this.round(cardData.filter(it => it.at >= monthStart && it.at <= monthEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
-  }
-
-  private twoWeekStart(weekStart: Date) {
-    let twoWeekStart = new Date(weekStart);
-    twoWeekStart.setDate(weekStart.getDate() - 1);
-    return this.monday(twoWeekStart);
-  }
-
   private getHoursValue(card: ManagedTimeLog) {
     return this.round(card.durationminutes / 60.0 );
   }
@@ -226,17 +205,4 @@ export class TimeCardCalendarComponent implements OnInit {
   private round(value: number) {
     return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
   }
-
-  private monday(d: Date) {
-    d = new Date(d);
-    let day = d.getDay();
-    let diff = d.getDate() - day + (day == 0 ? -6 : 1);
-    return new Date(d.setDate(diff));
-  }
 }
-
-class CardDuration {
-  constructor(public at, public durationminutes) {
-  }
-}
-
