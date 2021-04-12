@@ -50,7 +50,7 @@ export class TimeCardApiService {
   }
 
   deleteTimeCardImage(path: string) {
-    return this.httpClient.delete(this.baseManagedTimelogImagesUri + "/" + path);
+    return this.httpClient.delete(this.baseManagedTimelogImagesUri + path);
   }
 }
 

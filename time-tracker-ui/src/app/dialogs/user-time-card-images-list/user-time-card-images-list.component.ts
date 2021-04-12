@@ -29,6 +29,7 @@ export class UserTimeCardImagesListComponent implements OnInit {
   }
 
   doDelete(data: UserTimeLogData) {
+    this.loading = true;
     this.api.deleteTimeCardImage(data.relUrl).subscribe(_ => this.loadTimeCards());
   }
 
