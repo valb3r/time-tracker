@@ -2,6 +2,7 @@
   <mat-card-title>Timecard</mat-card-title>
 </mat-card-header>
 <mat-card-content fxLayout="column">
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <form [formGroup]="addTimecard">
     <mat-form-field>
       <input matInput [matDatepicker]="workDate" placeholder="Worked on" [formControl]="dateControl">

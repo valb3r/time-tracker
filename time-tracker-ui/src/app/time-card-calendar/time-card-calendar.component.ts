@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit, ViewEncapsulation} from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -66,6 +66,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(
           filter(result => result !== undefined),
+          map(it => { this.loading = true; this.ref.detectChanges(); return it; }),
           flatMap((result: TimeLogUpload) => this.api.updateTimeCard(event.meta.src.id, result)),
           flatMap(() => this.doLoadTimecards())
         ).subscribe(res => this.updateTimeCards(res));
@@ -87,10 +88,11 @@ export class TimeCardCalendarComponent implements OnInit {
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
+        this.loading = true;
         this.api.deleteTimeCard(event.meta.src.id)
           .pipe(
             flatMap(() => this.doLoadTimecards())
-          ).subscribe(res => this.updateTimeCards(res))
+          ).subscribe(res => this.updateTimeCards(res));
       }
     }
   ];
@@ -99,9 +101,9 @@ export class TimeCardCalendarComponent implements OnInit {
 
   events: CalendarEvent[] = [];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen = true;
 
-  constructor(private media: MediaMatcher, private dialog: MatDialog, private api: TimeCardApiService) {
+  constructor(private media: MediaMatcher, private dialog: MatDialog, private api: TimeCardApiService, private ref: ChangeDetectorRef) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
   }
 
@@ -118,6 +120,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(
       filter(result => result !== undefined),
+      map(it => { this.loading = true; this.ref.detectChanges(); return it; }),
       flatMap((result: TimeLogUpload) => this.api.uploadTimeCard(result)),
       flatMap(() => this.doLoadTimecards())
     ).subscribe(res => this.updateTimeCards(res));
@@ -130,7 +133,7 @@ export class TimeCardCalendarComponent implements OnInit {
         this.loading = false;
         return it;
       })
-    )
+    );
   }
 
   eventTimesChanged({
@@ -141,6 +144,7 @@ export class TimeCardCalendarComponent implements OnInit {
     this.events = this.events.map(iEvent => {
       if (iEvent === event) {
         event.meta.src.timestamp = newStart;
+        this.loading = true;
         this.api.updateTimeCard(event.meta.src.id, event.meta.src)
           .pipe(
             flatMap(() => this.doLoadTimecards())

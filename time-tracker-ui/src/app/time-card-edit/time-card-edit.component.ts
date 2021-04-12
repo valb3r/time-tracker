@@ -20,9 +20,11 @@ export class TimeCardEditComponent implements OnInit {
 
   locations = Object.keys(LocationCode);
 
-  defaultActivity = "";
+  defaultActivity = '';
   activities = new Set<string>();
   projects: ProjectWithId[];
+
+  loading = true;
 
   durations: Duration[] = Array
     .from(Array(20).keys())
@@ -55,9 +57,11 @@ export class TimeCardEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.api.listAvailableProjects()
       .subscribe(resp => {
         this.projects = resp;
+        this.loading = false;
         this.prefillProjectAndActivityAndDuration();
     });
 
