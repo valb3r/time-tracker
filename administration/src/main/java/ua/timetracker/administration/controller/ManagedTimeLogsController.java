@@ -60,6 +60,22 @@ public class ManagedTimeLogsController {
     }
 
     @OnlyResourceManagers
+    @GetMapping(path = "/projects/{project_ids}/users/{user_ids}")
+    public Flux<TimeLogDto> timeCardsForManagedProjectsOfUsers(
+            @Parameter(hidden = true) Authentication user,
+            @ManagedResourceId @PathVariable("project_ids") @Valid @NotEmpty Set<@NotNull Long> projectIds,
+            @ManagedResourceId @PathVariable("user_ids") @Valid @NotEmpty Set<@NotNull Long> userIds,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(value = "from", defaultValue = "1970-01-01T00:00") LocalDateTime fromDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(value = "to", defaultValue = "2100-01-01T00:00") LocalDateTime toDate
+    ) {
+        val uploads = logs.listUploadedCards(projectIds, userIds, fromDate, toDate);
+        // materialize collections (eager fetch of Projects[])
+        return logs.findAllById(uploads).map(TimeLogDto.MAP::map);
+    }
+
+    @OnlyResourceManagers
     @GetMapping(path = "/projects/{project_ids}/cards/{time_log_ids}")
     public Flux<TimeLogImageDto> timeCardImagesForTimeLogs(
             @Parameter(hidden = true) Authentication user,

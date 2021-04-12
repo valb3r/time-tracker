@@ -6,6 +6,15 @@
   </mat-card-header>
   <mat-card-content>
     <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+    <mat-form-field appearance="fill">
+      <mat-label>View by user</mat-label>
+      <mat-select [formControl]="selectedUserId" (selectionChange)="changeUser()">
+        <mat-option value="{{ALL}}">All</mat-option>
+        <ng-container *ngFor="let usr of users">
+          <mat-option value="{{usr.id}}">{{usr.name}}</mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
     <mat-grid-list cols="3" rowHeight="30pt">
       <mat-grid-tile [colspan]="3" [rowspan]="1">
         <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>

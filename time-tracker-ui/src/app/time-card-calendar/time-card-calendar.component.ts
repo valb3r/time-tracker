@@ -201,7 +201,7 @@ export class TimeCardCalendarComponent implements OnInit {
   }
 
   private computeAggregateStats(updates: TimeLogUpload[]) {
-    const date = new Date()
+    const date = new Date();
     const weekStart = startOfISOWeek(date);
     const weekEnd = endOfISOWeek(date);
     const biWeekStart = startOfISOWeek(subDays(weekStart, 1));

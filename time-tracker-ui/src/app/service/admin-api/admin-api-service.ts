@@ -237,6 +237,13 @@ export class AdminApiService {
       );
   }
 
+  getManagedTimelogsOfUsers(projectIds: number[], userIds: number[], from: Date, to: Date) {
+    return this.httpClient.get<ManagedTimeLog[]>(
+      this.baseManagedTimelogsUri + projectIds + '/users/' + userIds,
+      {params: new HttpParams().append('from', from.toISOString()).append('to', to.toISOString()) }
+    );
+  }
+
   getManagedTimelogCards(projectIds: number[], timelogIds: number[]) {
     return this.httpClient.get<ManagedTimeLogCard[]>(this.baseManagedTimelogCardsUri + projectIds + "/cards/" + timelogIds);
   }

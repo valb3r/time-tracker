@@ -1,14 +1,15 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {CalendarEvent, CalendarEventAction, CalendarMonthViewDay, CalendarView} from "angular-calendar";
-import {Subject} from "rxjs";
+import {CalendarEvent, CalendarEventAction, CalendarMonthViewDay, CalendarView} from 'angular-calendar';
+import {Subject} from 'rxjs';
 
 import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-fns';
-import {MatDialog} from "@angular/material/dialog";
-import {TimeCardEditComponent} from "../time-card-edit/time-card-edit.component";
-import {TimeLogUpload} from "../service/timecard-api/time-card-api.service";
-import {MediaMatcher} from "@angular/cdk/layout";
-import {AdminApiService, ManagedTimeLog, ProjectDto} from "../service/admin-api/admin-api-service";
-import {TimeCardImagesListComponent} from "../dialogs/time-card-images-list/time-card-images-list.component";
+import {MatDialog} from '@angular/material/dialog';
+import {TimeCardEditComponent} from '../time-card-edit/time-card-edit.component';
+import {TimeLogUpload} from '../service/timecard-api/time-card-api.service';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {AdminApiService, ManagedTimeLog, ProjectDto} from '../service/admin-api/admin-api-service';
+import {TimeCardImagesListComponent} from '../dialogs/time-card-images-list/time-card-images-list.component';
+import {FormControl} from "@angular/forms";
 
 const colors: any = {
   blue: {
@@ -26,6 +27,8 @@ const colors: any = {
 })
 export class TimeCardReportComponent implements OnInit {
 
+  public ALL = 'ALL';
+
   @Input() project: ProjectDto;
 
   mobileQuery: MediaQueryList;
@@ -34,6 +37,8 @@ export class TimeCardReportComponent implements OnInit {
   viewDate: Date = new Date();
   excludeDays: number[] = [0, 6];
   loading = true;
+  users: UserDto[] = [];
+  selectedUserId = new FormControl(this.ALL);
 
   actions: CalendarEventAction[] = [
     {
@@ -42,8 +47,8 @@ export class TimeCardReportComponent implements OnInit {
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.dialog.open(TimeCardImagesListComponent, {
           data: [this.project, event.meta.src],
-          width: "70%",
-          height: "70%"
+          width: '70%',
+          height: '70%'
         });
       }
     },
@@ -53,7 +58,7 @@ export class TimeCardReportComponent implements OnInit {
 
   events: CalendarEvent[] = [];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen = true;
 
   constructor(private media: MediaMatcher, private dialog: MatDialog, private api: AdminApiService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -74,7 +79,11 @@ export class TimeCardReportComponent implements OnInit {
 
   private loadTimeLogs() {
     this.loading = true;
-    this.api.getManagedTimelogs([this.project.id], startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+    const resp = this.ALL === this.selectedUserId.value ?
+      this.api.getManagedTimelogs([this.project.id], startOfMonth(this.viewDate), endOfMonth(this.viewDate))
+      : this.api.getManagedTimelogsOfUsers([this.project.id], [+this.selectedUserId.value], startOfMonth(this.viewDate), endOfMonth(this.viewDate));
+
+    resp
       .subscribe(res => {
         this.loading = false;
         this.updateTimeCards(res);
@@ -94,14 +103,24 @@ export class TimeCardReportComponent implements OnInit {
     this.loadTimeLogs();
   }
 
+  changeUser() {
+    this.loadTimeLogs();
+  }
+
   private updateTimeCards(updates: ManagedTimeLog[]) {
     this.events = [];
+    if (this.ALL === this.selectedUserId.value) {
+      const userMap = new Map();
+      updates.forEach(it => userMap.set(it.userid, new UserDto(it.userid, this.userName(it))));
+      this.users = [...userMap.values()];
+    }
+
     updates.sort((a, b) => parseISO(a.timestamp).valueOf() - parseISO(b.timestamp).valueOf()).forEach(card => {
       const timeValue = this.getHoursValue(card);
-      let event = {
+      const event = {
         start: parseISO(card.timestamp),
         end: parseISO(card.timestamp),
-        title: `[${card.userfullname ? card.userfullname + ',': ''}${card.username}], ${timeValue}h ${card.description}`,
+        title: `[${this.userName(card)}], ${timeValue}h ${card.description}`,
         color: colors.blue,
         actions: this.actions,
         allDay: true,
@@ -117,12 +136,21 @@ export class TimeCardReportComponent implements OnInit {
     this.refresh.next();
   }
 
+  private userName(card: ManagedTimeLog) {
+    return `${card.userfullname ? card.userfullname + ',' : ''}${card.username}`;
+  }
+
   private getHoursValue(card: ManagedTimeLog) {
     return this.round(card.durationminutes / 60.0 );
   }
 
   private round(value: number) {
     return (Math.round((value + Number.EPSILON) * 100) / 100).toFixed(2);
+  }
+}
+
+class UserDto {
+  constructor(public id: number, public name: string) {
   }
 }
 
