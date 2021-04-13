@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TimeLogUpload} from "../service/timecard-api/time-card-api.service";
-import {endOfISOWeek, endOfMonth, parseISO, startOfISOWeek, startOfMonth, subDays} from "date-fns";
+import {endOfISOWeek, endOfMonth, formatISO, parseISO, startOfISOWeek, startOfMonth, subDays} from "date-fns";
 import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 
 @Component({
@@ -10,8 +10,18 @@ import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 })
 export class TimeCardAggregateStatsComponent implements OnInit {
 
+  logs: TimeLogUpload[];
+  viewDate: Date;
+
   @Input() set updates(value: TimeLogUpload[]) {
-    this.computeAggregateStats(value);
+    this.logs = value;
+    this.viewDate = new Date();
+    this.computeAggregateStats(this.logs, this.viewDate);
+  }
+
+  @Input() set date(value: Date) {
+    this.viewDate = value;
+    this.computeAggregateStats(this.logs, this.viewDate);
   }
 
   weeklyH = 0;
@@ -23,12 +33,15 @@ export class TimeCardAggregateStatsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private computeAggregateStats(updates: TimeLogUpload[]) {
+  isoViewDate() {
+    return formatISO(this.viewDate, {representation: 'date'});
+  }
+
+  private computeAggregateStats(updates: TimeLogUpload[], date: Date) {
     if (!updates) {
       return;
     }
 
-    const date = new Date();
     const weekStart = startOfISOWeek(date);
     const weekEnd = endOfISOWeek(date);
     const biWeekStart = startOfISOWeek(subDays(weekStart, 1));
