@@ -1,4 +1,8 @@
-<h4>Your aggregate time statistics for {{isoViewDate()}} (click on calendar to change)</h4>
-<p>Hours worked this week: {{weeklyH}}</p>
-<p>Hours worked this and previous week: {{biWeeklyH}}</p>
-<p>Hours worked this month: {{monthlyH}}</p>
+<h4>Your aggregate time statistics for {{isoDate(viewDate)}} (click on calendar to change)</h4>
+<p>Hours worked in 7 days: {{sevenDaysH}} ({{isoDate(sevenDaysDates[0])}} to {{isoDate(sevenDaysDates[1])}})</p>
+<p>Hours worked in 14 days: {{fourteenDaysH}} ({{isoDate(fourteenDaysDates[0])}} to {{isoDate(fourteenDaysDates[1])}})</p>
+<p>Hours worked in 30 days: {{thirtyDaysH}} ({{isoDate(thirtyDaysDates[0])}} to {{isoDate(thirtyDaysDates[1])}})</p>
+<br/>
+<p>Hours worked this week: {{weeklyH}} ({{isoDate(weeklyDates[0])}} to {{isoDate(weeklyDates[1])}})</p>
+<p>Hours worked this and previous week: {{biWeeklyH}} ({{isoDate(biWeeklyDates[0])}} to {{isoDate(biWeeklyDates[1])}})</p>
+<p>Hours worked this month: {{monthlyH}} ({{isoDate(monthlyDates[0])}} to {{isoDate(monthlyDates[1])}})</p>

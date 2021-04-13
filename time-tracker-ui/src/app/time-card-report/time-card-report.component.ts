@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} fr
 import {CalendarEvent, CalendarEventAction, CalendarMonthViewDay, CalendarView} from 'angular-calendar';
 import {Subject} from 'rxjs';
 
-import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth} from 'date-fns';
+import {endOfMonth, isSameDay, isSameMonth, parseISO, startOfMonth, subDays} from 'date-fns';
 import {MatDialog} from '@angular/material/dialog';
 import {TimeCardEditComponent} from '../time-card-edit/time-card-edit.component';
 import {TimeLogUpload} from '../service/timecard-api/time-card-api.service';
@@ -82,8 +82,8 @@ export class TimeCardReportComponent implements OnInit {
   private loadTimeLogs() {
     this.loading = true;
     const resp = this.ALL === this.selectedUserId.value ?
-      this.api.getManagedTimelogs([this.project.id], startOfMonth(this.viewDate), endOfMonth(this.viewDate))
-      : this.api.getManagedTimelogsOfUsers([this.project.id], [+this.selectedUserId.value], startOfMonth(this.viewDate), endOfMonth(this.viewDate));
+      this.api.getManagedTimelogs([this.project.id], subDays(startOfMonth(this.viewDate), 30) /* Required for aggregate - time-card-aggregate-stats*/, endOfMonth(this.viewDate))
+      : this.api.getManagedTimelogsOfUsers([this.project.id], [+this.selectedUserId.value], subDays(startOfMonth(this.viewDate), 30) /* Required for aggregate - time-card-aggregate-stats*/, endOfMonth(this.viewDate));
 
     resp
       .subscribe(res => {

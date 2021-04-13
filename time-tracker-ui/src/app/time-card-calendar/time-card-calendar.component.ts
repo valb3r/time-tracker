@@ -128,7 +128,7 @@ export class TimeCardCalendarComponent implements OnInit {
 
   private doLoadTimecards() {
     this.loading = true;
-    return this.api.listTimeCards(subDays(startOfMonth(this.viewDate), 14), endOfMonth(this.viewDate)).pipe(
+    return this.api.listTimeCards(subDays(startOfMonth(this.viewDate), 30) /* Required for aggregate - time-card-aggregate-stats*/, endOfMonth(this.viewDate)).pipe(
       map(it => {
         this.loading = false;
         return it;

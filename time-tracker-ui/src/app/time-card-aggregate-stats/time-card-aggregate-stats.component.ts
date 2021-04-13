@@ -1,6 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TimeLogUpload} from "../service/timecard-api/time-card-api.service";
-import {endOfISOWeek, endOfMonth, formatISO, parseISO, startOfISOWeek, startOfMonth, subDays} from "date-fns";
+import {
+  endOfISOWeek,
+  endOfMonth,
+  formatISO,
+  parseISO,
+  startOfDay,
+  startOfISOWeek,
+  startOfMonth,
+  subDays
+} from "date-fns";
 import {ManagedTimeLog} from "../service/admin-api/admin-api-service";
 
 @Component({
@@ -24,17 +33,31 @@ export class TimeCardAggregateStatsComponent implements OnInit {
     this.computeAggregateStats(this.logs, this.viewDate);
   }
 
+  sevenDaysH = 0;
+  fourteenDaysH = 0;
+  thirtyDaysH = 0;
   weeklyH = 0;
   biWeeklyH = 0;
   monthlyH = 0;
+
+  sevenDaysDates = [];
+  fourteenDaysDates = [];
+  thirtyDaysDates = [];
+  weeklyDates = [];
+  biWeeklyDates = [];
+  monthlyDates = [];
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  isoViewDate() {
-    return formatISO(this.viewDate, {representation: 'date'});
+  isoDate(date: Date) {
+    if (!date) {
+      return '';
+    }
+
+    return formatISO(date, {representation: 'date'});
   }
 
   private computeAggregateStats(updates: TimeLogUpload[], date: Date) {
@@ -48,9 +71,27 @@ export class TimeCardAggregateStatsComponent implements OnInit {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
     const cardData = updates.map(it => new CardDuration(parseISO(it.timestamp), it.durationminutes));
-    this.weeklyH = +this.round(cardData.filter(it => it.at >= weekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
-    this.biWeeklyH = +this.round(cardData.filter(it => it.at >= biWeekStart && it.at <= weekEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
-    this.monthlyH = +this.round(cardData.filter(it => it.at >= monthStart && it.at <= monthEnd).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
+    const sevenDaysStart = subDays(date, 6);
+    const fourteenDaysStart = subDays(date, 13);
+    const thirtyDaysStart = subDays(date, 29);
+
+    this.sevenDaysDates = [sevenDaysStart, date];
+    this.fourteenDaysDates = [fourteenDaysStart, date];
+    this.thirtyDaysDates = [thirtyDaysStart, date];
+    this.weeklyDates = [weekStart, weekEnd];
+    this.biWeeklyDates = [biWeekStart, weekEnd];
+    this.monthlyDates = [monthStart, monthEnd];
+
+    this.sevenDaysH = this.hoursBetweenDates(cardData, this.sevenDaysDates[0], this.sevenDaysDates[1]);
+    this.fourteenDaysH = this.hoursBetweenDates(cardData, this.fourteenDaysDates[0], this.fourteenDaysDates[1]);
+    this.thirtyDaysH = this.hoursBetweenDates(cardData, this.thirtyDaysDates[0], this.thirtyDaysDates[1]);
+    this.weeklyH = this.hoursBetweenDates(cardData, this.weeklyDates[0], this.weeklyDates[1]);
+    this.biWeeklyH = this.hoursBetweenDates(cardData, this.biWeeklyDates[0], this.biWeeklyDates[1]);
+    this.monthlyH = this.hoursBetweenDates(cardData, this.monthlyDates[0], this.monthlyDates[1]);
+  }
+
+  private hoursBetweenDates(cardData: CardDuration[], start: Date, end: Date) {
+    return +this.round(cardData.filter(it => startOfDay(it.at) >= startOfDay(start) && startOfDay(it.at) <= startOfDay(end)).map(it => it.durationminutes).reduce((a, b) => a + b, 0) / 60.0);
   }
 
   private twoWeekStart(weekStart: Date) {
