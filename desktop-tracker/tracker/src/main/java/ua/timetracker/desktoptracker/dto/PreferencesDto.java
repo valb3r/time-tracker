@@ -16,7 +16,7 @@ public class PreferencesDto {
     private String username = "";
     private String apiUrl = "https://demo.timetracker.tk";
     private int width = 600;
-    private int height = 300;
+    private int height = 200;
     private Set<String> captureDevices;
     private Map<Long, ProjectPreferences> preferences = new HashMap<>();
 
