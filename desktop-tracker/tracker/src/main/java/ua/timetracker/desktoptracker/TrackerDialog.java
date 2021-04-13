@@ -33,11 +33,13 @@ import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -69,6 +71,8 @@ public class TrackerDialog {
     private JLabel loginErrorMessage;
     private JLabel trackingErrorMessage;
     private JComboBox waitBeforeUpload;
+    private JList<GraphicalDeviceComponent> monitorList;
+    private DefaultListModel<GraphicalDeviceComponent> monitorListModel;
 
     private TimeLogControllerApi timeLog;
     private String authCookie;
@@ -103,37 +107,8 @@ public class TrackerDialog {
             }
         });
 
-        start.addActionListener(e -> {
-            if (null == activeProject) {
-                return;
-            }
-
-            if (!taskDescription.getInputVerifier().verify(taskDescription)) {
-                trackingErrorMessage.setText("Task description is too short");
-                return;
-            }
-            trackingErrorMessage.setText("");
-
-            this.frame.setTitle(String.format("[%s] Tracking...", activeProject.getProject().getCode()));
-            tracker.setScreenshots(captureScreenshots.isSelected());
-            tracker.startTracking(activeProject.getProject(), taskDescription.getText(), (String) workType.getSelectedItem());
-            currentProject.setEnabled(false);
-            taskDescription.setEnabled(false);
-            workType.setEnabled(false);
-            start.setEnabled(false);
-            stop.setEnabled(true);
-        });
-
-        stop.addActionListener(e -> {
-            this.frame.setTitle(DEFAULT_TITLE);
-            updateLoggedTime(null);
-            tracker.stopTracking();
-            currentProject.setEnabled(true);
-            taskDescription.setEnabled(true);
-            workType.setEnabled(true);
-            start.setEnabled(true);
-            stop.setEnabled(false);
-        });
+        start.addActionListener(e -> doStartTracking());
+        stop.addActionListener(e -> doStopTracking());
 
         currentProject.addActionListener(e -> {
             activeProject = (ProjectComponent) currentProject.getSelectedItem();
@@ -149,29 +124,15 @@ public class TrackerDialog {
         });
 
         captureScreenshots.addActionListener(e -> tracker.setScreenshots(captureScreenshots.isSelected()));
-    }
+        Arrays.stream(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()).forEach(g -> monitorListModel.addElement(new GraphicalDeviceComponent(g)));
 
-    private void propagateProjectPrefs() {
-        Long projectId = activeProject.getProject().getId();
-        if (projectsLoaded.contains(projectId)) {
+        if (null == preferences.getCaptureDevices()) {
             return;
         }
-        PreferencesDto.ProjectPreferences preferences = this.preferences.getPreferences().get(projectId);
-        projectsLoaded.add(projectId);
-        if (null != preferences) {
-            taskDescription.setText(preferences.getTaskDescription());
-            captureScreenshots.setSelected(preferences.isCaptureScreenshots());
-            IntStream.range(0, workType.getItemCount()).forEach(it -> {
-                if (workType.getItemAt(it).equals(preferences.getTaskTag())) {
-                    workType.setSelectedIndex(it);
-                }
-            });
-            IntStream.range(0, waitBeforeUpload.getItemCount()).forEach(it -> {
-                if (waitBeforeUpload.getItemAt(it).equals(preferences.getWaitBeforeUpload())) {
-                    waitBeforeUpload.setSelectedIndex(it);
-                }
-            });
-        }
+        val devices = IntStream.range(0, monitorListModel.size())
+                .filter(it -> preferences.getCaptureDevices().contains(monitorListModel.get(it).getDevice().getIDstring()))
+                .toArray();
+        monitorList.setSelectedIndices(devices);
     }
 
     private void doLogin() {
@@ -210,6 +171,69 @@ public class TrackerDialog {
                 this.loginButton.setEnabled(true);
             }
         }).start();
+    }
+
+    private void doStartTracking() {
+        if (null == activeProject) {
+            return;
+        }
+
+        if (!taskDescription.getInputVerifier().verify(taskDescription)) {
+            trackingErrorMessage.setText("Task description is too short");
+            return;
+        }
+        trackingErrorMessage.setText("");
+
+        if (monitorList.isSelectionEmpty()) {
+            monitorList.setSelectedIndices(IntStream.range(0, monitorListModel.size()).toArray());
+        }
+        this.frame.setTitle(String.format("[%s] Tracking...", activeProject.getProject().getCode()));
+        tracker.setScreenshots(captureScreenshots.isSelected());
+        tracker.startTracking(
+                activeProject.getProject(),
+                taskDescription.getText(),
+                (String) workType.getSelectedItem(),
+                monitorList.getSelectedValuesList().stream().map(GraphicalDeviceComponent::getDevice).collect(Collectors.toList())
+        );
+        currentProject.setEnabled(false);
+        taskDescription.setEnabled(false);
+        workType.setEnabled(false);
+        start.setEnabled(false);
+        stop.setEnabled(true);
+    }
+
+    private void doStopTracking() {
+        this.frame.setTitle(DEFAULT_TITLE);
+        updateLoggedTime(null);
+        tracker.stopTracking();
+        currentProject.setEnabled(true);
+        taskDescription.setEnabled(true);
+        workType.setEnabled(true);
+        start.setEnabled(true);
+        stop.setEnabled(false);
+    }
+
+    private void propagateProjectPrefs() {
+        Long projectId = activeProject.getProject().getId();
+        if (projectsLoaded.contains(projectId)) {
+            return;
+        }
+        PreferencesDto.ProjectPreferences preferences = this.preferences.getPreferences().get(projectId);
+        projectsLoaded.add(projectId);
+        if (null != preferences) {
+            taskDescription.setText(preferences.getTaskDescription());
+            captureScreenshots.setSelected(preferences.isCaptureScreenshots());
+            IntStream.range(0, workType.getItemCount()).forEach(it -> {
+                if (workType.getItemAt(it).equals(preferences.getTaskTag())) {
+                    workType.setSelectedIndex(it);
+                }
+            });
+            IntStream.range(0, waitBeforeUpload.getItemCount()).forEach(it -> {
+                if (waitBeforeUpload.getItemAt(it).equals(preferences.getWaitBeforeUpload())) {
+                    waitBeforeUpload.setSelectedIndex(it);
+                }
+            });
+        }
     }
 
     private ApiResponse<?> apiLogin() {
@@ -287,6 +311,12 @@ public class TrackerDialog {
         return String.format("Error: %s", ex.getMessage());
     }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        this.monitorListModel = new DefaultListModel<>();
+        monitorList = new JList<>(monitorListModel);
+    }
+
     @Getter
     public static class ProjectComponent {
         private final ProjectDto project;
@@ -298,6 +328,20 @@ public class TrackerDialog {
         @Override
         public String toString() {
             return String.format("[%s] %s", project.getCode(), project.getName());
+        }
+    }
+
+    @Getter
+    public static class GraphicalDeviceComponent {
+        private final GraphicsDevice device;
+
+        public GraphicalDeviceComponent(GraphicsDevice device) {
+            this.device = device;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%dx%d] %s", device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight(), device.getIDstring());
         }
     }
 
@@ -398,6 +442,7 @@ public class TrackerDialog {
                     dialog.apiUploadUrl.getText(),
                     dialog.frame.getWidth(),
                     dialog.frame.getHeight(),
+                    dialog.monitorList.getSelectedValuesList().stream().map(it -> it.getDevice().getIDstring()).collect(Collectors.toSet()),
                     null == dialog.activeProject ? null :
                             ImmutableMap.of(
                                     dialog.activeProject.getProject().getId(),

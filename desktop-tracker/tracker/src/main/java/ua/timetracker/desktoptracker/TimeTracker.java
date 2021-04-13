@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,8 +40,8 @@ public class TimeTracker {
         startTimeTrackingThread();
     }
 
-    public void startTracking(ProjectDto project, String taskDescription, String taskTag) {
-        trackingData.set(new TrackingData(System.currentTimeMillis(), nextSchedule(project), taskDescription, taskTag, project));
+    public void startTracking(ProjectDto project, String taskDescription, String taskTag, Collection<GraphicsDevice> devices) {
+        trackingData.set(new TrackingData(System.currentTimeMillis(), nextSchedule(project), taskDescription, taskTag, project, devices));
     }
 
     public void stopTracking() {
@@ -73,7 +74,7 @@ public class TimeTracker {
         Path logDir = ProjectFileStructUtil.logDir();
         logDir.toFile().mkdir();
         String baseName = "" + Instant.now().toEpochMilli();
-        writeScreenshotIfNeeded(logDir, baseName, data.getProject());
+        writeScreenshotIfNeeded(logDir, baseName, data.getProject(), data.getDevices());
         val duration = System.currentTimeMillis() - data.getForTime();
         if (duration <= 0) {
             return;
@@ -92,12 +93,16 @@ public class TimeTracker {
     }
 
     @SneakyThrows
-    private void writeScreenshotIfNeeded(Path dir, String baseName, ProjectDto project) {
+    private void writeScreenshotIfNeeded(Path dir, String baseName, ProjectDto project, Collection<GraphicsDevice> devices) {
         if (!screenShotsEnabled.get()) {
            return;
         }
 
-        BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+        Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+        for (GraphicsDevice gd : devices) {
+            screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+        }
+        BufferedImage image = new Robot().createScreenCapture(new Rectangle(screenRect));
         ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
         ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
         jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
@@ -128,5 +133,6 @@ public class TimeTracker {
         private final String taskDescription;
         private final String taskTag;
         private final ProjectDto project;
+        private final Collection<GraphicsDevice> devices;
     }
 }
