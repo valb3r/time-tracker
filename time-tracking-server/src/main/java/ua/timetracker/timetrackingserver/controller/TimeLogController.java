@@ -3,6 +3,7 @@ package ua.timetracker.timetrackingserver.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
@@ -44,6 +45,7 @@ import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 import static ua.timetracker.shared.restapi.Paths.V1_TIMELOGS;
 import static ua.timetracker.shared.util.UserIdUtil.id;
 
+@Slf4j
 @RestController
 @RequestMapping(value = V1_TIMELOGS, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -63,6 +65,7 @@ public class TimeLogController {
     public Flux<ProjectDto> availableProjects(
         @Parameter(hidden = true) Authentication user
     ) {
+        log.info("[{}]: available projects", id(user));
         return projects.timeLoggableProjects(id(user))
             .map(ProjectDto.MAP::map)
             .switchIfEmpty(EntityNotFoundException.mono());
@@ -76,6 +79,7 @@ public class TimeLogController {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         @RequestParam(value = "to", defaultValue = "2100-01-01T00:00") LocalDateTime toDate
     ) {
+        log.info("[{}]: uploaded cards {} to {}", id(user), fromDate, toDate);
         val uploads = logs.listUploadedCards(id(user), fromDate, toDate);
         // materialize collections (eager fetch of Projects[])
         return logs.findAllById(uploads).map(TimeLogDto.MAP::map);
@@ -86,9 +90,10 @@ public class TimeLogController {
     public Mono<TimeLogDto> updateTimeLog(
         @Parameter(hidden = true) Authentication user,
         @PathVariable("id") long cardId,
-        @Valid @RequestBody TimeLogCreateOrUpdate log
+        @Valid @RequestBody TimeLogCreateOrUpdate updateLog
     ) {
-        return updater.update(id(user), cardId, log)
+        log.info("[{}]: update card {}, use project: {}, descr.: {}, dur: {}", id(user), cardId, updateLog.getProjectId(), updateLog.getDescription(), updateLog.getDuration());
+        return updater.update(id(user), cardId, updateLog)
             .switchIfEmpty(EntityNotFoundException.mono());
     }
 
@@ -99,6 +104,7 @@ public class TimeLogController {
             @PathVariable("id") long cardId,
             @RequestParam String duration
     ) {
+        log.info("[{}]: increment card {}, dur: {}", id(user), cardId, duration);
         return updater.increment(id(user), cardId, Duration.parse(duration)).switchIfEmpty(EntityNotFoundException.mono());
     }
 
@@ -108,6 +114,7 @@ public class TimeLogController {
         @Parameter(hidden = true) Authentication user,
         @PathVariable("id") long cardId
     ) {
+        log.info("[{}]: delete log card {}", id(user), cardId);
         return updater.delete(id(user), cardId);
     }
 
@@ -115,8 +122,9 @@ public class TimeLogController {
     @PutMapping
     public Mono<TimeLogDto> uploadTimelog(
         @Parameter(hidden = true) Authentication user,
-        @Valid @RequestBody TimeLogCreateOrUpdate log) {
-        return uploader.upload(id(user), log)
+        @Valid @RequestBody TimeLogCreateOrUpdate uploadLog) {
+        log.info("[{}]: upload card, use project: {}, descr.: {}, dur: {}", id(user), uploadLog.getProjectId(), uploadLog.getDescription(), uploadLog.getDuration());
+        return uploader.upload(id(user), uploadLog)
             .switchIfEmpty(EntityNotFoundException.mono());
     }
 
@@ -129,6 +137,7 @@ public class TimeLogController {
             @RequestParam(value = "duration", required = false) String duration, // Openapi Codegen does not seem to support Duration
             @RequestParam(value = "timestamp", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timestamp,
             @RequestPart("file") FilePart file) {
+        log.info("[{}]: upload time card log, cardId: {}, tag.: {}, dur: {}, time: {}", id(user), cardId, tag, duration, timestamp);
         return images.uploadTimelogImage(id(user), cardId, tag, Duration.parse(duration), timestamp, file);
     }
 
@@ -137,6 +146,7 @@ public class TimeLogController {
             @Parameter(hidden = true) Authentication user,
             @PathVariable("time_log_ids") @Valid @NotEmpty Set<@NotNull Long> timeLogIds
     ) {
+        log.info("[{}]: get time card log, cardIds: {}", id(user), timeLogIds);
         return imagesRepo.findByUserIdAndCardIds(id(user), timeLogIds).map(TimeLogImageDto.MAP::map);
     }
 
@@ -147,6 +157,7 @@ public class TimeLogController {
             @PathVariable("path") String path,
             ServerHttpResponse response
     ) {
+        log.info("[{}]: download time card log: {}", id(user), path);
         ZeroCopyHttpOutputMessage zeroCopyResponse = (ZeroCopyHttpOutputMessage) response;
         response.getHeaders().set(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         String[] segments = path.split("/", -1);
@@ -165,6 +176,7 @@ public class TimeLogController {
             @Parameter(hidden = true) Authentication user,
             @PathVariable("path") String path
     ) {
+        log.info("[{}]: delete time card log: {}", id(user), path);
         return images.deleteTimecardImage(id(user), path);
     }
 }
