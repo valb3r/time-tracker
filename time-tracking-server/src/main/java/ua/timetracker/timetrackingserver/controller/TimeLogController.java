@@ -65,7 +65,7 @@ public class TimeLogController {
     public Flux<ProjectDto> availableProjects(
         @Parameter(hidden = true) Authentication user
     ) {
-        log.info("[{}]: available projects", id(user));
+        log.info("[{}]: get available projects", id(user));
         return projects.timeLoggableProjects(id(user))
             .map(ProjectDto.MAP::map)
             .switchIfEmpty(EntityNotFoundException.mono());
@@ -79,7 +79,7 @@ public class TimeLogController {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         @RequestParam(value = "to", defaultValue = "2100-01-01T00:00") LocalDateTime toDate
     ) {
-        log.info("[{}]: uploaded cards {} to {}", id(user), fromDate, toDate);
+        log.info("[{}]: get uploaded cards {} to {}", id(user), fromDate, toDate);
         val uploads = logs.listUploadedCards(id(user), fromDate, toDate);
         // materialize collections (eager fetch of Projects[])
         return logs.findAllById(uploads).map(TimeLogDto.MAP::map);
