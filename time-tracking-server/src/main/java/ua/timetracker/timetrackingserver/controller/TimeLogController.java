@@ -123,7 +123,8 @@ public class TimeLogController {
     public Mono<TimeLogDto> uploadTimelog(
         @Parameter(hidden = true) Authentication user,
         @Valid @RequestBody TimeLogCreateOrUpdate uploadLog) {
-        log.info("[{}]: upload card, use project: {}, descr.: {}, dur: {}", id(user), uploadLog.getProjectId(), uploadLog.getDescription(), uploadLog.getDuration());
+        log.info("[{}]: upload card, use project: {}, descr.: {}, dur: {}, tags: {}",
+                id(user), uploadLog.getProjectId(), uploadLog.getDescription(), uploadLog.getDuration(), uploadLog.getTags());
         return uploader.upload(id(user), uploadLog)
             .switchIfEmpty(EntityNotFoundException.mono());
     }

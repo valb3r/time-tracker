@@ -74,7 +74,7 @@ public class TimeTracker {
         Path logDir = ProjectFileStructUtil.logDir();
         logDir.toFile().mkdir();
         String baseName = "" + Instant.now().toEpochMilli();
-        writeScreenshotIfNeeded(logDir, baseName, data.getProject(), data.getDevices());
+        val screenshotState = writeScreenshotIfNeeded(logDir, baseName, data.getProject(), data.getDevices());
         val duration = System.currentTimeMillis() - data.getForTime();
         if (duration <= 0) {
             return;
@@ -86,16 +86,17 @@ public class TimeTracker {
                     duration,
                     data.getProject(),
                     data.getTaskDescription(),
-                    data.getTaskTag()
+                    data.getTaskTag(),
+                    screenshotState.name()
             );
             gson.toJson(card, writer);
         }
     }
 
     @SneakyThrows
-    private void writeScreenshotIfNeeded(Path dir, String baseName, ProjectDto project, Collection<GraphicsDevice> devices) {
+    private ScreenshotState writeScreenshotIfNeeded(Path dir, String baseName, ProjectDto project, Collection<GraphicsDevice> devices) {
         if (!screenShotsEnabled.get()) {
-           return;
+           return ScreenshotState.SCRD_DISABLED;
         }
 
         Rectangle screenRect = new Rectangle(0, 0, 0, 0);
@@ -112,9 +113,13 @@ public class TimeTracker {
             jpgWriter.setOutput(os);
             IIOImage outputImage = new IIOImage(image, null, null);
             jpgWriter.write(null, outputImage, jpgWriteParam);
+        } catch (RuntimeException ex) {
+            return ScreenshotState.SCRD_SCR_FAILED;
         } finally {
             jpgWriter.dispose();
         }
+
+        return ScreenshotState.SCRD_CAPTURED;
     }
 
     private long nextSchedule(ProjectDto project) {
@@ -134,5 +139,11 @@ public class TimeTracker {
         private final String taskTag;
         private final ProjectDto project;
         private final Collection<GraphicsDevice> devices;
+    }
+
+    private enum ScreenshotState {
+        SCRD_DISABLED,
+        SCRD_SCR_FAILED,
+        SCRD_CAPTURED
     }
 }

@@ -158,7 +158,7 @@ public class CardUploader {
                         new TimeLogCreateOrUpdate()
                                 .projectid(toUpload.getProject().getId())
                                 .description(toUpload.getTaskMessage())
-                                .tags(Collections.singletonList(toUpload.getTaskTag()))
+                                .tags(Arrays.asList(toUpload.getTaskTag(), toUpload.getScreenShotState()))
                                 .duration(uploadDuration(toUpload).toString())
                                 .timestamp(null != toUpload.getForTime() ? toUpload.getForTime() : LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
