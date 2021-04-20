@@ -37,7 +37,7 @@ export class AdminApiService {
   login(username: string, password: string) {
     return this.httpClient.post(
       this.loginUri,
-      {"username": username, "password": password},
+      {"username": username, "password": password, "clientversion": 9999_99_99},
       {observe: 'response'}
     );
   }

@@ -50,3 +50,7 @@ cors:
 image-upload:
   path: images-for-cards
   base-url: http://localhost:20080
+
+api:
+  client:
+    min-client-version: 20210420

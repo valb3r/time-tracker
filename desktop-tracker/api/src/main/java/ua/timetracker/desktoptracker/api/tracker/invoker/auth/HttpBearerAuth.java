@@ -18,7 +18,7 @@ import ua.timetracker.desktoptracker.api.tracker.invoker.Pair;
 import java.util.Map;
 import java.util.List;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T20:10:36.938113+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-20T17:18:59.621+03:00[Europe/Kiev]")
 public class HttpBearerAuth implements Authentication {
   private final String scheme;
   private String bearerToken;

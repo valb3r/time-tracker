@@ -12,4 +12,6 @@ public class LoginDto {
 
     @NotBlank
     private String password;
+
+    private Long clientversion; // Optional client version indicator
 }
