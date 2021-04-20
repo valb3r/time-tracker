@@ -150,7 +150,7 @@ public class CardUploader {
                     api.incrementTimeLog(
                             card.getId(),
                             uploadDuration(toUpload).toString(),
-                            Collections.singleton(toUpload.getScreenShotState())
+                            null != toUpload.getScreenShotState() ? Collections.singleton(toUpload.getScreenShotState()) : Collections.emptySet()
                     );
                     // If anything prevents file removal - TODO double - submission
                     uploadImagesAndCleanup(api, report, toUpload, card);
@@ -161,7 +161,7 @@ public class CardUploader {
                         new TimeLogCreateOrUpdate()
                                 .projectid(toUpload.getProject().getId())
                                 .description(toUpload.getTaskMessage())
-                                .tags(Arrays.asList(toUpload.getTaskTag(), toUpload.getScreenShotState()))
+                                .tags(null != toUpload.getScreenShotState() ? Arrays.asList(toUpload.getTaskTag(), toUpload.getScreenShotState()) : Collections.singletonList(toUpload.getTaskTag()))
                                 .duration(uploadDuration(toUpload).toString())
                                 .timestamp(null != toUpload.getForTime() ? toUpload.getForTime() : LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
