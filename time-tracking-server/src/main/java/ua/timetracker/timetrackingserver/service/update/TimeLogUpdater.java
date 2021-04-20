@@ -1,6 +1,7 @@
 package ua.timetracker.timetrackingserver.service.update;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -10,6 +11,8 @@ import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Set;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
@@ -21,12 +24,14 @@ public class TimeLogUpdater {
 
     // TODO - need to obtain locks to increment properly in concurrent setting. Serializable is not supported
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<TimeLogDto> increment(long userId, long id, Duration duration) {
+    public Mono<TimeLogDto> increment(long userId, long id, Duration duration, Set<String> incrementTags) {
         return timeLogs.findById(id)
                 .flatMap(it -> {
                     if (it.getUser().getId() != userId) {
                         return Mono.empty();
                     }
+
+                    updateIncrementTags(duration, incrementTags, it);
 
                     it.setDuration(duration.plus(null == it.getDuration() ? Duration.ZERO : it.getDuration()));
                     return timeLogs.save(it);
@@ -48,5 +53,16 @@ public class TimeLogUpdater {
     public Mono<Void> delete(long userId, long id) {
         return timeLogs.findByIdAndUserId(id, userId)
             .flatMap(timeLogs::delete);
+    }
+
+    private void updateIncrementTags(Duration duration, Set<String> incrementTags, TimeLog it) {
+        val existingTags = null == it.getIncrementTags() ? new HashMap<String, String>() : it.getIncrementTags();
+        val durationStr = duration.toString();
+        incrementTags.forEach(tag -> existingTags.compute(tag, (tagId, value) -> {
+            if (null == tagId || null == value) {
+                return durationStr;
+            }
+            return Duration.parse(value).plus(duration).toString();
+        }));
     }
 }
