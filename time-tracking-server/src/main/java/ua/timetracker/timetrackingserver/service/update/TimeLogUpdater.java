@@ -11,8 +11,8 @@ import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import ua.timetracker.shared.restapi.dto.timelog.TimeLogDto;
 
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ua.timetracker.shared.config.Const.REACTIVE_TX_MANAGER;
 
@@ -55,18 +55,19 @@ public class TimeLogUpdater {
             .flatMap(timeLogs::delete);
     }
 
-    private void updateIncrementTags(Duration duration, Set<String> incrementTags, TimeLog it) {
+    private void updateIncrementTags(Duration duration, Set<String> incrementTags, TimeLog log) {
         if (null == incrementTags) {
             return;
         }
-        
-        val existingTags = null == it.getIncrementTags() ? new HashMap<String, String>() : it.getIncrementTags();
-        val durationStr = duration.toString();
+
+        val existingTags = log.parseIncrementTags();
         incrementTags.forEach(tag -> existingTags.compute(tag, (tagId, value) -> {
             if (null == tagId || null == value) {
-                return durationStr;
+                return duration;
             }
-            return Duration.parse(value).plus(duration).toString();
+            return value.plus(duration);
         }));
+
+        log.setIncrementTags(existingTags.entrySet().stream().map(it -> it.getKey() + ":" + it.getValue().toString()).collect(Collectors.toSet()));
     }
 }

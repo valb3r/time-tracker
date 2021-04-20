@@ -6,6 +6,13 @@
 
 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
 <mat-dialog-content>
+  <h4>Tags uploaded</h4>
+  <ul>
+    <li *ngFor="let tag of byIncrementTags">
+      {{tag}}
+    </li>
+  </ul>
+  <mat-divider></mat-divider>
   <div>
     <mat-grid-list cols="4" rowHeight="2:1">
       <mat-grid-tile *ngFor='let img of images' [colspan]="selected === img ? 4 : 1"

@@ -349,6 +349,7 @@ export interface ManagedTimeLog {
   userid?: number;
   username?: string;
   userfullname?: string;
+  incrementtagsminutes?: object;
 }
 
 export interface ManagedTimeLogCard {

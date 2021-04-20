@@ -14,6 +14,7 @@ export class TimeCardImagesListComponent implements OnInit {
   timeOnCardM: number;
   timeOnScreenshotsM: number;
   loading = true;
+  byIncrementTags = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public log: [ProjectDto, ManagedTimeLog], public api: AdminApiService, public dialogRef: MatDialogRef<TimeCardImagesListComponent>) { }
 
@@ -25,7 +26,12 @@ export class TimeCardImagesListComponent implements OnInit {
         this.timeOnCardM = +this.round(this.log[1].durationseconds / 60.0);
         this.timeOnScreenshotsM = +this.round(res.map(it => it.durationseconds).reduce((a, b) => a + b, 0) / 60.0);
         this.loading = false;
-      })
+        if (this.log[1].incrementtagsminutes) {
+          new Map(Object.entries(this.log[1].incrementtagsminutes)).forEach((v, k) => {
+            this.byIncrementTags.push(`${k} : ${v} minutes`);
+          });
+        }
+      });
   }
 
   onDoneClick() {

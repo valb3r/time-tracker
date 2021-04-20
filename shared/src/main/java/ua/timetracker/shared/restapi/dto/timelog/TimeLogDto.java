@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
@@ -44,6 +46,7 @@ public class TimeLogDto {
     private Long userid;
     private String username;
     private String userfullname;
+    private Map<String, Long> incrementtagsminutes;
 
     @Mapper
     public interface FromEntity {
@@ -58,6 +61,7 @@ public class TimeLogDto {
                 target.setUsername(source.getUser().getUsername());
                 target.setUserfullname(source.getUser().getFullname());
             }
+            target.setIncrementtagsminutes(source.parseIncrementTags().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, it -> it.getValue().toMinutes())));
 
             return map(source, target);
         }
