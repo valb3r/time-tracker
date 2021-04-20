@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * LoginDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T20:10:36.657434+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-20T17:35:19.311+03:00[Europe/Kiev]")
 public class LoginDto {
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
@@ -36,6 +36,10 @@ public class LoginDto {
   public static final String SERIALIZED_NAME_PASSWORD = "password";
   @SerializedName(SERIALIZED_NAME_PASSWORD)
   private String password;
+
+  public static final String SERIALIZED_NAME_CLIENTVERSION = "clientversion";
+  @SerializedName(SERIALIZED_NAME_CLIENTVERSION)
+  private Long clientversion;
 
 
   public LoginDto username(String username) {
@@ -82,6 +86,29 @@ public class LoginDto {
   }
 
 
+  public LoginDto clientversion(Long clientversion) {
+    
+    this.clientversion = clientversion;
+    return this;
+  }
+
+   /**
+   * Get clientversion
+   * @return clientversion
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Long getClientversion() {
+    return clientversion;
+  }
+
+
+  public void setClientversion(Long clientversion) {
+    this.clientversion = clientversion;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -92,12 +119,13 @@ public class LoginDto {
     }
     LoginDto loginDto = (LoginDto) o;
     return Objects.equals(this.username, loginDto.username) &&
-        Objects.equals(this.password, loginDto.password);
+        Objects.equals(this.password, loginDto.password) &&
+        Objects.equals(this.clientversion, loginDto.clientversion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, password);
+    return Objects.hash(username, password, clientversion);
   }
 
   @Override
@@ -106,6 +134,7 @@ public class LoginDto {
     sb.append("class LoginDto {\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    clientversion: ").append(toIndentedString(clientversion)).append("\n");
     sb.append("}");
     return sb.toString();
   }

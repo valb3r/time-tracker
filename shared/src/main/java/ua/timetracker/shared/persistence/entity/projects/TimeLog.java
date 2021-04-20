@@ -22,7 +22,10 @@ import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 import static org.neo4j.springframework.data.core.schema.Relationship.Direction.OUTGOING;
@@ -58,6 +61,8 @@ public class TimeLog {
 
     private LocalDateTime timestamp;
 
+    private Set<String> incrementTags;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -77,5 +82,10 @@ public class TimeLog {
     @Mapper(nullValuePropertyMappingStrategy = IGNORE)
     public interface Merge {
         void update(TimeLogCreateOrUpdate updated, @MappingTarget TimeLog result);
+    }
+
+    public Map<String, Duration> parseIncrementTags() {
+        return null == this.getIncrementTags() ? new HashMap<>() :
+                this.getIncrementTags().stream().collect(Collectors.toMap(it -> it.split(":")[0], it -> Duration.parse(it.split(":")[1])));
     }
 }

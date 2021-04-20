@@ -33,7 +33,7 @@ import ua.timetracker.desktoptracker.api.admin.model.ProjectDto;
 /**
  * TimeLogDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-06T20:10:36.657434+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-20T17:35:19.311+03:00[Europe/Kiev]")
 public class TimeLogDto {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -50,6 +50,10 @@ public class TimeLogDto {
   public static final String SERIALIZED_NAME_DURATIONMINUTES = "durationminutes";
   @SerializedName(SERIALIZED_NAME_DURATIONMINUTES)
   private Long durationminutes;
+
+  public static final String SERIALIZED_NAME_DURATIONSECONDS = "durationseconds";
+  @SerializedName(SERIALIZED_NAME_DURATIONSECONDS)
+  private Long durationseconds;
 
   public static final String SERIALIZED_NAME_DURATION = "duration";
   @SerializedName(SERIALIZED_NAME_DURATION)
@@ -78,6 +82,10 @@ public class TimeLogDto {
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
   private String username;
+
+  public static final String SERIALIZED_NAME_USERFULLNAME = "userfullname";
+  @SerializedName(SERIALIZED_NAME_USERFULLNAME)
+  private String userfullname;
 
 
   public TimeLogDto id(Long id) {
@@ -177,6 +185,29 @@ public class TimeLogDto {
 
   public void setDurationminutes(Long durationminutes) {
     this.durationminutes = durationminutes;
+  }
+
+
+  public TimeLogDto durationseconds(Long durationseconds) {
+    
+    this.durationseconds = durationseconds;
+    return this;
+  }
+
+   /**
+   * Get durationseconds
+   * @return durationseconds
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public Long getDurationseconds() {
+    return durationseconds;
+  }
+
+
+  public void setDurationseconds(Long durationseconds) {
+    this.durationseconds = durationseconds;
   }
 
 
@@ -348,6 +379,29 @@ public class TimeLogDto {
   }
 
 
+  public TimeLogDto userfullname(String userfullname) {
+    
+    this.userfullname = userfullname;
+    return this;
+  }
+
+   /**
+   * Get userfullname
+   * @return userfullname
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public String getUserfullname() {
+    return userfullname;
+  }
+
+
+  public void setUserfullname(String userfullname) {
+    this.userfullname = userfullname;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -361,18 +415,20 @@ public class TimeLogDto {
         Objects.equals(this.projectid, timeLogDto.projectid) &&
         Objects.equals(this.tags, timeLogDto.tags) &&
         Objects.equals(this.durationminutes, timeLogDto.durationminutes) &&
+        Objects.equals(this.durationseconds, timeLogDto.durationseconds) &&
         Objects.equals(this.duration, timeLogDto.duration) &&
         Objects.equals(this.description, timeLogDto.description) &&
         Objects.equals(this.location, timeLogDto.location) &&
         Objects.equals(this.projects, timeLogDto.projects) &&
         Objects.equals(this.timestamp, timeLogDto.timestamp) &&
         Objects.equals(this.userid, timeLogDto.userid) &&
-        Objects.equals(this.username, timeLogDto.username);
+        Objects.equals(this.username, timeLogDto.username) &&
+        Objects.equals(this.userfullname, timeLogDto.userfullname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, projectid, tags, durationminutes, duration, description, location, projects, timestamp, userid, username);
+    return Objects.hash(id, projectid, tags, durationminutes, durationseconds, duration, description, location, projects, timestamp, userid, username, userfullname);
   }
 
   @Override
@@ -383,6 +439,7 @@ public class TimeLogDto {
     sb.append("    projectid: ").append(toIndentedString(projectid)).append("\n");
     sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    durationminutes: ").append(toIndentedString(durationminutes)).append("\n");
+    sb.append("    durationseconds: ").append(toIndentedString(durationseconds)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");
@@ -390,6 +447,7 @@ public class TimeLogDto {
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    userid: ").append(toIndentedString(userid)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    userfullname: ").append(toIndentedString(userfullname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

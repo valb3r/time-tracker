@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import ua.timetracker.administration.config.ApiClientConfig;
 import ua.timetracker.administration.domain.TokenDto;
 import ua.timetracker.administration.service.LoginAuthorization;
 import ua.timetracker.shared.restapi.dto.user.LoginDto;
@@ -27,12 +28,18 @@ import static ua.timetracker.shared.restapi.Paths.V1_LOGIN;
 @RequiredArgsConstructor
 public class LoginController {
 
+    private final ApiClientConfig config;
     private final LoginAuthorization authorization;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public Mono<? extends ResponseEntity> login(
         @RequestBody @Valid LoginDto loginDto, @Parameter(hidden = true) ServerHttpResponse response
     ) {
+        if (null != config.getMinClientVersion()
+                && (null == loginDto.getClientversion() || (null != loginDto.getClientversion() && config.getMinClientVersion() > loginDto.getClientversion()))
+        ) {
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please use newer tracker client"));
+        }
         return authorization.issueTokenIfAuthorized(loginDto.getUsername(), loginDto.getPassword())
             .map(user -> buildResponse(user, response))
             .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));

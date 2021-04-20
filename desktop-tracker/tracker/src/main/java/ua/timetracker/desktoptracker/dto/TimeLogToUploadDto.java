@@ -17,4 +17,5 @@ public class TimeLogToUploadDto {
     private ProjectDto project;
     private String taskMessage;
     private String taskTag;
+    private String screenShotState;
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import lombok.var;
 import ua.timetracker.desktoptracker.api.admin.LoginControllerApi;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiClient;
 import ua.timetracker.desktoptracker.api.admin.invoker.ApiException;
@@ -40,6 +41,8 @@ import java.util.stream.IntStream;
 
 @Slf4j
 public class TrackerDialog {
+    private static final long VERSION = 20210420;
+
     public static final String DEFAULT_TITLE = "Time Tracker";
 
     private final Set<Long> projectsLoaded = new HashSet<>();
@@ -234,7 +237,12 @@ public class TrackerDialog {
 
     private ApiResponse<?> apiLogin() {
         LoginControllerApi loginApi = new LoginControllerApi(new ApiClient().setBasePath(apiUploadUrl.getText() + "/admin-api"));
-        return loginApi.loginWithHttpInfo(new LoginDto().username(usernameField.getText()).password(new String(passwordField.getPassword())));
+        return loginApi.loginWithHttpInfo(
+                new LoginDto()
+                        .username(usernameField.getText())
+                        .password(new String(passwordField.getPassword()))
+                        .clientversion(VERSION)
+        );
     }
 
     private TimeLogControllerApi buildTrackerApi(ApiResponse<?> loginResp) {
@@ -304,7 +312,13 @@ public class TrackerDialog {
     }
 
     private static String errorMessage(Throwable ex) {
-        return String.format("Error: %s", ex.getMessage());
+        var body = "";
+        if (ex instanceof ApiException) {
+            body = ((ApiException) ex).getResponseBody();
+        } else if (ex instanceof ua.timetracker.desktoptracker.api.tracker.invoker.ApiException) {
+            body = ((ua.timetracker.desktoptracker.api.tracker.invoker.ApiException) ex).getResponseBody();
+        }
+        return String.format("Error: %s %s", ex.getMessage(), body);
     }
 
     private void createUIComponents() {

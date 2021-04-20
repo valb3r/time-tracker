@@ -102,10 +102,11 @@ public class TimeLogController {
     public Mono<TimeLogDto> incrementTimeLog(
             @Parameter(hidden = true) Authentication user,
             @PathVariable("id") long cardId,
-            @RequestParam String duration
+            @RequestParam(name = "duration") String duration,
+            @RequestParam(name = "incrementTags", required = false) Set<String> incrementTags
     ) {
-        log.info("[{}]: increment card {}, dur: {}", id(user), cardId, duration);
-        return updater.increment(id(user), cardId, Duration.parse(duration)).switchIfEmpty(EntityNotFoundException.mono());
+        log.info("[{}]: increment card {}, dur: {}, tags {}", id(user), cardId, duration, incrementTags);
+        return updater.increment(id(user), cardId, Duration.parse(duration), incrementTags).switchIfEmpty(EntityNotFoundException.mono());
     }
 
     @OnlyProjectWorkers
@@ -123,7 +124,8 @@ public class TimeLogController {
     public Mono<TimeLogDto> uploadTimelog(
         @Parameter(hidden = true) Authentication user,
         @Valid @RequestBody TimeLogCreateOrUpdate uploadLog) {
-        log.info("[{}]: upload card, use project: {}, descr.: {}, dur: {}", id(user), uploadLog.getProjectId(), uploadLog.getDescription(), uploadLog.getDuration());
+        log.info("[{}]: upload card, use project: {}, descr.: {}, dur: {}, tags: {}",
+                id(user), uploadLog.getProjectId(), uploadLog.getDescription(), uploadLog.getDuration(), uploadLog.getTags());
         return uploader.upload(id(user), uploadLog)
             .switchIfEmpty(EntityNotFoundException.mono());
     }

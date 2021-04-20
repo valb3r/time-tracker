@@ -853,6 +853,51 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TimeLogDto'
+  /v1/resources/managed/timelogs/projects/{project_ids}/users/{user_ids}:
+    get:
+      tags:
+        - managed-time-logs-controller
+      operationId: timeCardsForManagedProjectsOfUsers
+      parameters:
+        - name: project_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: user_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeLogDto'
   /v1/resources/managed/timelogs/projects/{project_ids}/cards/{time_log_ids}:
     get:
       tags:
@@ -1128,6 +1173,9 @@ components:
           type: string
         password:
           type: string
+        clientversion:
+          type: integer
+          format: int64
     UserWithoutRateDto:
       type: object
       properties:
@@ -1176,6 +1224,9 @@ components:
         durationminutes:
           type: integer
           format: int64
+        durationseconds:
+          type: integer
+          format: int64
         duration:
           type: string
           format: duration
@@ -1197,6 +1248,8 @@ components:
           format: int64
         username:
           type: string
+        userfullname:
+          type: string
     TimeLogImageDto:
       type: object
       properties:
@@ -1212,3 +1265,9 @@ components:
         timestamp:
           type: string
           format: date-time
+        durationseconds:
+          type: integer
+          format: int64
+        durationminutes:
+          type: integer
+          format: int64

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.File;
 import java.time.LocalDateTime;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
+import java.util.Set;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogImageDto;
@@ -270,9 +271,8 @@ public class TimeLogControllerApi {
         return localVarCall;
     }
     /**
-     * Build call for incrementTimeLog
-     * @param id  (required)
-     * @param duration  (required)
+     * Build call for deleteTimecardImage
+     * @param path  (required)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -282,7 +282,225 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call incrementTimeLogCall(Long id, String duration, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call deleteTimecardImageCall(String path, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/v1/resources/timelogs/cards/images/{path}"
+            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call deleteTimecardImageValidateBeforeCall(String path, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'path' is set
+        if (path == null) {
+            throw new ApiException("Missing the required parameter 'path' when calling deleteTimecardImage(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = deleteTimecardImageCall(path, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * 
+     * 
+     * @param path  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public void deleteTimecardImage(String path) throws ApiException {
+        deleteTimecardImageWithHttpInfo(path);
+    }
+
+    /**
+     * 
+     * 
+     * @param path  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> deleteTimecardImageWithHttpInfo(String path) throws ApiException {
+        okhttp3.Call localVarCall = deleteTimecardImageValidateBeforeCall(path, null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param path  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call deleteTimecardImageAsync(String path, final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = deleteTimecardImageValidateBeforeCall(path, _callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for downloadTimecardImage
+     * @param path  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call downloadTimecardImageCall(String path, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/v1/resources/timelogs/cards/images/{path}"
+            .replaceAll("\\{" + "path" + "\\}", localVarApiClient.escapeString(path.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call downloadTimecardImageValidateBeforeCall(String path, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'path' is set
+        if (path == null) {
+            throw new ApiException("Missing the required parameter 'path' when calling downloadTimecardImage(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = downloadTimecardImageCall(path, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * 
+     * 
+     * @param path  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public void downloadTimecardImage(String path) throws ApiException {
+        downloadTimecardImageWithHttpInfo(path);
+    }
+
+    /**
+     * 
+     * 
+     * @param path  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<Void> downloadTimecardImageWithHttpInfo(String path) throws ApiException {
+        okhttp3.Call localVarCall = downloadTimecardImageValidateBeforeCall(path, null);
+        return localVarApiClient.execute(localVarCall);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param path  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call downloadTimecardImageAsync(String path, final ApiCallback<Void> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = downloadTimecardImageValidateBeforeCall(path, _callback);
+        localVarApiClient.executeAsync(localVarCall, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for incrementTimeLog
+     * @param id  (required)
+     * @param duration  (required)
+     * @param incrementTags  (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call incrementTimeLogCall(Long id, String duration, Set<String> incrementTags, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -297,6 +515,10 @@ public class TimeLogControllerApi {
 
         if (duration != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("duration", duration));
+        }
+
+        if (incrementTags != null) {
+            localVarCollectionQueryParams.addAll(localVarApiClient.parameterToPairs("multi", "incrementTags", incrementTags));
         }
 
         final String[] localVarAccepts = {
@@ -318,7 +540,7 @@ public class TimeLogControllerApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call incrementTimeLogValidateBeforeCall(Long id, String duration, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call incrementTimeLogValidateBeforeCall(Long id, String duration, Set<String> incrementTags, final ApiCallback _callback) throws ApiException {
         
         // verify the required parameter 'id' is set
         if (id == null) {
@@ -331,7 +553,7 @@ public class TimeLogControllerApi {
         }
         
 
-        okhttp3.Call localVarCall = incrementTimeLogCall(id, duration, _callback);
+        okhttp3.Call localVarCall = incrementTimeLogCall(id, duration, incrementTags, _callback);
         return localVarCall;
 
     }
@@ -341,6 +563,7 @@ public class TimeLogControllerApi {
      * 
      * @param id  (required)
      * @param duration  (required)
+     * @param incrementTags  (optional)
      * @return TimeLogDto
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -349,8 +572,8 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public TimeLogDto incrementTimeLog(Long id, String duration) throws ApiException {
-        ApiResponse<TimeLogDto> localVarResp = incrementTimeLogWithHttpInfo(id, duration);
+    public TimeLogDto incrementTimeLog(Long id, String duration, Set<String> incrementTags) throws ApiException {
+        ApiResponse<TimeLogDto> localVarResp = incrementTimeLogWithHttpInfo(id, duration, incrementTags);
         return localVarResp.getData();
     }
 
@@ -359,6 +582,7 @@ public class TimeLogControllerApi {
      * 
      * @param id  (required)
      * @param duration  (required)
+     * @param incrementTags  (optional)
      * @return ApiResponse&lt;TimeLogDto&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -367,8 +591,8 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<TimeLogDto> incrementTimeLogWithHttpInfo(Long id, String duration) throws ApiException {
-        okhttp3.Call localVarCall = incrementTimeLogValidateBeforeCall(id, duration, null);
+    public ApiResponse<TimeLogDto> incrementTimeLogWithHttpInfo(Long id, String duration, Set<String> incrementTags) throws ApiException {
+        okhttp3.Call localVarCall = incrementTimeLogValidateBeforeCall(id, duration, incrementTags, null);
         Type localVarReturnType = new TypeToken<TimeLogDto>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -378,6 +602,7 @@ public class TimeLogControllerApi {
      * 
      * @param id  (required)
      * @param duration  (required)
+     * @param incrementTags  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -387,10 +612,122 @@ public class TimeLogControllerApi {
         <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call incrementTimeLogAsync(Long id, String duration, final ApiCallback<TimeLogDto> _callback) throws ApiException {
+    public okhttp3.Call incrementTimeLogAsync(Long id, String duration, Set<String> incrementTags, final ApiCallback<TimeLogDto> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = incrementTimeLogValidateBeforeCall(id, duration, _callback);
+        okhttp3.Call localVarCall = incrementTimeLogValidateBeforeCall(id, duration, incrementTags, _callback);
         Type localVarReturnType = new TypeToken<TimeLogDto>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for timeCardImagesForTimeLogs
+     * @param timeLogIds  (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardImagesForTimeLogsCall(Set<Long> timeLogIds, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/v1/resources/timelogs/cards/{time_log_ids}"
+            .replaceAll("\\{" + "time_log_ids" + "\\}", localVarApiClient.escapeString(localVarApiClient.collectionPathParameterToString("csv", timeLogIds)));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] {  };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call timeCardImagesForTimeLogsValidateBeforeCall(Set<Long> timeLogIds, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'timeLogIds' is set
+        if (timeLogIds == null) {
+            throw new ApiException("Missing the required parameter 'timeLogIds' when calling timeCardImagesForTimeLogs(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsCall(timeLogIds, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * 
+     * 
+     * @param timeLogIds  (required)
+     * @return List&lt;TimeLogImageDto&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public List<TimeLogImageDto> timeCardImagesForTimeLogs(Set<Long> timeLogIds) throws ApiException {
+        ApiResponse<List<TimeLogImageDto>> localVarResp = timeCardImagesForTimeLogsWithHttpInfo(timeLogIds);
+        return localVarResp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param timeLogIds  (required)
+     * @return ApiResponse&lt;List&lt;TimeLogImageDto&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<List<TimeLogImageDto>> timeCardImagesForTimeLogsWithHttpInfo(Set<Long> timeLogIds) throws ApiException {
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsValidateBeforeCall(timeLogIds, null);
+        Type localVarReturnType = new TypeToken<List<TimeLogImageDto>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param timeLogIds  (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> OK </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call timeCardImagesForTimeLogsAsync(Set<Long> timeLogIds, final ApiCallback<List<TimeLogImageDto>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = timeCardImagesForTimeLogsValidateBeforeCall(timeLogIds, _callback);
+        Type localVarReturnType = new TypeToken<List<TimeLogImageDto>>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

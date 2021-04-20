@@ -149,7 +149,8 @@ public class CardUploader {
                     val card = existingCard.get();
                     api.incrementTimeLog(
                             card.getId(),
-                            uploadDuration(toUpload).toString()
+                            uploadDuration(toUpload).toString(),
+                            Collections.singleton(toUpload.getScreenShotState())
                     );
                     // If anything prevents file removal - TODO double - submission
                     uploadImagesAndCleanup(api, report, toUpload, card);
@@ -160,7 +161,7 @@ public class CardUploader {
                         new TimeLogCreateOrUpdate()
                                 .projectid(toUpload.getProject().getId())
                                 .description(toUpload.getTaskMessage())
-                                .tags(Collections.singletonList(toUpload.getTaskTag()))
+                                .tags(Arrays.asList(toUpload.getTaskTag(), toUpload.getScreenShotState()))
                                 .duration(uploadDuration(toUpload).toString())
                                 .timestamp(null != toUpload.getForTime() ? toUpload.getForTime() : LocalDateTime.now(ZoneOffset.UTC))
                                 .location("UNKNOWN")
