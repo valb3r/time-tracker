@@ -1,9 +1,11 @@
 package ua.timetracker.desktoptracker;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.*;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
+import ua.timetracker.desktoptracker.typeadapter.LocalDateTimeTypeAdapter;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -34,7 +36,7 @@ public class TimeTracker {
 
     private final AtomicReference<TrackingData> trackingData = new AtomicReference<>();
     private final AtomicBoolean screenShotsEnabled = new AtomicBoolean();
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
 
     public TimeTracker() {
         startTimeTrackingThread();

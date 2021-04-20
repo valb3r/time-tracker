@@ -1,6 +1,7 @@
 package ua.timetracker.desktoptracker;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -9,6 +10,7 @@ import ua.timetracker.desktoptracker.api.tracker.invoker.ApiException;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogCreateOrUpdate;
 import ua.timetracker.desktoptracker.api.tracker.model.TimeLogDto;
 import ua.timetracker.desktoptracker.dto.TimeLogToUploadDto;
+import ua.timetracker.desktoptracker.typeadapter.LocalDateTimeTypeAdapter;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +31,7 @@ public class CardUploader {
     private static final int UPLOAD_EACH_N_MS = 10_000;
 
     private final Set<String> processedFiles = new HashSet<>();
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
     private final AtomicReference<TimeLogControllerApi> api = new AtomicReference<>();
     private final AtomicLong nextUpload = new AtomicLong(System.currentTimeMillis());
 

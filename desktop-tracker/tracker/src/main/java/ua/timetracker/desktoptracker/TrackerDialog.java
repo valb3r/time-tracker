@@ -3,9 +3,6 @@ package ua.timetracker.desktoptracker;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -20,19 +17,18 @@ import ua.timetracker.desktoptracker.api.admin.model.LoginDto;
 import ua.timetracker.desktoptracker.api.tracker.TimeLogControllerApi;
 import ua.timetracker.desktoptracker.api.tracker.model.ProjectDto;
 import ua.timetracker.desktoptracker.dto.PreferencesDto;
+import ua.timetracker.desktoptracker.typeadapter.LocalDateTimeTypeAdapter;
 import ua.timetracker.desktoptracker.verifier.MinLenVerifier;
 import ua.timetracker.desktoptracker.verifier.NotBlankVerifier;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -342,32 +338,6 @@ public class TrackerDialog {
         @Override
         public String toString() {
             return String.format("[%dx%d] %s", device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight(), device.getIDstring());
-        }
-    }
-
-    static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
-
-        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
-        @Override
-        public void write(JsonWriter out, LocalDateTime date) throws IOException {
-            if (date == null) {
-                out.nullValue();
-            } else {
-                out.value(formatter.format(date));
-            }
-        }
-
-        @Override
-        public LocalDateTime read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String date = in.nextString();
-                    return LocalDateTime.parse(date, formatter);
-            }
         }
     }
 
