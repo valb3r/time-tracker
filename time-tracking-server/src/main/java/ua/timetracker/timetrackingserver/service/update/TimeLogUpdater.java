@@ -56,6 +56,10 @@ public class TimeLogUpdater {
     }
 
     private void updateIncrementTags(Duration duration, Set<String> incrementTags, TimeLog it) {
+        if (null == incrementTags) {
+            return;
+        }
+        
         val existingTags = null == it.getIncrementTags() ? new HashMap<String, String>() : it.getIncrementTags();
         val durationStr = duration.toString();
         incrementTags.forEach(tag -> existingTags.compute(tag, (tagId, value) -> {

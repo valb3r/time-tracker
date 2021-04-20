@@ -147,7 +147,8 @@ public class CardUploader {
                     val card = existingCard.get();
                     api.incrementTimeLog(
                             card.getId(),
-                            uploadDuration(toUpload).toString()
+                            uploadDuration(toUpload).toString(),
+                            Collections.singleton(toUpload.getScreenShotState())
                     );
                     // If anything prevents file removal - TODO double - submission
                     uploadImagesAndCleanup(api, report, toUpload, card);

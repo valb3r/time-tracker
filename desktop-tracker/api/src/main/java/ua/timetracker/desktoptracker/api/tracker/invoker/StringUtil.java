@@ -16,7 +16,7 @@ package ua.timetracker.desktoptracker.api.tracker.invoker;
 import java.util.Collection;
 import java.util.Iterator;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-20T17:18:59.621+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-20T17:35:20.008+03:00[Europe/Kiev]")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

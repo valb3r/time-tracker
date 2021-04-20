@@ -113,6 +113,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: incrementTags
+          in: query
+          required: false
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
       responses:
         "200":
           description: OK
@@ -173,6 +181,57 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectDto'
+  /v1/resources/timelogs/cards/{time_log_ids}:
+    get:
+      tags:
+        - time-log-controller
+      operationId: timeCardImagesForTimeLogs
+      parameters:
+        - name: time_log_ids
+          in: path
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeLogImageDto'
+  /v1/resources/timelogs/cards/images/{path}:
+    get:
+      tags:
+        - time-log-controller
+      operationId: downloadTimecardImage
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+        - time-log-controller
+      operationId: deleteTimecardImage
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
 components:
   schemas:
     TimeLogImageDto:
@@ -190,6 +249,12 @@ components:
         timestamp:
           type: string
           format: date-time
+        durationseconds:
+          type: integer
+          format: int64
+        durationminutes:
+          type: integer
+          format: int64
     TimeLogCreateOrUpdate:
       required:
         - description
@@ -262,6 +327,9 @@ components:
           items:
             type: string
         durationminutes:
+          type: integer
+          format: int64
+        durationseconds:
           type: integer
           format: int64
         duration:
