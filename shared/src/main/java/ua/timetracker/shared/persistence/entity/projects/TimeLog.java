@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Properties;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -22,6 +23,7 @@ import ua.timetracker.shared.restapi.dto.timelog.TimeLogCreateOrUpdate;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -57,6 +59,9 @@ public class TimeLog {
     private Set<Project> projects;
 
     private LocalDateTime timestamp;
+
+    @Properties
+    private Map<String, String> incrementTags;
 
     @CreatedDate
     private LocalDateTime createdAt;
