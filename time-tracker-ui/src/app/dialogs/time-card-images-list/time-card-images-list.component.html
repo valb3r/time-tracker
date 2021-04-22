@@ -9,7 +9,12 @@
   <h4>Tags uploaded</h4>
   <ul>
     <li *ngFor="let tag of byIncrementTags">
-      {{tag}}
+      <ng-container [ngSwitch]="tag[0]">
+        <ng-container *ngSwitchCase="KnownTagsType.SCRD_CAPTURED">With screenshot <strong style="color: darkgreen">enabled</strong>: {{tag[1]}} minutes</ng-container>
+        <ng-container *ngSwitchCase="KnownTagsType.SCRD_DISABLED">With screenshot <strong style="color: orange">explicitly disabled</strong>: {{tag[1]}} minutes</ng-container>
+        <ng-container *ngSwitchCase="KnownTagsType.SCRD_SCR_FAILED">With screenshot <strong style="color: darkred">failed</strong>: {{tag[1]}} minutes</ng-container>
+        <ng-container *ngSwitchDefault>{{tag[0]}}: {{tag[1]}} minutes</ng-container>
+      </ng-container>
     </li>
   </ul>
   <mat-divider></mat-divider>

@@ -9,6 +9,8 @@ import {AdminApiService, ManagedTimeLog, ProjectDto} from "../../service/admin-a
 })
 export class TimeCardImagesListComponent implements OnInit {
 
+  KnownTagsType = KnownTags
+
   selected: ManagedTimeLogData;
   images: ManagedTimeLogData[] = [];
   timeOnCardM: number;
@@ -27,9 +29,9 @@ export class TimeCardImagesListComponent implements OnInit {
         this.timeOnScreenshotsM = +this.round(res.map(it => it.durationseconds).reduce((a, b) => a + b, 0) / 60.0);
         this.loading = false;
         if (this.log[1].incrementtagsminutes) {
-          new Map(Object.entries(this.log[1].incrementtagsminutes)).forEach((v, k) => {
-            this.byIncrementTags.push(`${k} : ${v} minutes`);
-          });
+          const asMap = new Map(Object.entries(this.log[1].incrementtagsminutes))
+          const orderedMap = new Map([...asMap].sort((a, b) => b[1] - a[1]));
+          orderedMap.forEach((tagValue, tagType) => this.byIncrementTags.push([tagType, tagValue]));
         }
       });
   }
@@ -47,4 +49,10 @@ export class ManagedTimeLogData {
 
   constructor(public url: string, public timestamp: string, public duration: string) {
   }
+}
+
+enum KnownTags {
+  SCRD_DISABLED = 'SCRD_DISABLED',
+  SCRD_SCR_FAILED = 'SCRD_SCR_FAILED',
+  SCRD_CAPTURED = 'SCRD_CAPTURED'
 }
