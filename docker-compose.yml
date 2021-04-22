@@ -22,6 +22,9 @@ services:
   ui:
     image: ua-timetracker/time-tracker-ui:${TIMETRACKER_VERSION}
     restart: always
+    environment:
+      ADMIN_BACKEND_URL: http://admin:20081
+      TIME_TRACKER_BACKEND_URL: http://tracker:20080
     ports:
       - '6500:80'
     networks:
