@@ -6,7 +6,7 @@ import {FormControl, Validators} from "@angular/forms";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {endOfMonth, startOfMonth} from "date-fns";
+import {endOfDay, endOfMonth, startOfDay, startOfMonth} from "date-fns";
 import {TemplateManagementDialogComponent} from "../template-management-dialog/template-management-dialog.component";
 
 @Component({
@@ -100,7 +100,11 @@ export class NewProjectsReportComponent implements OnInit {
     this.loading = true;
     this.api.createProjectBasedReport(
       this.projectsSelected.map(it => it.id),
-      {templateid: this.templatesControl.value.id, from: this.fromDateControl.value, to: this.toDateControl.value}
+      {
+        templateid: this.templatesControl.value.id,
+        from: NewProjectsReportComponent.fromUtcDateToDateStart(this.fromDateControl.value),
+        to: NewProjectsReportComponent.fromUtcDateToDateEnd(this.toDateControl.value)
+      }
     ).subscribe(res => {
       this.loading = false;
       this.dialogRef.close(true);
@@ -121,6 +125,14 @@ export class NewProjectsReportComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.templates.filter(option => option.description.toLowerCase().includes(filterValue));
+  }
+
+  private static fromUtcDateToDateStart(value) {
+    return startOfDay(new Date(value.toISOString()));
+  }
+
+  private static fromUtcDateToDateEnd(value) {
+    return endOfDay(new Date(value.toISOString()));
   }
 
   displayProjectFn(project?: ProjectDto): string | undefined {

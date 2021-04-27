@@ -1,6 +1,8 @@
 package ua.timetracker.reportgenerator.service;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,7 @@ public class ReportByUserJob implements Tasklet {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Context context = new Context();
         context.putVar("developers", developerCards);
+        context.putVar("report", new ProjectReport(report.getFrom(), report.getTo()));
 
         // broken Relationship annotation due to rx-sdn -> ogm bridge
         ReportTemplate template = templates.getByReport(report.getId());
@@ -124,5 +127,14 @@ public class ReportByUserJob implements Tasklet {
         private String activity;
         private String description;
         private BigDecimal duration;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectReport {
+
+        private LocalDateTime start;
+        private LocalDateTime end;
     }
 }
