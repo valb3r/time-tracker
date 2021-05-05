@@ -81,7 +81,9 @@ export class TimeCardEditComponent implements OnInit {
     this.dialogRef.close({
       projectid: this.projectControl.value.id,
       description: this.descriptionControl.value,
-      duration: "PT" + this.durationControl.value.minutes + "M",
+      duration:
+        this.durationControl.value instanceof Duration ? "PT" + this.durationControl.value.minutes + "M"
+          : `PT${this.durationControl.value.replace(' ', '').toUpperCase()}`,
       location: this.locationControl.value,
       timestamp: endOfDay(this.dateControl.value instanceof Date ? this.dateControl.value : this.dateControl.value.toDate()).toISOString(),
       tags: [this.activityControl.value]}
