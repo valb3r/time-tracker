@@ -50,8 +50,8 @@ public class GroupManager {
     }
 
     @Transactional(REACTIVE_TX_MANAGER)
-    public Mono<Void> deleteGroup(long groupId) {
-        return groups.deleteById(groupId);
+    public Mono<Long> deleteGroup(long groupId) {
+        return groups.removeGroupAndUsersThatAreOnlyInIt(groupId);
     }
 
     @Transactional(REACTIVE_TX_MANAGER)

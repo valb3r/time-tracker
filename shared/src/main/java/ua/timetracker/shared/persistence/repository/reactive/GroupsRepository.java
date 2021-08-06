@@ -88,4 +88,11 @@ public interface GroupsRepository extends ReactiveCrudRepository<Group, Long> {
 
     @Query("MATCH (g:Group)-[role:" + OWNS + "]->(p:Project) WHERE id(p) IN $projects AND id(g) IN $groups DELETE role RETURN COUNT(role)")
     Mono<Long> removeProjectsFromGroup(@Param("projects") Collection<Long> projectIds, @Param("groups") Collection<Long> groupIds);
+
+    @Query("MATCH (go:Group)<-[:IN_GROUP]-(excluded:User) WHERE id(go) <> $groupId " +
+            "WITH collect(excluded) as excluded " +
+            "MATCH (g:Group) WHERE id(g) = $groupId " +
+            "OPTIONAL MATCH (g)<-[:IN_GROUP]-(u:User) WHERE NOT u IN excluded " +
+            "DETACH DELETE g,u")
+    Mono<Long> removeGroupAndUsersThatAreOnlyInIt(@Param("groupId") long groupId);
 }

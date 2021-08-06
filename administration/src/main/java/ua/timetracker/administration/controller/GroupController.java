@@ -63,7 +63,7 @@ public class GroupController {
 
     @OnlyResourceManagers
     @DeleteMapping(path = "/{id}")
-    public Mono<Void> deleteGroup(
+    public Mono<Long> deleteGroup(
         @Parameter(hidden = true) Authentication user,
         @ManagedResourceId @PathVariable("id") long groupToDelete) {
         return manager.deleteGroup(groupToDelete);
