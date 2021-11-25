@@ -1,0 +1,10 @@
+domain: valb3r.github.io
+url: https://valb3r.github.io/letsencrypt-helper
+baseurl: /letsencrypt-helper/
+markdown: kramdown
+
+remote_theme: pages-themes/cayman@v0.2.0
+
+
+plugins:
+  - jekyll-remote-theme
