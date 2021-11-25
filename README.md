@@ -20,11 +20,17 @@ Desktop tracker is [available at **releases page**](https://github.com/valb3r/ti
 1. Gradle as build system.
 1. Dockerized deployment via docker-compose.
 
-# Demo users
 
-Admin user at https://demo.timetracker.tk has `admin/admin` credentials. You can see an organization tree with this user. 
+# Demo environment
+
+Demo environment to play with project is [located here - https://demo.timetracker.tk](https://demo.timetracker.tk)
+
+## Demo users
+
+Admin user at https://demo.timetracker.tk has `admin/admin` credentials. You can see an organization tree with this user.
 Typically, all other users have a password that is equal to the  username - you can try `petya/petya` for
 example.
+
 
 # Why graph database?
 
