@@ -25,7 +25,7 @@
     "@angular/router": "~9.0.7",
     "angular-calendar": "^0.28.28",
     "class-transformer": "^0.3.1",
-    "date-fns": "^2.21.1",
+    "date-fns": "^2.26.0",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.7",
