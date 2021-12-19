@@ -8,7 +8,7 @@ networks:
 
 services:
   db:
-    image: neo4j:4.2.0
+    image: neo4j:4.2.13
     restart: always
     environment:
       NEO4J_AUTH: 'neo4j/docker'
