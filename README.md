@@ -105,6 +105,13 @@ Commands above spin up everything needed. UI will be at localhost:6500
 1. Open http://localhost:6500 - there you can play with user `admin/admin`
      
 
+# JWT token key generation
+
+1. `openssl genrsa -out key_priv 1024`
+2. `openssl rsa -in key_priv -pubout -outform PEM -out key.pem`
+3. `openssl pkcs8 -topk8 -inform PEM -in key_priv -out key -nocrypt`
+4. `rm -f key_priv`
+
 
 # Stub data
 
