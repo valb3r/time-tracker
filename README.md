@@ -107,7 +107,7 @@ Commands above spin up everything needed. UI will be at localhost:6500
 
 # JWT token key generation
 
-1. `openssl genrsa -out key_priv 1024`
+1. `openssl genrsa -out key_priv 2048`
 2. `openssl rsa -in key_priv -pubout -outform PEM -out key.pem`
 3. `openssl pkcs8 -topk8 -inform PEM -in key_priv -out key -nocrypt`
 4. `rm -f key_priv`
