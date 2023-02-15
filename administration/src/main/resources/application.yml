@@ -54,3 +54,6 @@ image-upload:
 api:
   client:
     min-client-version: 20210420
+
+demo:
+  reset-admin-password-on-start: true

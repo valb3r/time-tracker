@@ -1,6 +1,7 @@
 package ua.timetracker.administration.service.users;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -18,6 +19,9 @@ public class InitialUserCreation {
     private final GroupsRepository groups;
     private final UserManager users;
 
+    @Value("demo.reset-admin-password-on-start")
+    private boolean resetAdminPasswordOnStart;
+
     @Transactional(REACTIVE_TX_MANAGER)
     @PostConstruct
     public void initInitialUser() {
@@ -26,6 +30,11 @@ public class InitialUserCreation {
                 () -> groups
                     .findByName("Root admins group")
                     .flatMap(admins -> users.createUser(admins.getId(), new UserCreateDto("admin", "super", "admin", "0"))))
-            ).subscribe();
+            ).flatMap(user -> {
+                if (resetAdminPasswordOnStart) {
+                    return users.updatePassword(user.getId(), "admin");
+                }
+                return Mono.just(user);
+            }).subscribe();
     }
 }

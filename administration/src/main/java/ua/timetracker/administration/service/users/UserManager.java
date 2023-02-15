@@ -74,6 +74,15 @@ public class UserManager {
     }
 
     @Transactional(REACTIVE_TX_MANAGER)
+    public Mono<UserDto> updatePassword(long userId, String password) {
+        return users.findById(userId)
+                .flatMap(it -> {
+                    it.setEncodedPassword(encoder.encode(password));
+                    return users.save(it);
+                }).map(UserDto.MAP::map);
+    }
+
+    @Transactional(REACTIVE_TX_MANAGER)
     public Mono<Void> deleteUser(long userId) {
         return users.deleteById(userId);
     }
