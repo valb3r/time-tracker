@@ -19,7 +19,7 @@ public class InitialUserCreation {
     private final GroupsRepository groups;
     private final UserManager users;
 
-    @Value("demo.reset-admin-password-on-start")
+    @Value("${demo.reset-admin-password-on-start}")
     private boolean resetAdminPasswordOnStart;
 
     @Transactional(REACTIVE_TX_MANAGER)
